@@ -1,0 +1,36 @@
+version: '3'
+services:
+#mssql docker
+  easyappointment-sql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=QWElkj132!
+      - MSSQL_PID=Developer
+    ports:
+      - 1401:1433
+    expose:
+      - 1433
+    networks:
+      - easyappointmentnet2023
+
+  easyappointment-api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=easyAppointmnetDB;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 7198:7198
+    networks:
+      - easyappointmentnet2023
+    links:
+      - easyappointment-sql
+    depends_on:
+      - easyappointment-sql
+      
+networks:
+  easyappointmentnet2023:
+    driver: bridge      
