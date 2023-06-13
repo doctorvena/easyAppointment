@@ -1,4 +1,3 @@
-import 'package:eprodaja_admin/providers/reservation_provider.dart';
 import 'package:eprodaja_admin/providers/timeslot_provider.dart';
 import 'package:eprodaja_admin/utils/utils.dart';
 import 'package:eprodaja_admin/widgets/register_screen.dart';
@@ -17,7 +16,6 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
-      ChangeNotifierProvider(create: (_) => ReservationProvider()),
     ],
     child: MyApp(),
   ));
@@ -89,7 +87,6 @@ class LoginPage extends StatelessWidget {
   TextEditingController _userNameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   late TimeSlotProvider timeslotprovider;
-  late ReservationProvider _reservationProvider;
 
   @override
   Widget build(BuildContext context) {

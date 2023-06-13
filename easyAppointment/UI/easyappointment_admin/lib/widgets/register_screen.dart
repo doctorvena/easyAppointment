@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../main.dart';
 import '../providers/user_provider.dart';
-import '../screens/reservations/reservations_overview.dart';
+import '../screens/time-slot/timeslot_list_screen.dart';
 
 class RegistrationPage extends StatelessWidget {
   final _fromKey = GlobalKey<FormBuilderState>();
@@ -149,7 +149,7 @@ class RegistrationPage extends StatelessWidget {
                       // After registration, you can navigate to a different page
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ReservationsOverview(),
+                          builder: (context) => TimeSlotOverviewScreen(),
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(

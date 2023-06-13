@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_cast
 
-import 'dart:math';
-
-import 'package:eprodaja_admin/screens/time-slot/timeslot_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,21 +57,6 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
         child: Column(children: [
           SizedBox(
             height: 8,
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              // ignore: avoid_print
-              // print("data: ${data.result[0].naziv}");
-            },
-            child: Text("Testic"),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: ElevatedButton(
-                onPressed: () async {
-                  _showMyDialog();
-                },
-                child: Text("Add new")),
           ),
           Expanded(
               child: Center(
@@ -166,39 +148,6 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
           )))
         ]),
       ),
-    );
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Center(
-            child: const Text(
-              'Add new Time Slot',
-            ),
-          ),
-          insetPadding: EdgeInsets.symmetric(
-            horizontal: 300,
-          ),
-          content: TimeSlotDetails(
-            timeSlot: null,
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-              ),
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

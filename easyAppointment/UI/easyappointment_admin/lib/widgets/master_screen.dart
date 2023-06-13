@@ -1,8 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../main.dart';
 import '../screens/time-slot/timeslot_list_screen.dart';
@@ -49,16 +46,6 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 );
               },
             ),
-            ListTile(
-              title: Text('Reservations'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ReservationsOverview(),
-                  ),
-                );
-              },
-            )
           ],
         ),
       ),
