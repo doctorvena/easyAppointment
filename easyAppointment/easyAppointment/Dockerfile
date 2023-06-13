@@ -14,7 +14,7 @@ WORKDIR "/src/easyAppointment"
 RUN dotnet build "easyAppointment.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "easyAppointment.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "easyAppointment.csproj" -c Release -o /app/publish 
 
 FROM base AS final
 WORKDIR /app

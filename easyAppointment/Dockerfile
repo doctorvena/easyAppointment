@@ -13,5 +13,5 @@ RUN dotnet publish "easyAppointment/easyAppointment.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-
+COPY easyAppointment/dataSeed.sql ./
 ENTRYPOINT ["dotnet", "easyAppointment.dll"]

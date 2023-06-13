@@ -86,31 +86,37 @@ namespace easyAppointment.Services.ServiceImpl
 
         public UserResponse Register(UserInsertRequest request)
         {
-
             var entity = _mapper.Map<User>(request);
 
             if (request.Password != request.PasswordRepeat)
             {
-                throw new UserException("Password i potvrda se ne slažu!");
+                throw new UserException("Password and PasswordRepeat are not the same!");
             }
 
             var korisnici = _context.Users.ToList();
             foreach (var korisnik in korisnici)
             {
                 if (korisnik.Username == request.Username)
-                    throw new UserException("Korisnicko ime koje ste unijeli je zauzeto!");
+                    throw new UserException("Username is taken!");
                 if (korisnik.Email == request.Email)
-                    throw new UserException("Email koji ste unijeli je zauzet!");
+                    throw new UserException("Email is taken!");
             }
 
             _context.Add(entity);
 
             entity.PasswordSalt = GenerateSalt();
             entity.PasswordHash = GenerateHash(entity.PasswordSalt, request.Password);
-
             _context.SaveChanges();
 
+            var userRoles = new UserRole
+            {
+                UserId = entity.UserId,
+                RoleId = request.RoleId,
+                ModificationDate = DateTime.Now
+            };
+            _context.UserRoles.AddRange(userRoles);
 
+            _context.SaveChanges();
 
             return _mapper.Map<UserResponse>(entity);
         }

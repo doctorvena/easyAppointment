@@ -9,11 +9,11 @@ namespace easyAppointment.Model.Requests
     public class TimeSlotUpdateRequest
     {
 
-        public TimeSpan? StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
-        public TimeSpan? EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
-        public TimeSpan Duration { get; set; }
+        public DateTime? SlotDate { get; set; }
 
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Controllers
-{
+{ 
     [ApiController]
     [AllowAnonymous]
     public class TimeSlotsController : BaseCRUDController<TimeslotResponse, TimeSlotSearchObject,TimeSlotInsertRequest,TimeSlotUpdateRequest>

@@ -15,21 +15,27 @@ public partial class User
 
     public string? Phone { get; set; }
 
+    public string? Status { get; set; }
+
+    public int? SexId { get; set; }
+
     public string Username { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
 
     public string PasswordSalt { get; set; } = null!;
 
-    public bool? Status { get; set; }
-
     public virtual ICollection<Reservation> ReservationUserBusinesses { get; set; } = new List<Reservation>();
 
     public virtual ICollection<Reservation> ReservationUserCustomers { get; set; } = new List<Reservation>();
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public virtual ICollection<SalonEmployee> SalonEmployees { get; set; } = new List<SalonEmployee>();
 
-    public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+    public virtual ICollection<Salon> Salons { get; set; } = new List<Salon>();
+
+    public virtual ICollection<ServiceRating> ServiceRatings { get; set; } = new List<ServiceRating>();
+
+    public virtual Sex? Sex { get; set; }
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

@@ -19,6 +19,8 @@ namespace easyAppointment.Model.Responses
         public DateTime? ReservationDate { get; set; }
 
         public string? ReservationName { get; set; }
+        public virtual ICollection<TimeslotResponse> Timeslots { get; set; } = new List<TimeslotResponse>();
+
 
     }
 }

@@ -11,10 +11,10 @@ namespace easyAppointment.Model.Requests
     {
         [Required(AllowEmptyStrings =false)]
         public string FirstName { get; set; } = null!;
-        
         public string LastName { get; set; } = null!;
-        public int RoleId { get; set; } 
-
+        public int RoleId { get; set; }
+        public string? Status { get; set; }
+        public int? SexId { get; set; }
         public string? Email { get; set; }
         [Required(AllowEmptyStrings = false)]
         public string? Phone { get; set; }

@@ -1,7 +1,6 @@
 using easyAppointment.Model.Requests;
 using easyAppointment.Model.Responses;
 using easyAppointment.Model.SearchObjects;
-using easyAppointment.Services.Database;
 using easyAppointment.Services.InterfaceServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

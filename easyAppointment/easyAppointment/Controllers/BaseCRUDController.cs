@@ -1,4 +1,6 @@
 ﻿using easyAppointment.Model;
+using easyAppointment.Model.Responses;
+using easyAppointment.Model.SearchObjects;
 using easyAppointment.Services.InterfaceServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,8 @@ namespace easyAppointment.Controllers
     {
         protected readonly ICRUDService<T, TSearch, TInsert, TUpdate> service;
         protected readonly ILogger<BaseController<T, TSearch>> logger;
+        private ILogger<BaseController<SalonResponse, SalonSearchObject>> logger1;
+        private SalonService service1;
 
         public BaseCRUDController(ILogger<BaseController<T, TSearch>> _logger, ICRUDService<T, TSearch, TInsert, TUpdate> _service)
             : base(_logger, _service) 

@@ -1,7 +1,8 @@
-using easyAppointment;
+using AppointIT;
 using easyAppointment.Filters;
 using easyAppointment.Model.Responses;
 using easyAppointment.Model.SearchObjects;
+using easyAppointment.Security;
 using easyAppointment.Services.Database;
 using easyAppointment.Services.InterfaceServices;
 using easyAppointment.Services.ServiceImpl;
@@ -12,10 +13,18 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<ReservationsService, ReservationsServiceImpl>();
-builder.Services.AddTransient<TimeSlotsService, TimeSlotsServiceImpl>();
-builder.Services.AddTransient<UserService, UserServiceImpl>();
-builder.Services.AddTransient<Service<ReviewResponse, ReviewSearcchObject>, ReviewServiceImpl>();
+builder.Services.AddScoped<ReservationsService, ReservationsServiceImpl>();
+builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
+builder.Services.AddScoped<UserService, UserServiceImpl>();
+builder.Services.AddScoped<Service<SexResponse, SexSearchObject>, SexServiceImpl>();
+builder.Services.AddScoped<Service<CityResponse, BaseSearchObject>, CityServiceImpl>();
+builder.Services.AddScoped<Service<ServiceRatingResponse, ServiceRatingSearcchObject>, ServiceRatingServiceImpl>();
+builder.Services.AddScoped<Service<RoleResponse,RoleSearchObject>, RolesServiceImpl>();
+builder.Services.AddScoped<SalonService, SalonServiceImpl>();
+builder.Services.AddScoped<ServiceRatingService, ServiceRatingServiceImpl>();
+builder.Services.AddScoped<ServiceService, ServiceServiceImpl>();
+builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
+builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
 
 
 builder.Services.AddControllers(x=>
@@ -89,9 +98,13 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetDbContext>();
-    //dataContext.Database.EnsureCreated();
+    dataContext.Database.EnsureCreated();
 
-    var conn = dataContext.Database.GetConnectionString();
+    new SetupService().Init(dataContext);
+    new SetupService().InsertData(dataContext);
+
+
+    //var conn = dataContext.Database.GetConnectionString();
 
     //dataContext.Database.Migrate();
 }

@@ -1,7 +1,6 @@
 ﻿using easyAppointment.Model.Requests;
 using easyAppointment.Model.Responses;
 using easyAppointment.Model.SearchObjects;
-using easyAppointment.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
