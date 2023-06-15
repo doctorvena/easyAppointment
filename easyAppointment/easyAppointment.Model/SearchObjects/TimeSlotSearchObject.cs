@@ -9,5 +9,9 @@ namespace easyAppointment.Model.SearchObjects
     public class TimeSlotSearchObject : BaseSearchObject
     {
         public int duration {get; set;}
+
+        public int? ServiceId { get; set; }
+
+        public int? EmployeeId { get; set; }
     }
 }

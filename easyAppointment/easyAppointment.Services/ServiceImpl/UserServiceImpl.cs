@@ -102,11 +102,11 @@ namespace easyAppointment.Services.ServiceImpl
                     throw new UserException("Email is taken!");
             }
 
-            _context.Add(entity);
-
             entity.PasswordSalt = GenerateSalt();
             entity.PasswordHash = GenerateHash(entity.PasswordSalt, request.Password);
-            _context.SaveChanges();
+
+            _context.Add(entity);
+            _context.SaveChanges(); // Ensure that entity is saved and UserId is generated
 
             var userRoles = new UserRole
             {
@@ -115,7 +115,6 @@ namespace easyAppointment.Services.ServiceImpl
                 ModificationDate = DateTime.Now
             };
             _context.UserRoles.AddRange(userRoles);
-
             _context.SaveChanges();
 
             return _mapper.Map<UserResponse>(entity);

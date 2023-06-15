@@ -25,6 +25,7 @@ builder.Services.AddScoped<ServiceRatingService, ServiceRatingServiceImpl>();
 builder.Services.AddScoped<ServiceService, ServiceServiceImpl>();
 builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
 builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
+builder.Services.AddScoped<ServiceRecommenderService, ServiceRecommenderServiceImpl>();
 
 
 builder.Services.AddControllers(x=>
