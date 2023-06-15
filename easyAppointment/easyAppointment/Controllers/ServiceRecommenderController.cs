@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Controllers
 {
-    public class ServiceRecommender : Controller
+    public class ServiceRecommenderController : Controller
     {
         private readonly ServiceRecommenderService service;
-        public ServiceRecommender(ServiceRecommenderService service)
+        public ServiceRecommenderController(ServiceRecommenderService service)
         {
             this.service = service;
         }
