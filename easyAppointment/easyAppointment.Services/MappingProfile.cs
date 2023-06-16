@@ -28,9 +28,6 @@ namespace easyAppointment.Services
             CreateMap<ReservationInsertRequest, Reservation>();
             CreateMap<ReservationUpdateRequest, Reservation>();
 
-            //Reviews
-            CreateMap<ServiceRating, ServiceRatingResponse>();
-
             //TimeSlot
             CreateMap<TimeSlot, TimeslotResponse>();
             CreateMap<TimeSlotInsertRequest, TimeSlot>();
@@ -68,10 +65,10 @@ namespace easyAppointment.Services
             CreateMap<SalonEmployeeInsertRequest, SalonEmployee>();
             CreateMap<SalonEmployeeUpdateRequest, SalonEmployee>();
 
-            // ServiceRating
-            CreateMap<ServiceRating, ServiceRatingResponse>();
-            CreateMap<ServiceRatingInsertRequest, ServiceRating>();
-            CreateMap<ServiceRatingUpdateRequest, ServiceRating>();
+            // SalonRating
+            CreateMap<SalonRating, SalonRatingResponse>();
+            CreateMap<SalonRatingInsertRequest, SalonRating>();
+            CreateMap<SalonRatingUpdateRequest, SalonRating>();
         }
     }
 }

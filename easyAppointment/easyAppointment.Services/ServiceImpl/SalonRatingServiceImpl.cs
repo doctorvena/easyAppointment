@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Services.ServiceImpl
 {
-    public class ServiceRatingServiceImpl : BaseCRUDService<ServiceRatingResponse, ServiceRating, ServiceRatingSearcchObject,ServiceRatingInsertRequest,ServiceRatingUpdateRequest>, ServiceRatingService
+    public class SalonRatingServiceImpl : BaseCRUDService<SalonRatingResponse, SalonRating, SalonRatingSearcchObject, SalonRatingInsertRequest, SalonRatingUpdateRequest>, SalonRatingService
     {
-        public ServiceRatingServiceImpl(ILogger<BaseCRUDService<ServiceRatingResponse, ServiceRating, ServiceRatingSearcchObject, ServiceRatingInsertRequest, ServiceRatingUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper)
+        public SalonRatingServiceImpl(ILogger<BaseCRUDService<SalonRatingResponse, SalonRating, SalonRatingSearcchObject, SalonRatingInsertRequest, SalonRatingUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper)
             : base(_logger ,_context, _mapper)
         {
 

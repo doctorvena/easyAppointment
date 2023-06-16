@@ -12,41 +12,41 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Services.ServiceImpl
 {
-    public class ServiceRecommenderServiceImpl : ServiceRecommenderService
+    public class SalonRecommenderServiceImpl : SalonRecommenderService
     {
         private readonly EasyAppointmnetDbContext _context;
         private readonly IMapper _mapper;
-        Dictionary<int, List<ServiceRating>> services = new Dictionary<int, List<ServiceRating>>();
+        Dictionary<int, List<SalonRating>> salons = new Dictionary<int, List<SalonRating>>();
 
-        public ServiceRecommenderServiceImpl(EasyAppointmnetDbContext context, IMapper mapper)
+        public SalonRecommenderServiceImpl(EasyAppointmnetDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        private List<Service> LoadSimilar(int serviceId)
+        private List<Salon> LoadSimilar(int salonId)
         {
-            LoadOtherServices(serviceId);
-            List<ServiceRating> ratingOfCurrent = _context.ServiceRatings.Where(x => x.ServiceId == serviceId).OrderBy(x => x.UserId).ToList();
+            LoadOtherServices(salonId);
+            List<SalonRating> ratingOfCurrent = _context.SalonRatings.Where(x => x.SalonId == salonId).OrderBy(x => x.UserId).ToList();
 
-            List<ServiceRating> ratings1 = new List<ServiceRating>();
-            List<ServiceRating> ratings2 = new List<ServiceRating>();
-            List<Service> recommendedServices = new List<Service>();
+            List<SalonRating> ratings1 = new List<SalonRating>();
+            List<SalonRating> ratings2 = new List<SalonRating>();
+            List<Salon> recommendedServices = new List<Salon>();
 
-            foreach (var service in services)
+            foreach (var salon in salons)
             {
-                foreach (ServiceRating rating in ratingOfCurrent)
+                foreach (SalonRating rating in ratingOfCurrent)
                 {
-                    if (service.Value.Where(w => w.UserId == rating.UserId).Count() > 0)
+                    if (salon.Value.Where(w => w.UserId == rating.UserId).Count() > 0)
                     {
                         ratings1.Add(rating);
-                        ratings2.Add(service.Value.Where(w => w.UserId == rating.UserId).First());
+                        ratings2.Add(salon.Value.Where(w => w.UserId == rating.UserId).First());
                     }
                 }
                 double similarity = GetSimilarity(ratings1, ratings2);
                 if (similarity > 0.5)
                 {
-                    recommendedServices.Add(_context.Services.AsQueryable().Where(w => w.ServiceId == service.Key).FirstOrDefault());
+                    recommendedServices.Add(_context.Salons.AsQueryable().Where(w => w.SalonId == salon.Key).FirstOrDefault());
                 }
                 ratings1.Clear();
                 ratings2.Clear();
@@ -54,7 +54,7 @@ namespace easyAppointment.Services.ServiceImpl
             return recommendedServices;
         }
 
-        private double GetSimilarity(List<ServiceRating> ratings1, List<ServiceRating> ratings2)
+        private double GetSimilarity(List<SalonRating> ratings1, List<SalonRating> ratings2)
         {
             if (ratings1.Count != ratings2.Count)
             {
@@ -77,25 +77,25 @@ namespace easyAppointment.Services.ServiceImpl
             return x / y;
         }
 
-        private void LoadOtherServices(int serviceId)
+        private void LoadOtherServices(int salonId)
         {
-            List<Service> list = _context.Services.Where(w => w.ServiceId != serviceId).ToList();
-            List<ServiceRating> ratings = new List<ServiceRating>();
+            List<Salon> list = _context.Salons.Where(w => w.SalonId != salonId).ToList();
+            List<SalonRating> ratings = new List<SalonRating>();
             foreach (var item in list)
             {
-                ratings = _context.ServiceRatings.Where(w => w.ServiceId == item.ServiceId).OrderBy(w => w.ServiceId).ToList();
+                ratings = _context.SalonRatings.Where(w => w.SalonId == item.SalonId).OrderBy(w => w.SalonId).ToList();
                 if (ratings.Count > 0)
                 {
-                    services.Add(item.ServiceId, ratings);
+                    salons.Add(item.SalonId, ratings);
                 }
             }
 
         }
 
-        public List<ServiceResponse> Recommend(int serviceId)
+        public List<SalonResponse> Recommend(int salonId)
         {
-            var tmp = LoadSimilar(serviceId);
-            return _mapper.Map<List<ServiceResponse>>(tmp);
+            var tmp = LoadSimilar(salonId);
+            return _mapper.Map<List<SalonResponse>>(tmp);
         }
 
     }

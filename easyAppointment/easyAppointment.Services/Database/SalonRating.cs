@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace easyAppointment.Services.Database;
 
-public partial class ServiceRating
+public partial class SalonRating
 {
-    public int ServiceRatingId { get; set; }
+    public int SalonRatingId { get; set; }
 
     public double Rating { get; set; }
 
@@ -13,9 +13,9 @@ public partial class ServiceRating
 
     public int? UserId { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int? SalonId { get; set; }
 
-    public virtual Service? Service { get; set; }
+    public virtual Salon? Salon { get; set; }
 
     public virtual User? User { get; set; }
 }

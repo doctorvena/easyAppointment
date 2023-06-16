@@ -31,9 +31,9 @@ public partial class User
 
     public virtual ICollection<SalonEmployee> SalonEmployees { get; set; } = new List<SalonEmployee>();
 
-    public virtual ICollection<Salon> Salons { get; set; } = new List<Salon>();
+    public virtual ICollection<SalonRating> SalonRatings { get; set; } = new List<SalonRating>();
 
-    public virtual ICollection<ServiceRating> ServiceRatings { get; set; } = new List<ServiceRating>();
+    public virtual ICollection<Salon> Salons { get; set; } = new List<Salon>();
 
     public virtual Sex? Sex { get; set; }
 

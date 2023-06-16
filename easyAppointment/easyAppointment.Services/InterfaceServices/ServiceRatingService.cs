@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Services.InterfaceServices
 {
-    public interface ServiceRatingService : ICRUDService<ServiceRatingResponse, ServiceRatingSearcchObject,ServiceRatingInsertRequest,ServiceRatingUpdateRequest>
+    public interface SalonRatingService : ICRUDService<SalonRatingResponse, SalonRatingSearcchObject,SalonRatingInsertRequest,SalonRatingUpdateRequest>
     {
     }
 }

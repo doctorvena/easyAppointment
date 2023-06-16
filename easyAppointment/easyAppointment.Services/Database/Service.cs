@@ -19,7 +19,5 @@ public partial class Service
 
     public virtual ICollection<SalonPhoto> SalonPhotos { get; set; } = new List<SalonPhoto>();
 
-    public virtual ICollection<ServiceRating> ServiceRatings { get; set; } = new List<ServiceRating>();
-
     public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
 }

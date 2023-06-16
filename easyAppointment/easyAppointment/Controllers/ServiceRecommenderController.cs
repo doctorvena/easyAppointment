@@ -3,20 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Controllers
 {
-    public class ServiceRecommenderController : Controller
+    public class SalonRecommenderController : Controller
     {
-        private readonly ServiceRecommenderService service;
-        public ServiceRecommenderController(ServiceRecommenderService service)
+        private readonly SalonRecommenderService service;
+        public SalonRecommenderController(SalonRecommenderService service)
         {
             this.service = service;
         }
 
-        [HttpGet("{ServiceId}")]
-        public IActionResult RecommendedProduct(int ServiceId)
+        [HttpGet("{SalonId}")]
+        public IActionResult RecommendedProduct(int SalonId)
         {
             try
             {
-                return Ok(service.Recommend(ServiceId));
+                return Ok(service.Recommend(SalonId));
             }
             catch (Exception ex)
             {

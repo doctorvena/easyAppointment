@@ -27,9 +27,9 @@ public partial class EasyAppointmnetDbContext : DbContext
 
     public virtual DbSet<SalonPhoto> SalonPhotos { get; set; }
 
-    public virtual DbSet<Service> Services { get; set; }
+    public virtual DbSet<SalonRating> SalonRatings { get; set; }
 
-    public virtual DbSet<ServiceRating> ServiceRatings { get; set; }
+    public virtual DbSet<Service> Services { get; set; }
 
     public virtual DbSet<Sex> Sexes { get; set; }
 
@@ -39,18 +39,10 @@ public partial class EasyAppointmnetDbContext : DbContext
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
 
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Data Source=localhost; Database=easyAppointmnetDB; TrustServerCertificate=True; Trusted_Connection=True;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=localhost; Database=easyAppointmnetDB; TrustServerCertificate=True; Trusted_Connection=True;");
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    if (!optionsBuilder.IsConfigured)
-    //    {
-    //        optionsBuilder.UseSqlServer("Data Source=localhost; Database=easyAppointmnetDB2; TrustServerCertificate=True; Trusted_Connection=True;");
-
-    //    }
-    //}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<City>(entity =>
@@ -140,6 +132,23 @@ public partial class EasyAppointmnetDbContext : DbContext
                 .HasConstraintName("FK__Photos__ServiceI__4D94879B");
         });
 
+        modelBuilder.Entity<SalonRating>(entity =>
+        {
+            entity.HasKey(e => e.SalonRatingId).HasName("PK__SalonRat__A5496F32DA8AA6FD");
+
+            entity.ToTable("SalonRating");
+
+            entity.Property(e => e.RatingDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Salon).WithMany(p => p.SalonRatings)
+                .HasForeignKey(d => d.SalonId)
+                .HasConstraintName("FK__SalonRati__Salon__5EBF139D");
+
+            entity.HasOne(d => d.User).WithMany(p => p.SalonRatings)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__SalonRati__UserI__5DCAEF64");
+        });
+
         modelBuilder.Entity<Service>(entity =>
         {
             entity.HasKey(e => e.ServiceId).HasName("PK__Services__C51BB00A897B989B");
@@ -150,23 +159,6 @@ public partial class EasyAppointmnetDbContext : DbContext
             entity.HasOne(d => d.Salon).WithMany(p => p.Services)
                 .HasForeignKey(d => d.SalonId)
                 .HasConstraintName("FK__Services__SalonI__3D5E1FD2");
-        });
-
-        modelBuilder.Entity<ServiceRating>(entity =>
-        {
-            entity.HasKey(e => e.ServiceRatingId).HasName("PK__ServiceR__DFBB89AAF96ACBF6");
-
-            entity.ToTable("ServiceRating");
-
-            entity.Property(e => e.RatingDate).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.ServiceRatings)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__ServiceRa__Servi__49C3F6B7");
-
-            entity.HasOne(d => d.User).WithMany(p => p.ServiceRatings)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__ServiceRa__UserI__48CFD27E");
         });
 
         modelBuilder.Entity<Sex>(entity =>

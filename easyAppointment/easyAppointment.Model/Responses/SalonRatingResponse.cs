@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Model.Responses
 {
-    public partial class ServiceRatingResponse
+    public partial class SalonRatingResponse
     {
         public int ReviewId { get; set; }
 

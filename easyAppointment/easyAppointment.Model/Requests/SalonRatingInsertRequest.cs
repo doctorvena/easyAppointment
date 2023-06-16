@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Model.Requests
 {
-    public class ServiceRatingInsertRequest
+    public class SalonRatingInsertRequest
     {
 
         public double Rating { get; set; }

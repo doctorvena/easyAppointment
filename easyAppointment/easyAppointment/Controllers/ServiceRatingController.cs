@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace easyAppointment.Controllers
 {
     [ApiController]
-    public class ServiceRatingController : BaseCRUDController<ServiceRatingResponse, ServiceRatingSearcchObject,ServiceRatingInsertRequest,ServiceRatingUpdateRequest>
+    public class ServiceRatingController : BaseCRUDController<SalonRatingResponse, SalonRatingSearcchObject, SalonRatingInsertRequest, SalonRatingUpdateRequest>
     {
-        public ServiceRatingController(ILogger<BaseController<ServiceRatingResponse, ServiceRatingSearcchObject>> logger, ServiceRatingService _service) : base(logger,_service)
+        public ServiceRatingController(ILogger<BaseController<SalonRatingResponse, SalonRatingSearcchObject>> logger, SalonRatingService _service) : base(logger,_service)
         {
         }
     }

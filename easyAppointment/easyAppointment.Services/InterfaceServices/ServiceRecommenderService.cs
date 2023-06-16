@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Services.InterfaceServices
 {
-    public interface ServiceRecommenderService
+    public interface SalonRecommenderService
     {
-        List<ServiceResponse> Recommend(int proizvodid);
+        List<SalonResponse> Recommend(int proizvodid);
 
     }
 }

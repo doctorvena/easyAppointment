@@ -25,5 +25,7 @@ public partial class Salon
 
     public virtual ICollection<SalonPhoto> SalonPhotos { get; set; } = new List<SalonPhoto>();
 
+    public virtual ICollection<SalonRating> SalonRatings { get; set; } = new List<SalonRating>();
+
     public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 }

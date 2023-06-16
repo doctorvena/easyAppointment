@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace easyAppointment.Model.SearchObjects
 {
-    public class ServiceRatingSearcchObject : BaseSearchObject
+    public class SalonRatingSearcchObject : BaseSearchObject
     {
         public string? comment { get; set; }
         public string? FTS { get; set; }

@@ -18,14 +18,14 @@ builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
 builder.Services.AddScoped<UserService, UserServiceImpl>();
 builder.Services.AddScoped<Service<SexResponse, SexSearchObject>, SexServiceImpl>();
 builder.Services.AddScoped<Service<CityResponse, BaseSearchObject>, CityServiceImpl>();
-builder.Services.AddScoped<Service<ServiceRatingResponse, ServiceRatingSearcchObject>, ServiceRatingServiceImpl>();
+builder.Services.AddScoped<Service<SalonRatingResponse, SalonRatingSearcchObject>, SalonRatingServiceImpl>();
 builder.Services.AddScoped<Service<RoleResponse,RoleSearchObject>, RolesServiceImpl>();
 builder.Services.AddScoped<SalonService, SalonServiceImpl>();
-builder.Services.AddScoped<ServiceRatingService, ServiceRatingServiceImpl>();
+builder.Services.AddScoped<SalonRatingService, SalonRatingServiceImpl>();
 builder.Services.AddScoped<ServiceService, ServiceServiceImpl>();
 builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
 builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
-builder.Services.AddScoped<ServiceRecommenderService, ServiceRecommenderServiceImpl>();
+builder.Services.AddScoped<SalonRecommenderService, SalonRecommenderServiceImpl>();
 
 
 builder.Services.AddControllers(x=>
