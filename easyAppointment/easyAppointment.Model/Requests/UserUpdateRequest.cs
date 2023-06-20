@@ -15,6 +15,8 @@ namespace easyAppointment.Model.Requests
         public string? Email { get; set; }
 
         public string? Phone { get; set; }
+        public byte[]? Photo { get; set; }
+
 
     }
 }

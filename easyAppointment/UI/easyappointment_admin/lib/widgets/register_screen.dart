@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../main.dart';
 import '../providers/user_provider.dart';
-import '../screens/time-slot/timeslot_list_screen.dart';
 
 class RegistrationPage extends StatelessWidget {
   final _fromKey = GlobalKey<FormBuilderState>();
@@ -34,142 +33,196 @@ class RegistrationPage extends StatelessWidget {
               color: Color.fromRGBO(220, 220, 220, 90),
               padding: EdgeInsets.all(14.0),
               constraints: BoxConstraints(maxHeight: 520, maxWidth: 520),
-              child: Column(
-                children: [
-                  SizedBox(height: 14.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "First Name",
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "First Name",
+                      ),
+                      controller: _firstNameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'First name is required';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _firstNameController,
-                  ),
-                  SizedBox(height: 14.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Last Name",
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Last Name",
+                      ),
+                      controller: _lastNameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Last name is required';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _lastNameController,
-                  ),
-                  SizedBox(height: 14.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Email",
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                      ),
+                      controller: _emailController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Email is required';
+                        } else if (!value.contains('@')) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _emailController,
-                  ),
-                  SizedBox(height: 14.0),
-                  TextField(
+                    TextFormField(
                       decoration: InputDecoration(
                         labelText: "Username",
                       ),
-                      controller: _usernameController),
-                  SizedBox(height: 14.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Password",
+                      controller: _usernameController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Username is required';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _passwordController,
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 14.0),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                      ),
+                      controller: _passwordController,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Password is required';
+                        }
+                        return null;
+                      },
                     ),
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 14.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      String firstName = _firstNameController.text;
-                      String lastName = _lastNameController.text;
-                      String username = _usernameController.text;
-                      String phone = _phoneController.text;
-                      String email = _emailController.text;
-                      String password = _passwordController.text;
-                      String confirmPassword = _confirmPasswordController.text;
-                      int roleId = 3;
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                      ),
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Confirm password is required';
+                        } else if (value != _passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Phone",
+                      ),
+                      controller: _phoneController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Phone number is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        String firstName = _firstNameController.text;
+                        String lastName = _lastNameController.text;
+                        String username = _usernameController.text;
+                        String phone = _phoneController.text;
+                        String email = _emailController.text;
+                        String password = _passwordController.text;
+                        String confirmPassword =
+                            _confirmPasswordController.text;
+                        int roleId = 3;
 
-                      validateRegister();
+                        validateRegister();
 
-                      if (firstName == null || firstName.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("FirstName can not be empty"),
-                        ));
-                        return;
-                      }
+                        if (firstName == null || firstName.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("FirstName can not be empty"),
+                          ));
+                          return;
+                        }
 
-                      if (lastName == null || lastName.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("LastName can not be empty"),
-                        ));
-                        return;
-                      }
+                        if (lastName == null || lastName.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("LastName can not be empty"),
+                          ));
+                          return;
+                        }
 
-                      if (email == null || email.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Email can not be empty"),
-                        ));
-                        return;
-                      }
+                        if (email == null || email.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Email can not be empty"),
+                          ));
+                          return;
+                        }
 
-                      if (!validateStructure(password)) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text(
-                              "Password must contain one upercase letter one special char and number"),
-                        ));
-                        return;
-                      }
+                        if (!validateStructure(password)) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                "Password must contain one upercase letter one special char and number"),
+                          ));
+                          return;
+                        }
 
-                      if (password != confirmPassword) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Passwors must match!"),
-                        ));
-                        return;
-                      }
+                        if (password != confirmPassword) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Passwors must match!"),
+                          ));
+                          return;
+                        }
 
-                      var request = {
-                        'firstName': firstName,
-                        'lastName': lastName,
-                        'roleId': 1,
-                        'email': email,
-                        'phone': phone,
-                        'username': username,
-                        'password': password,
-                        'passwordRepeat': confirmPassword,
-                      };
-                      _saveUser(request);
+                        final Map<String, dynamic> requestBody = {
+                          'firstName': firstName,
+                          'lastName': lastName,
+                          'roleId': 2,
+                          'email': email,
+                          'phone': phone,
+                          'username': username,
+                          'password': password,
+                          'passwordRepeat': confirmPassword,
+                          'status': 'Active',
+                          'sexId': 1,
+                        };
 
-                      // After registration, you can navigate to a different page
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TimeSlotOverviewScreen(),
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Registracija uspješna!')),
-                      );
-                    },
-                    child: Text("Register"),
-                  ),
-                  SizedBox(height: 14.0),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    },
-                    child: Text("Login"),
-                  ),
-                ],
+                        // _saveUser(requestBody);
+                        _userProvider.createUser(requestBody);
+
+                        // After registration, you can navigate to a different page
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Registracija uspješna!')),
+                        );
+                      },
+                      child: Text("Register"),
+                    ),
+                    SizedBox(height: 12.0),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                        );
+                      },
+                      child: Text("Login"),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -194,7 +247,7 @@ class RegistrationPage extends StatelessWidget {
   }
 
   bool _validateInput(String? value, BuildContext context) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Field '$value' can not be empty"),
       ));

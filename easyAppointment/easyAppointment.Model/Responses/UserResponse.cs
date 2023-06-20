@@ -17,6 +17,7 @@ namespace easyAppointment.Model.Responses
 
         public string? Email { get; set; }
 
+        public byte[]? Photo { get; set; }
         public string? Phone { get; set; }
 
         public string Username { get; set; } = null!;

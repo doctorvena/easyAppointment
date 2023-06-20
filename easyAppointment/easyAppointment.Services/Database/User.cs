@@ -25,6 +25,8 @@ public partial class User
 
     public string PasswordSalt { get; set; } = null!;
 
+    public byte[]? Photo { get; set; }
+
     public virtual ICollection<Reservation> ReservationUserBusinesses { get; set; } = new List<Reservation>();
 
     public virtual ICollection<Reservation> ReservationUserCustomers { get; set; } = new List<Reservation>();

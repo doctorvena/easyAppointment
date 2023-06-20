@@ -20,6 +20,9 @@ class BaseProvider<T> with ChangeNotifier {
   Future<searchResult<T>> get(dynamic filter) async {
     var url = "$_baseurl$_endpoint";
 
+    print("url");
+    print(url);
+
     if (filter != null) {
       var queryString = getQueryString(filter);
       url = "$url?$queryString";
@@ -155,5 +158,26 @@ class BaseProvider<T> with ChangeNotifier {
       }
     });
     return query;
+  }
+
+  void createUser(Map<String, dynamic> requestBody) async {
+    var url1 = "$_baseurl$_endpoint";
+    final url = Uri.parse(url1);
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      print('User created successfully');
+    } else {
+      print('Error creating user: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
   }
 }

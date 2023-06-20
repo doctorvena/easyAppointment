@@ -15,6 +15,8 @@ namespace easyAppointment.Model.Requests
         public int RoleId { get; set; }
         public string? Status { get; set; }
         public int? SexId { get; set; }
+        public byte[]? Photo { get; set; }
+
         public string? Email { get; set; }
         [Required(AllowEmptyStrings = false)]
         public string? Phone { get; set; }

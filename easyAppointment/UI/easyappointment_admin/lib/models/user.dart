@@ -16,6 +16,8 @@ class User {
     this.username,
     this.password,
     this.passwordRepeat,
+    this.status,
+    this.sexId,
   );
 
   String? firstName;
@@ -26,6 +28,8 @@ class User {
   String? username;
   String? password;
   String? passwordRepeat;
+  String? status;
+  int? sexId;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
