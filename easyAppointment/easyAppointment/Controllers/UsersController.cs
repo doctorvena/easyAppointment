@@ -26,5 +26,12 @@ namespace easyAppointment.Controllers
             return _service.Register(request);
         }
 
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<UserResponse> Login(string username, string password)
+        {
+            return await _service.Login(username, password);
+        }
+
     }
 }
