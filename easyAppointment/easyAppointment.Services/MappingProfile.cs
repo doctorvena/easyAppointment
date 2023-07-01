@@ -16,10 +16,7 @@ namespace easyAppointment.Services
         public MappingProfile()
         {
             //User
-            CreateMap<User, UserResponse>()
-                .ForMember(dest => dest.Status,
-                    opt => opt.MapFrom(src => src.Status == "Active" ? true : false));
-
+            CreateMap<User, UserResponse>();
             CreateMap<UserInsertRequest, User>();
             CreateMap<UserUpdateRequest, User>();
 

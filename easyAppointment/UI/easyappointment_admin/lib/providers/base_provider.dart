@@ -160,6 +160,32 @@ class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 
+  Future<T> loginUser(String username, String password) async {
+    final url = Uri.parse(
+        '$_baseurl$_endpoint/login?username=$username&password=$password');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final userData = jsonDecode(response.body);
+      final user = fromJson(userData);
+      print('Login successful');
+      return user;
+      // Handle the successful login response here
+    } else {
+      print('Error logging in: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Login failed');
+      // Handle the login error here
+    }
+  }
+
   void createUser(Map<String, dynamic> requestBody) async {
     var url1 = "$_baseurl$_endpoint";
     final url = Uri.parse(url1);

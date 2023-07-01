@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
 import 'package:flutter/material.dart';
 
+import '../app/user_singleton.dart';
 import '../main.dart';
 import '../screens/time-slot/timeslot_list_screen.dart';
 
@@ -46,10 +48,56 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 );
               },
             ),
+            ListTile(
+              title: Text('Reservations'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ReservationsOverview(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap:
+                  _showLogoutDialog, // Call the _showLogoutDialog function to display the logout popup
+            ),
           ],
         ),
       ),
       body: widget.child!,
+    );
+  }
+
+  Future<void> _showLogoutDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Call the logoutUser function to log out the user
+                UserSingleton().loggedInUserId = -1;
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: const Text('Logout'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

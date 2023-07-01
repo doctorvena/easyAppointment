@@ -22,7 +22,7 @@ namespace easyAppointment.Model.Responses
 
         public string Username { get; set; } = null!;
 
-        public bool? Status { get; set; }
+        public string? Status { get; set; }
 
         public virtual ICollection<UserRoleResponse> UserRoles { get; set; } = new List<UserRoleResponse>();
     }

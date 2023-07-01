@@ -1,10 +1,13 @@
+import 'package:eprodaja_admin/providers/reservation_provider.dart';
 import 'package:eprodaja_admin/providers/timeslot_provider.dart';
+import 'package:eprodaja_admin/providers/user_provider.dart';
+import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
 import 'package:eprodaja_admin/utils/utils.dart';
 import 'package:eprodaja_admin/widgets/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/time-slot/timeslot_list_screen.dart';
+import 'app/user_singleton.dart';
 
 void main() {
   final timeOfDay = TimeOfDay(hour: 0, minute: 34);
@@ -16,6 +19,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
+      ChangeNotifierProvider(create: (_) => ReservationProvider()),
+      ChangeNotifierProvider(create: (_) => UserProvider()),
     ],
     child: MyApp(),
   ));
@@ -87,10 +92,12 @@ class LoginPage extends StatelessWidget {
   TextEditingController _userNameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   late TimeSlotProvider timeslotprovider;
+  late UserProvider _userProvider;
 
   @override
   Widget build(BuildContext context) {
     timeslotprovider = context.read<TimeSlotProvider>();
+    _userProvider = context.read<UserProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
@@ -129,7 +136,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     var username = _userNameController.text;
                     var password = _passwordController.text;
-                    _passwordController.text = username;
+                    // _passwordController.text = username;
 
                     print("login proceed $username $password");
 
@@ -137,11 +144,19 @@ class LoginPage extends StatelessWidget {
                     Authorization.password = password;
 
                     try {
-                      await timeslotprovider.get(null);
+                      var loggedUser =
+                          await _userProvider.loginUser(username, password);
+
+                      if (loggedUser == null) {
+                        throw Exception(
+                            'User login failed'); // Throw exception if user is null
+                      }
+
+                      UserSingleton().loggedInUserId = loggedUser.userId!;
 
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const TimeSlotOverviewScreen(),
+                          builder: (context) => const ReservationsOverview(),
                         ),
                       );
                     } on Exception catch (e) {
@@ -153,11 +168,7 @@ class LoginPage extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => RegistrationPage(),
-                                  ),
-                                );
+                                Navigator.of(context).pop();
                               },
                               child: Text("OK"),
                             )
