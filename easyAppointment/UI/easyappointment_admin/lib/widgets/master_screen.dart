@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../app/user_singleton.dart';
 import '../main.dart';
+import '../screens/contactus/contact_screen.dart';
+import '../screens/help/help_screen.dart';
+import '../screens/profile/prfile_screen.dart';
 import '../screens/time-slot/timeslot_list_screen.dart';
 
 class MasterScreenWidget extends StatefulWidget {
@@ -44,6 +47,36 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const ReservationsOverview(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Help'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const HelpPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Contact'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ContactPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Profile Settings'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProfileSettingsPage(),
                   ),
                 );
               },

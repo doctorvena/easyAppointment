@@ -14,6 +14,7 @@ class User {
     this.roleId,
     this.email,
     this.phone,
+    this.photo,
     this.username,
     this.password,
     this.passwordRepeat,
@@ -27,6 +28,7 @@ class User {
   int? roleId;
   String? email;
   String? phone;
+  String? photo;
   String? username;
   String? password;
   String? passwordRepeat;

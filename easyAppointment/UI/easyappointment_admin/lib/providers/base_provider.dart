@@ -8,17 +8,34 @@ import '../models/search_result.dart';
 import '../utils/utils.dart';
 
 class BaseProvider<T> with ChangeNotifier {
-  static String? _baseurl;
+  static String? _baseUrl;
   String _endpoint = "";
 
   BaseProvider(String endpint) {
     _endpoint = endpint;
-    _baseurl = const String.fromEnvironment("baseUrl",
+    _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "http://localhost:7198");
   }
 
+  Future<T> getById(dynamic id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
   Future<searchResult<T>> get({dynamic filter}) async {
-    var url = "$_baseurl$_endpoint";
+    var url = "$_baseUrl$_endpoint";
 
     print("url");
     print(url);
@@ -50,7 +67,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> insert(dynamic request) async {
-    var url = "$_baseurl$_endpoint";
+    var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -68,7 +85,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> update(int id, [dynamic request]) async {
-    var url = "$_baseurl$_endpoint/$id";
+    var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -85,7 +102,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> delete(int id) async {
-    var url = '$_baseurl$_endpoint/$id';
+    var url = '$_baseUrl$_endpoint/$id';
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
@@ -162,7 +179,7 @@ class BaseProvider<T> with ChangeNotifier {
 
   Future<T> loginUser(String username, String password) async {
     final url = Uri.parse(
-        '$_baseurl$_endpoint/login?username=$username&password=$password');
+        '$_baseUrl$_endpoint/login?username=$username&password=$password');
 
     final response = await http.post(
       url,
@@ -187,7 +204,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   void createUser(Map<String, dynamic> requestBody) async {
-    var url1 = "$_baseurl$_endpoint";
+    var url1 = "$_baseUrl$_endpoint";
     final url = Uri.parse(url1);
 
     final response = await http.post(

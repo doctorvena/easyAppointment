@@ -15,6 +15,8 @@ public partial class Reservation
 
     public DateTime? ReservationDate { get; set; }
 
+    public string? ReservationName { get; set; }
+
     public virtual TimeSlot? TimeSlot { get; set; }
 
     public virtual User? UserBusiness { get; set; }

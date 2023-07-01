@@ -63,6 +63,7 @@ public partial class EasyAppointmnetDbContext : DbContext
 
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.ReservationDate).HasColumnType("date");
+            entity.Property(e => e.ReservationName).HasMaxLength(255);
             entity.Property(e => e.TimeSlotId).HasColumnName("TimeSlotID");
             entity.Property(e => e.UserBusinessId).HasColumnName("UserBusinessID");
             entity.Property(e => e.UserCustomerId).HasColumnName("UserCustomerID");
