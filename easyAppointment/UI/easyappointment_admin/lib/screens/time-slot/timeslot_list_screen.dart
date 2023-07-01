@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_cast
 
+import 'package:eprodaja_admin/app/user_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +31,12 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
   }
 
   Future<void> fetchData() async {
-    var data = await _timeslotprovider.get(null);
+    // var data = await _timeslotprovider.get(null);
 
+    var data = await _timeslotprovider
+        .get(filter: {'businessId': UserSingleton().loggedInUserId});
+
+    print(UserSingleton().loggedInUserId);
     print("data: $data");
 
     setState(() {

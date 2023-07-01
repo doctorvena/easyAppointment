@@ -13,5 +13,6 @@ namespace easyAppointment.Model.SearchObjects
         public int? ServiceId { get; set; }
 
         public int? EmployeeId { get; set; }
+        public int? BusinessId { get; set; }
     }
 }

@@ -20,5 +20,20 @@ namespace easyAppointment.Services.ServiceImpl
         {
         }
 
+        public override IQueryable<TimeSlot> AddFilter(IQueryable<TimeSlot> query, TimeSlotSearchObject? search = null)
+        {
+            if (search != null)
+            {
+                query = query.Where(x =>
+                    (search.BusinessId == null || x.BusinessId.Equals(search.BusinessId)) &&
+                    (search.EmployeeId == null || x.EmployeeId.Equals(search.EmployeeId)) &&
+                    (search.ServiceId == null || x.ServiceId.Equals(search.ServiceId))
+                );
+            }
+
+
+            return query;
+        }
+
     }
 }

@@ -53,5 +53,22 @@ namespace easyAppointment.Services.ServiceImpl
             return reservationsResponseList;
         }
 
+        public override IQueryable<Reservation> AddFilter(IQueryable<Reservation> query, ReservationSearchObjecs? search = null)
+        {
+
+            if (search != null)
+            {
+                query = query.Where(x =>
+                    (search.UserBusinessId == null || x.UserBusinessId.Equals(search.UserBusinessId)) &&
+                    (search.UserCustomerId == null || x.UserCustomer.Equals(search.UserCustomerId)) &&
+                    (search.TimeSlotId == null || x.TimeSlotId.Equals(search.TimeSlotId)) &&
+                    (search.ReservationDate == null || x.ReservationDate.Equals(search.ReservationDate))
+                );
+            }
+
+
+            return base.AddFilter(query, search);
+        }
+
     }
 }

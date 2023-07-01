@@ -7,14 +7,25 @@ part 'time-slot.g.dart';
 
 @JsonSerializable()
 class TimeSlot {
-  TimeSlot(this.timeSlotId, this.startTime, this.endTime, this.businessId,
-      this.duration);
+  TimeSlot(
+    this.timeSlotId,
+    this.startTime,
+    this.endTime,
+    this.serviceId,
+    this.employeeId,
+    this.slotDate,
+    this.duration,
+    this.businessId,
+  );
 
   int? timeSlotId;
   String? startTime;
   String? endTime;
+  int? serviceId;
+  int? employeeId;
+  String? slotDate;
+  int? duration;
   int? businessId;
-  String? duration;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

@@ -8,16 +8,14 @@ namespace easyAppointment.Model.Responses
 {
     public partial class TimeslotResponse
     {
-
         public int TimeSlotId { get; set; }
-
         public DateTime? StartTime { get; set; }
-
         public DateTime? EndTime { get; set; }
-
-        public int? BusinessId { get; set; }
-
+        public int? ServiceId { get; set; }
+        public int? EmployeeId { get; set; }
         public DateTime? SlotDate { get; set; }
+        public int Duration { get; set; }
+        public int? BusinessId { get; set; }
 
     }
 }

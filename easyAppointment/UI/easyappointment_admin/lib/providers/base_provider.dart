@@ -17,7 +17,7 @@ class BaseProvider<T> with ChangeNotifier {
         defaultValue: "http://localhost:7198");
   }
 
-  Future<searchResult<T>> get(dynamic filter) async {
+  Future<searchResult<T>> get({dynamic filter}) async {
     var url = "$_baseurl$_endpoint";
 
     print("url");

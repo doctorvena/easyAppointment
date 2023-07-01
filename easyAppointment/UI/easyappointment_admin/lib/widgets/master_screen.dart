@@ -29,16 +29,6 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         child: ListView(
           children: [
             ListTile(
-              title: Text('Back'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
               title: Text('TimeSlot'),
               onTap: () {
                 Navigator.of(context).push(

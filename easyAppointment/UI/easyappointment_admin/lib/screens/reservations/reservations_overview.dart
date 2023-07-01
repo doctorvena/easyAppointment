@@ -40,99 +40,125 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
     return MasterScreenWidget(
       title: "Reservations",
       child: Container(
-        child: Column(children: [
-          SizedBox(
-            height: 8,
-          ),
-          ElevatedButton(
+        child: Column(
+          children: [
+            SizedBox(height: 8),
+            ElevatedButton(
               onPressed: () async {
-                var data = await _reservationProvider.get(null);
-
-                int userId = UserSingleton().loggedInUserId;
-                print(userId);
-
-                print("data: $data");
+                var data = await _reservationProvider.get(
+                    filter: {'userBusinessId': UserSingleton().loggedInUserId});
 
                 setState(() {
                   result = data as searchResult<Reservation>?;
                 });
-                // ignore: avoid_print
-                if (false) {
-                  print("data: ${data.result[0]}");
-                }
               },
-              child: Text("Testic")),
-          Expanded(
+              child: Text("Testic"),
+            ),
+            Expanded(
               child: Center(
-                  child: SingleChildScrollView(
-                      child: DataTable(
-            columns: [
-              DataColumn(
-                label: const Expanded(
-                  child: const Text(
-                    'Reservation ID',
-                    style: const TextStyle(fontStyle: FontStyle.normal),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: const Expanded(
-                  child: const Text(
-                    'Time Slot ID',
-                    style: const TextStyle(fontStyle: FontStyle.normal),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: const Expanded(
-                  child: const Text(
-                    'Reservation Date',
-                    style: const TextStyle(fontStyle: FontStyle.normal),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Text('Actions'),
-              ),
-            ],
-            rows: result?.result
-                    .map(
-                      (Reservation e) => DataRow(
-                        onSelectChanged: (selected) {
-                          if (selected == true) {
-                            // Handle row selection
-                          }
-                        },
-                        cells: [
-                          DataCell(Text(e.reservationId.toString())),
-                          DataCell(Text(e.timeSlotId.toString())),
-                          DataCell(Text(e.reservationDate.toString())),
-                          DataCell(
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Edit action
-                                  },
-                                  child: Icon(Icons.edit),
-                                ),
-                                SizedBox(width: 8),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Delete action
-                                  },
-                                  child: Icon(Icons.delete),
-                                ),
-                              ],
-                            ),
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                        label: const Expanded(
+                          child: const Text(
+                            'Reservation ID',
+                            style: const TextStyle(fontStyle: FontStyle.normal),
                           ),
-                        ],
+                        ),
                       ),
-                    )
-                    .toList() ??
-                [],
-          ))))
-        ]),
+                      DataColumn(
+                        label: const Expanded(
+                          child: const Text(
+                            'Time Slot ID',
+                            style: const TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: const Expanded(
+                          child: const Text(
+                            'Reservation Date',
+                            style: const TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: const Expanded(
+                          child: const Text(
+                            'Start Time',
+                            style: const TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: const Expanded(
+                          child: const Text(
+                            'End Time',
+                            style: const TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text('Actions'),
+                      ),
+                    ],
+                    rows: result?.result
+                            .map(
+                              (Reservation e) => DataRow(
+                                onSelectChanged: (selected) {
+                                  if (selected == true) {
+                                    // Handle row selection
+                                  }
+                                },
+                                cells: [
+                                  DataCell(Text(e.reservationId.toString())),
+                                  DataCell(Text(e.timeSlotId.toString())),
+                                  DataCell(Text(e.reservationDate.toString())),
+                                  DataCell(
+                                    e.timeSlots != null &&
+                                            e.timeSlots!.isNotEmpty
+                                        ? Text(e.timeSlots![0].startTime
+                                            .toString())
+                                        : Text(''),
+                                  ),
+                                  DataCell(
+                                    e.timeSlots != null &&
+                                            e.timeSlots!.isNotEmpty
+                                        ? Text(
+                                            e.timeSlots![0].endTime.toString())
+                                        : Text(''),
+                                  ),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            // Edit action
+                                          },
+                                          child: Icon(Icons.edit),
+                                        ),
+                                        SizedBox(width: 8),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            // Delete action
+                                          },
+                                          child: Icon(Icons.delete),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
