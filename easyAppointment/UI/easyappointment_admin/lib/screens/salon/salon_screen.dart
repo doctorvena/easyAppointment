@@ -3,35 +3,44 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:eprodaja_admin/app/user_singleton.dart';
+import 'package:eprodaja_admin/models/city.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../app/image_helper.dart';
-import '../../models/user.dart';
-import '../../providers/user_provider.dart';
+import '../../models/salon.dart';
+import '../../providers/city_provider.dart';
+import '../../providers/salon_provider.dart';
 import '../../widgets/master_screen.dart';
 
-class ProfileSettingsPage extends StatefulWidget {
-  const ProfileSettingsPage({Key? key}) : super(key: key);
+class SalonPage extends StatefulWidget {
+  const SalonPage({Key? key}) : super(key: key);
 
   @override
-  _ProfileSettingsPageState createState() => _ProfileSettingsPageState();
+  _SalonPageState createState() => _SalonPageState();
 }
 
-class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
-  final UserProvider _userProvider = UserProvider();
+class _SalonPageState extends State<SalonPage> {
+  final SalonProvider _salonProvider = SalonProvider();
+  late CityProvider _cityProvider;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _salonNameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   Uint8List? bytes;
   File? _selectedImage;
-  User? user;
+  int? selectedCityId;
+  Salon? salon;
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
+    _cityProvider = context.read<CityProvider>();
+    _fetchSalonData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   Future<void> _selectImage() async {
@@ -46,30 +55,34 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _usernameController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
+    _salonNameController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
-  void _fetchUserData() async {
+  void _fetchSalonData() async {
     try {
-      var userData =
-          await _userProvider.getById(UserSingleton().loggedInUserId);
-      user = userData; // Assuming the response returns a single user
+      var salonData = await _salonProvider
+          .getById(UserSingleton().loggedInUserSalon!.salonId!);
+      salon =
+          salonData as Salon; // Assuming the response returns a single salon
 
       // Update the widget state synchronously
       setState(() {
-        _nameController.text = user!.firstName!;
-        _usernameController.text = user!.username!;
-        _phoneController.text = user!.phone!;
-        _emailController.text = user!.email!;
-        bytes = base64Decode(user!.photo!);
+        _salonNameController.text = salon!.salonName!;
+        _addressController.text = salon!.address!;
+        // if (salon.photo!.isNotEmpty) {
+        //   Uri uri = Uri.parse(salon.photo!);
+        //   _selectedImage =
+        //       File.fromUri(uri); // Assign the string to a File object
+        // }
+        selectedCityId = salon!.cityId;
+        bytes = base64Decode(salon!.photo!);
       });
+      print(_selectedImage);
     } catch (e) {
       // Handle any errors or display an error message
-      print('Error fetching user data: $e');
+      print('Error fetching salon data: $e');
     }
   }
 
@@ -80,7 +93,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'User Profile',
+      title: 'Salon',
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -90,10 +103,10 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             GestureDetector(
               onTap: _selectImage,
               child: Container(
-                width: 100,
+                width: 200,
                 height: 100,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  shape: BoxShape.rectangle,
                   image: _selectedImage != null
                       ? DecorationImage(
                           image: FileImage(_selectedImage!),
@@ -108,62 +121,78 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 ),
                 child:
                     _selectedImage == null && (bytes == null || bytes!.isEmpty)
-                        ? Icon(Icons.person, size: 60, color: Colors.grey)
+                        ? Icon(Icons.check_box_outline_blank,
+                            size: 60, color: Colors.grey)
                         : null,
               ),
             ),
             SizedBox(height: 16),
             TextField(
-              controller: _nameController,
+              controller: _salonNameController,
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: 'Salon Name',
               ),
             ),
             SizedBox(height: 8),
             TextField(
-              controller: _usernameController,
+              controller: _addressController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Adress',
               ),
             ),
             SizedBox(height: 8),
-            TextField(
-              controller: _phoneController,
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-              ),
+            FutureBuilder(
+              future: _cityProvider.get(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  List<City> cities = snapshot.data.result;
+                  return DropdownButtonFormField<int>(
+                    value: selectedCityId,
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        selectedCityId = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'City',
+                    ),
+                    items: cities.map((City city) {
+                      return DropdownMenuItem<int>(
+                        value: city.cityId,
+                        child: Text(city.cityName ?? ''),
+                      );
+                    }).toList(),
+                  );
+                }
+              },
             ),
             SizedBox(height: 8),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            SizedBox(height: 16),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () async {
                   // Save profile settings logic
-                  String name = _nameController.text;
-                  String username = _usernameController.text;
-                  String phone = _phoneController.text;
-                  String email = _emailController.text;
+                  String salonName = _salonNameController.text;
+                  String address = _addressController.text;
                   String? photo = _selectedImage != null
                       ? await ImageHelper.fileToBytes(_selectedImage!)
-                      : user!.photo ?? "";
+                      : salon!.photo ?? "";
+
                   Map<String, dynamic> updateData = {
-                    'firstName': name,
-                    'lastName': '',
-                    'email': email,
-                    'phone': phone,
+                    'salonName': salonName,
+                    'address': address,
+                    'ownerUserId': UserSingleton().loggedInUserId,
                     'photo': photo, // Update with the photo data if needed
+                    'cityId': selectedCityId,
                   };
 
                   try {
-                    _userProvider.update(
-                        UserSingleton().loggedInUserId, updateData);
+                    int? salonId = UserSingleton().loggedInUserSalon!.salonId;
+                    _salonProvider.update(salonId!, updateData);
                     showSuccessDialog(context);
                   } on Exception catch (e) {
                     showDialog(

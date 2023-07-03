@@ -24,7 +24,7 @@ namespace easyAppointment.Services.ServiceImpl
 
         }
 
-        public virtual async Task BeforeUpdate(TDb db, TInsert insert)
+        public virtual async Task BeforeUpdate(TDb db, TUpdate update)
         {
 
         }

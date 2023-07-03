@@ -40,4 +40,10 @@ class ImageHelper {
   static Image imageFromBase64String(String base64Image) {
     return Image.memory(base64Decode(base64Image));
   }
+
+  static Future<String> fileToBase64(File file) async {
+    List<int> imageBytes = await file.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+    return base64Image;
+  }
 }

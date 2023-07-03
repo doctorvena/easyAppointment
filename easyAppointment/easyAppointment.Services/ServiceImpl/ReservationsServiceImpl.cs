@@ -59,7 +59,7 @@ namespace easyAppointment.Services.ServiceImpl
             if (search != null)
             {
                 query = query.Where(x =>
-                    (search.UserBusinessId == null || x.UserBusinessId.Equals(search.UserBusinessId)) &&
+                    (search.SalonId == null || x.SalonId.Equals(search.SalonId)) &&
                     (search.UserCustomerId == null || x.UserCustomer.Equals(search.UserCustomerId)) &&
                     (search.TimeSlotId == null || x.TimeSlotId.Equals(search.TimeSlotId)) &&
                     (search.ReservationDate == null || x.ReservationDate.Equals(search.ReservationDate))

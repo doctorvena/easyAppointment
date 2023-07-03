@@ -101,16 +101,18 @@ class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T> delete(int id) async {
+  Future<void> delete(int id) async {
     var url = '$_baseUrl$_endpoint/$id';
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
     var response = await http.delete(uri, headers: headers);
 
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      return fromJson(data);
+    if (response.statusCode == 204) {
+      // Deletion successful, no content to return
+      return;
+    } else if (response.statusCode == 404) {
+      throw Exception('Entity not found');
     } else {
       throw Exception('Unknown error');
     }

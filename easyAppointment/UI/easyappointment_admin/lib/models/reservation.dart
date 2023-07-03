@@ -10,7 +10,7 @@ part 'reservation.g.dart';
 class Reservation {
   Reservation(
     this.reservationId,
-    this.userBusinessId,
+    this.salonId,
     this.userCustomerId,
     this.timeSlotId,
     this.reservationDate,
@@ -19,7 +19,7 @@ class Reservation {
   );
 
   int? reservationId;
-  int? userBusinessId;
+  int? salonId;
   int? userCustomerId;
   int? timeSlotId;
   DateTime? reservationDate;
@@ -38,7 +38,7 @@ class Reservation {
 
     return Reservation(
       json['reservationId'] as int?,
-      json['userBusinessId'] as int?,
+      json['salonId'] as int?,
       json['userCustomerId'] as int?,
       json['timeSlotId'] as int?,
       DateTime.parse(json['reservationDate'] as String),

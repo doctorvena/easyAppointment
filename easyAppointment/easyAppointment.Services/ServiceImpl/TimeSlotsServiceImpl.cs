@@ -35,5 +35,37 @@ namespace easyAppointment.Services.ServiceImpl
             return query;
         }
 
+        public override async Task<bool> Delete(int id)
+        {
+            try
+            {
+                // Perform the delete operation
+                var entity = await _context.Set<TimeSlot>().FindAsync(id);
+                if (entity == null)
+                {
+                    return false;
+                }
+
+                // Check if the reservation is active
+                var isActiveReservation = await _context.Set<Reservation>()
+                    .AnyAsync(r => r.TimeSlotId == id );
+
+                if (isActiveReservation)
+                {
+                    throw new Exception("You can't delete the timeslot if there is an active reservation!");
+                }
+
+                _context.Set<TimeSlot>().Remove(entity);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle the error or re-throw the exception
+                throw;
+            }
+        }
+
     }
 }

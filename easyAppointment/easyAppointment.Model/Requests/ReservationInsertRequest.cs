@@ -9,7 +9,7 @@ namespace easyAppointment.Model.Requests
     public class ReservationInsertRequest
     {
 
-        public int? UserBusinessId { get; set; }
+        public int? SalonId { get; set; }
 
         public int? UserCustomerId { get; set; }
 

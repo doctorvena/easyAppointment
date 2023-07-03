@@ -21,5 +21,31 @@ namespace easyAppointment.Services.ServiceImpl
         {
         }
 
+        public override async Task<SalonResponse> Insert(SalonInsertRequest insert)
+        {
+            // Check if a salon already exists for the user
+            var existingSalon = await _context.Set<Salon>().FirstOrDefaultAsync(s => s.OwnerUserId == insert.OwnerUserId);
+
+            if (existingSalon != null)
+            {
+                // Throw an exception or handle the error accordingly
+                throw new Exception("A salon already exists for this user.");
+            }
+
+            return await base.Insert(insert);
+        }
+
+        public override IQueryable<Salon> AddFilter(IQueryable<Salon> query, SalonSearchObject? search = null)
+        {
+            if (search != null)
+            {
+                query = query.Where(x =>
+                    (search.OwnerUserId == null || x.SalonId.Equals(search.OwnerUserId))
+                );
+            }
+
+
+            return base.AddFilter(query, search);
+        }
     }
 }

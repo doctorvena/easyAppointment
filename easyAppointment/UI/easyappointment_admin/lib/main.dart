@@ -1,4 +1,8 @@
+import 'package:eprodaja_admin/providers/city_provider.dart';
+import 'package:eprodaja_admin/providers/employee_salon_provider%20copy.dart';
 import 'package:eprodaja_admin/providers/reservation_provider.dart';
+import 'package:eprodaja_admin/providers/salon_photo_provider.dart';
+import 'package:eprodaja_admin/providers/salon_provider.dart';
 import 'package:eprodaja_admin/providers/timeslot_provider.dart';
 import 'package:eprodaja_admin/providers/user_provider.dart';
 import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
@@ -21,6 +25,10 @@ void main() {
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
       ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => SalonProvider()),
+      ChangeNotifierProvider(create: (_) => SalonEmployeeProvider()),
+      ChangeNotifierProvider(create: (_) => SalonPhotoProvider()),
+      ChangeNotifierProvider(create: (_) => CityProvider()),
     ],
     child: MyApp(),
   ));
@@ -34,6 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -91,13 +100,13 @@ class LoginPage extends StatelessWidget {
 
   TextEditingController _userNameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-  late TimeSlotProvider timeslotprovider;
   late UserProvider _userProvider;
+  late SalonProvider _salonProvider;
 
   @override
   Widget build(BuildContext context) {
-    timeslotprovider = context.read<TimeSlotProvider>();
     _userProvider = context.read<UserProvider>();
+    _salonProvider = context.read<SalonProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
@@ -153,7 +162,23 @@ class LoginPage extends StatelessWidget {
                       }
 
                       UserSingleton().loggedInUserId = loggedUser.userId!;
+                      try {
+                        var loggedUserSalon = await _salonProvider.get(
+                          filter: {
+                            'ownerUserId': UserSingleton().loggedInUserId
+                          },
+                        );
 
+                        if (loggedUserSalon == null) {
+                          throw Exception(
+                              'User login failed'); // Throw exception if user is null
+                        } else {
+                          UserSingleton().loggedInUserSalon =
+                              loggedUserSalon.result[0];
+                          print(loggedUserSalon.result[0].salonId);
+                          print(UserSingleton().loggedInUserSalon.salonId);
+                        }
+                      } catch (e) {}
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const ReservationsOverview(),

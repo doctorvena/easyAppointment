@@ -8,8 +8,8 @@ import '../../providers/timeslot_provider.dart';
 
 class AddReservationPage extends StatefulWidget {
   final void Function() refreshData;
-
-  AddReservationPage({required this.refreshData});
+  final int? salonId;
+  AddReservationPage({required this.salonId, required this.refreshData});
 
   @override
   _AddReservationPageState createState() => _AddReservationPageState();
@@ -96,7 +96,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
               onPressed: () async {
                 if (selectedTimeSlot != null && reservationName != null) {
                   final dynamic requestData = {
-                    "userBusinessId": UserSingleton().loggedInUserId,
+                    "salonId": widget.salonId,
                     "timeSlotId": selectedTimeSlot!.timeSlotId,
                     "reservationDate": DateTime.now().toIso8601String(),
                     "reservationName": reservationName!,

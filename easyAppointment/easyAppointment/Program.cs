@@ -98,11 +98,11 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetDbContext>();
-    dataContext.Database.EnsureCreated();
+    //var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetDbContext>();
+    //dataContext.Database.EnsureCreated();
 
-    new SetupService().Init(dataContext);
-    new SetupService().InsertData(dataContext);
+    //new SetupService().Init(dataContext);
+    //new SetupService().InsertData(dataContext);
 
 
     //var conn = dataContext.Database.GetConnectionString();

@@ -21,9 +21,9 @@ public partial class Salon
 
     public virtual User? OwnerUser { get; set; }
 
-    public virtual ICollection<SalonEmployee> SalonEmployees { get; set; } = new List<SalonEmployee>();
+    public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
-    public virtual ICollection<SalonPhoto> SalonPhotos { get; set; } = new List<SalonPhoto>();
+    public virtual ICollection<SalonEmployee> SalonEmployees { get; set; } = new List<SalonEmployee>();
 
     public virtual ICollection<SalonRating> SalonRatings { get; set; } = new List<SalonRating>();
 

@@ -1,4 +1,5 @@
 import 'package:eprodaja_admin/models/reservation.dart';
+import 'package:eprodaja_admin/providers/salon_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,18 +19,30 @@ class ReservationsOverview extends StatefulWidget {
 
 class _ReservationsOverviewState extends State<ReservationsOverview> {
   late ReservationProvider _reservationProvider;
+  late SalonProvider _salonnProvider;
   searchResult<Reservation>? result;
-
   @override
   void initState() {
     super.initState();
     _reservationProvider = context.read<ReservationProvider>();
-    fetchData();
+    _salonnProvider = context.read<SalonProvider>();
+    fetchSalonId(); // Fetch the salon ID first
+  }
+
+  Future<void> fetchSalonId() async {
+    // Fetch the salon ID that the user owns
+    try {
+      setState(() {});
+      fetchData(); // Fetch reservations after getting the salon ID
+    } catch (e) {
+      // Handle error
+      print('Error fetching salon ID: $e');
+    }
   }
 
   Future<void> fetchData() async {
     var data = await _reservationProvider.get(
-      filter: {'userBusinessId': UserSingleton().loggedInUserId},
+      filter: {'salonId': UserSingleton().loggedInUserSalon.salonId},
     );
 
     setState(() {
@@ -44,7 +57,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'Reservations',
+      title: 'Reservations - ${UserSingleton().loggedInUserSalon.salonName}',
       child: Column(
         children: [
           SizedBox(height: 8),
@@ -53,12 +66,13 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      AddReservationPage(refreshData: refreshData),
+                  builder: (context) => AddReservationPage(
+                      salonId: UserSingleton().loggedInUserSalon.salonId,
+                      refreshData: refreshData),
                 ),
               );
             },
-            child: Text('Add Reservation'),
+            child: Text('Add Reservation Manualy'),
           ),
           Expanded(
             child: Center(
@@ -114,7 +128,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                       ),
                     ),
                     DataColumn(
-                      label: Text('Actions'),
+                      label: Text('Delete'),
                     ),
                   ],
                   rows: result?.result
@@ -154,16 +168,10 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                                 DataCell(
                                   Row(
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Edit action
-                                        },
-                                        child: Icon(Icons.edit),
-                                      ),
                                       SizedBox(width: 8),
                                       ElevatedButton(
                                         onPressed: () {
-                                          // Delete action
+                                          deleteReservation(e.reservationId!);
                                         },
                                         child: Icon(Icons.delete),
                                       ),
@@ -189,5 +197,39 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
       return DateTime.parse(dateTimeString);
     }
     return null;
+  }
+
+  void deleteReservation(int reservationId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to delete this reservation?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                try {
+                  await _reservationProvider.delete(reservationId);
+                  await fetchData(); // Refresh data after deletion
+                } catch (e) {
+                  // Handle the error
+                  print('Error deleting reservation: $e');
+                  // Show an error message or perform any necessary error handling
+                }
+              },
+              child: Text('Delete'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

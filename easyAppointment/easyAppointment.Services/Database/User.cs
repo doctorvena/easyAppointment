@@ -27,9 +27,7 @@ public partial class User
 
     public byte[]? Photo { get; set; }
 
-    public virtual ICollection<Reservation> ReservationUserBusinesses { get; set; } = new List<Reservation>();
-
-    public virtual ICollection<Reservation> ReservationUserCustomers { get; set; } = new List<Reservation>();
+    public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     public virtual ICollection<SalonEmployee> SalonEmployees { get; set; } = new List<SalonEmployee>();
 

@@ -8,11 +8,11 @@ namespace easyAppointment.Model.Responses
 {
     public class SalonPhotoResponse
     {
-        public int Id { get; set; }
+        public int PhotoId { get; set; }
 
         public byte[]? Photo { get; set; }
 
-        public int? ServiceId { get; set; }
+        public int? SalonId { get; set; }
 
     }
 }

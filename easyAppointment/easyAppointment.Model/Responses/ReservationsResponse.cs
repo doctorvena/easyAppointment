@@ -10,7 +10,7 @@ namespace easyAppointment.Model.Responses
     {
         public int ReservationId { get; set; }
 
-        public int? UserBusinessId { get; set; }
+        public int? SalonId { get; set; }
 
         public int? UserCustomerId { get; set; }
 

@@ -11,7 +11,6 @@ namespace easyAppointment.Model.Responses
 
         public byte[]? Photo { get; set; }
 
-        public int? SalonId { get; set; }
 
     }
 }

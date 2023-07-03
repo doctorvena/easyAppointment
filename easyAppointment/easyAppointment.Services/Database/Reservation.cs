@@ -7,7 +7,7 @@ public partial class Reservation
 {
     public int ReservationId { get; set; }
 
-    public int? UserBusinessId { get; set; }
+    public int? SalonId { get; set; }
 
     public int? UserCustomerId { get; set; }
 
@@ -17,9 +17,9 @@ public partial class Reservation
 
     public string? ReservationName { get; set; }
 
-    public virtual TimeSlot? TimeSlot { get; set; }
+    public virtual Salon? Salon { get; set; }
 
-    public virtual User? UserBusiness { get; set; }
+    public virtual TimeSlot? TimeSlot { get; set; }
 
     public virtual User? UserCustomer { get; set; }
 }

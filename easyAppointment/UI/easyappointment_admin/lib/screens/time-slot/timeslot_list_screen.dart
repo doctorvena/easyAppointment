@@ -133,16 +133,10 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                                       Text(e.businessId?.toString() ?? "")),
                                   DataCell(Text(e.duration?.toString() ?? "")),
                                   DataCell(Row(children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Edit action
-                                      },
-                                      child: Icon(Icons.edit),
-                                    ),
                                     SizedBox(width: 8),
                                     ElevatedButton(
                                       onPressed: () {
-                                        // Delete action
+                                        deleteReservation(e.timeSlotId!);
                                       },
                                       child: Icon(Icons.delete),
                                     ),
@@ -153,6 +147,40 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
           )))
         ]),
       ),
+    );
+  }
+
+  void deleteReservation(int timesotId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to delete this Time?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                try {
+                  await _timeslotprovider.delete(timesotId);
+                  await fetchData(); // Refresh data after deletion
+                } catch (e) {
+                  // Handle the error
+                  print('Error deleting reservation: $e');
+                  // Show an error message or perform any necessary error handling
+                }
+              },
+              child: Text('Delete'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

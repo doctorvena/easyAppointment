@@ -59,26 +59,25 @@ public partial class EasyAppointmnetDbContext : DbContext
 
         modelBuilder.Entity<Reservation>(entity =>
         {
-            entity.HasKey(e => e.ReservationId).HasName("PK__Reservat__B7EE5F04212EBD2D");
+            entity.HasKey(e => e.ReservationId).HasName("PK__Reservat__B7EE5F04AB215F8C");
 
             entity.Property(e => e.ReservationId).HasColumnName("ReservationID");
             entity.Property(e => e.ReservationDate).HasColumnType("date");
-            entity.Property(e => e.ReservationName).HasMaxLength(255);
+            entity.Property(e => e.SalonId).HasColumnName("SalonID");
             entity.Property(e => e.TimeSlotId).HasColumnName("TimeSlotID");
-            entity.Property(e => e.UserBusinessId).HasColumnName("UserBusinessID");
             entity.Property(e => e.UserCustomerId).HasColumnName("UserCustomerID");
+
+            entity.HasOne(d => d.Salon).WithMany(p => p.Reservations)
+                .HasForeignKey(d => d.SalonId)
+                .HasConstraintName("FK__Reservati__Salon__6C190EBB");
 
             entity.HasOne(d => d.TimeSlot).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.TimeSlotId)
-                .HasConstraintName("FK__Reservati__TimeS__45F365D3");
+                .HasConstraintName("FK__Reservati__TimeS__6E01572D");
 
-            entity.HasOne(d => d.UserBusiness).WithMany(p => p.ReservationUserBusinesses)
-                .HasForeignKey(d => d.UserBusinessId)
-                .HasConstraintName("FK__Reservati__UserB__440B1D61");
-
-            entity.HasOne(d => d.UserCustomer).WithMany(p => p.ReservationUserCustomers)
+            entity.HasOne(d => d.UserCustomer).WithMany(p => p.Reservations)
                 .HasForeignKey(d => d.UserCustomerId)
-                .HasConstraintName("FK__Reservati__UserC__44FF419A");
+                .HasConstraintName("FK__Reservati__UserC__6D0D32F4");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -122,15 +121,7 @@ public partial class EasyAppointmnetDbContext : DbContext
 
         modelBuilder.Entity<SalonPhoto>(entity =>
         {
-            entity.HasKey(e => e.PhotoId).HasName("PK__Photos__21B7B5E2175D705C");
-
-            entity.HasOne(d => d.Salon).WithMany(p => p.SalonPhotos)
-                .HasForeignKey(d => d.SalonId)
-                .HasConstraintName("FK__Photos__SalonId__4CA06362");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.SalonPhotos)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Photos__ServiceI__4D94879B");
+            entity.HasKey(e => e.PhotoId).HasName("PK__SalonPho__21B7B5E21D85B570");
         });
 
         modelBuilder.Entity<SalonRating>(entity =>

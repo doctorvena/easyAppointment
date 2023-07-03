@@ -9,7 +9,6 @@ namespace easyAppointment.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize(Policy = "AdminOnly")]
     public class ReservationsController : BaseCRUDController<ReservationsResponse,ReservationSearchObjecs,ReservationInsertRequest,ReservationUpdateRequest>
     {
         public ReservationsController(ILogger<BaseController<ReservationsResponse, ReservationSearchObjecs>> _logger, ReservationsService _service) 

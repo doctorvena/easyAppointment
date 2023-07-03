@@ -20,6 +20,15 @@ namespace easyAppointment.Services.ServiceImpl
         public SalonPhotoServiceImpl(ILogger<BaseCRUDService<SalonPhotoResponse, SalonPhoto, SalonPhotoSearchObject, SalonPhotoInsertRequest, SalonPhotoUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper) : base(_logger, _context, _mapper)
         {
         }
-
+        public override IQueryable<SalonPhoto> AddFilter(IQueryable<SalonPhoto> query, SalonPhotoSearchObject? search = null)
+        {
+            if (search != null)
+            {
+                query = query.Where(x =>
+                    (search.SalonId == null || x.SalonId.Equals(search.SalonId))
+                );
+            }
+            return base.AddFilter(query, search);
+        }
     }
 }

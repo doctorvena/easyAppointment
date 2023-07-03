@@ -10,10 +10,4 @@ public partial class SalonPhoto
     public byte[]? Photo { get; set; }
 
     public int? SalonId { get; set; }
-
-    public int? ServiceId { get; set; }
-
-    public virtual Salon? Salon { get; set; }
-
-    public virtual Service? Service { get; set; }
 }

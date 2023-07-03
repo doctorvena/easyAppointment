@@ -8,5 +8,7 @@ namespace easyAppointment.Model.SearchObjects
 {
     public class SalonPhotoSearchObject : BaseSearchObject
     {
+        public int? SalonId { get; set; }
+
     }
 }

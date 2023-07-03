@@ -31,6 +31,15 @@ namespace easyAppointment.Controllers
             return await service.GetById(id);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await service.Delete(id);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
 
     }
 }

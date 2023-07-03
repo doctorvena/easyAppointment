@@ -17,7 +17,5 @@ public partial class Service
 
     public virtual Salon? Salon { get; set; }
 
-    public virtual ICollection<SalonPhoto> SalonPhotos { get; set; } = new List<SalonPhoto>();
-
     public virtual ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
 }

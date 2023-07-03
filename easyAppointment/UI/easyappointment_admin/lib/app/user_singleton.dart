@@ -1,3 +1,5 @@
+import 'package:eprodaja_admin/models/salon.dart';
+
 class UserSingleton {
   static final UserSingleton _instance = UserSingleton._internal();
 
@@ -8,4 +10,5 @@ class UserSingleton {
   UserSingleton._internal();
 
   late int loggedInUserId;
+  late Salon loggedInUserSalon;
 }

@@ -50,5 +50,18 @@ namespace easyAppointment.Services.ServiceImpl
 
             return _mapper.Map<T>(entity);
         }
+
+        public virtual async Task<bool> Delete(int id)
+        {
+            var entity = await _context.Set<TDb>().FindAsync(id);
+
+            if (entity == null)
+                return false;
+
+            _context.Set<TDb>().Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

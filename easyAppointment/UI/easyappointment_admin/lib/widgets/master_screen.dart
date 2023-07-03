@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:eprodaja_admin/screens/amployees/employee_page.dart';
+import 'package:eprodaja_admin/screens/photos/salon_photos_screen.dart';
 import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
+import 'package:eprodaja_admin/screens/salon/salon_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../app/user_singleton.dart';
@@ -32,6 +35,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         child: ListView(
           children: [
             ListTile(
+              title: Text('Salon'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SalonPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: Text('TimeSlot'),
               onTap: () {
                 Navigator.of(context).push(
@@ -47,6 +60,26 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const ReservationsOverview(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Employee'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const EmployeeOverview(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Photos'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SalonPhotosPage(),
                   ),
                 );
               },
@@ -105,6 +138,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onPressed: () {
                 // Call the logoutUser function to log out the user
                 UserSingleton().loggedInUserId = -1;
+                UserSingleton().loggedInUserSalon.salonId = -1;
 
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => LoginPage()),
