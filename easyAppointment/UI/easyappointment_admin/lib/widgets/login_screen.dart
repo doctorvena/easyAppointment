@@ -1,0 +1,154 @@
+import 'package:eprodaja_admin/widgets/register_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '/app/user_singleton.dart';
+import '/providers/salon_provider.dart';
+import '/providers/user_provider.dart';
+import '/screens/reservations/reservations_overview.dart';
+import '/utils/utils.dart';
+
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  late UserProvider _userProvider;
+  late SalonProvider _salonProvider;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _userProvider = context.read<UserProvider>();
+    _salonProvider = context.read<SalonProvider>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Remove back button
+        title: Text("Login"),
+      ),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxHeight: 450, maxWidth: 450),
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/images/EsayAppLogo.png",
+                    height: 200,
+                    width: 200,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: "UserName",
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    controller: _userNameController,
+                  ),
+                  SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      prefixIcon: Icon(Icons.password),
+                    ),
+                    controller: _passwordController,
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: isLoading ? null : _loginUser,
+                    child:
+                        isLoading ? CircularProgressIndicator() : Text("Login"),
+                  ),
+                  TextButton(
+                    onPressed: _navigateToRegistrationPage,
+                    child: Text("Don't have an account?"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _loginUser() async {
+    setState(
+      () {
+        isLoading = true;
+      },
+    );
+
+    var username = _userNameController.text;
+    var password = _passwordController.text;
+    Authorization.username = username;
+    Authorization.password = password;
+
+    try {
+      var loggedUser = await _userProvider.loginUser(username, password);
+
+      if (loggedUser == null) {
+        throw Exception('User login failed');
+      }
+
+      UserSingleton().loggedInUserId = loggedUser.userId!;
+      try {
+        var loggedUserSalon = await _salonProvider.get(
+          filter: {'ownerUserId': UserSingleton().loggedInUserId},
+        );
+
+        if (loggedUserSalon == null || loggedUserSalon.result.length == 0) {
+          throw Exception('User login failed');
+        } else {
+          UserSingleton().loggedInUserSalon = loggedUserSalon.result[0];
+        }
+      } catch (e) {}
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const ReservationsOverview(),
+        ),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text("Error"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(
+                  () {
+                    isLoading = false;
+                  },
+                );
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void _navigateToRegistrationPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => RegistrationPage(),
+      ),
+    );
+  }
+}

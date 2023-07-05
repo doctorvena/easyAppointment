@@ -1,10 +1,10 @@
 import 'package:eprodaja_admin/models/employee_salon.dart';
-import 'package:eprodaja_admin/providers/employee_salon_provider%20copy.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/user_singleton.dart';
 import '../../models/search_result.dart';
+import '../../providers/employee_salon_provider.dart';
 import '../../widgets/master_screen.dart';
 import 'add_employee_page.dart';
 
@@ -43,89 +43,108 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'Employe',
-      child: Column(
-        children: [
-          SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddUserPage(refreshData: refreshData),
-                ),
-              );
-            },
-            child: Text('Add Employe'),
-          ),
-          Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                child: DataTable(
-                  columns: [
-                    DataColumn(
-                      label: const Expanded(
-                        child: const Text(
+      title: 'Employee',
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddEmployeePage(
+                        refreshData: refreshData,
+                      ),
+                    ),
+                  );
+                },
+                child: Text('Add Employee'),
+              ),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: Card(
+                color: Colors.grey[200],
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                        label: Text(
                           'Employee ID',
-                          style: const TextStyle(fontStyle: FontStyle.normal),
+                          style: TextStyle(fontStyle: FontStyle.normal),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: const Expanded(
-                        child: const Text(
+                      DataColumn(
+                        label: Text(
                           'User Name',
-                          style: const TextStyle(fontStyle: FontStyle.normal),
+                          style: TextStyle(fontStyle: FontStyle.normal),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: const Expanded(
-                        child: const Text(
+                      DataColumn(
+                        label: Text(
                           'Email',
-                          style: const TextStyle(fontStyle: FontStyle.normal),
+                          style: TextStyle(fontStyle: FontStyle.normal),
                         ),
                       ),
-                    ),
-                    DataColumn(
-                      label: Text('Delete'),
-                    ),
-                  ],
-                  rows: result?.result
-                          .map(
-                            (SalonEmployee e) => DataRow(
-                              onSelectChanged: (selected) {
-                                if (selected == true) {
-                                  // Handle row selection
-                                }
-                              },
-                              cells: [
-                                DataCell(Text(e.salonId.toString())),
-                                DataCell(Text(e.salonEmployeeId.toString())),
-                                DataCell(Text(e.employeeUserId.toString())),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      SizedBox(width: 8),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          deleteUser(e.employeeUserId!);
-                                        },
-                                        child: Icon(Icons.delete),
-                                      ),
-                                    ],
+                      DataColumn(
+                        label: Text(
+                          'First Name',
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Last Name',
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Phone',
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text('Delete'),
+                      ),
+                    ],
+                    rows: result?.result
+                            .map(
+                              (SalonEmployee e) => DataRow(
+                                cells: [
+                                  DataCell(Text(e.salonEmployeeId.toString())),
+                                  DataCell(Text(e.username ?? '')),
+                                  DataCell(Text(e.email ?? '')),
+                                  DataCell(Text(e.firstName ?? '')),
+                                  DataCell(Text(e.lastName ?? '')),
+                                  DataCell(Text(e.phone ?? '')),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 8),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            deleteUser(e.employeeUserId!);
+                                          },
+                                          child: Icon(Icons.delete),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                          .toList() ??
-                      [],
+                                ],
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

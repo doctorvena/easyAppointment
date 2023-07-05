@@ -4,6 +4,7 @@ using easyAppointment.Model.Responses;
 using easyAppointment.Model.SearchObjects;
 using easyAppointment.Services.Database;
 using easyAppointment.Services.InterfaceServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,38 @@ namespace easyAppointment.Services.ServiceImpl
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public override async Task<List<SalonEmployeeResponse>> Get(SalonEmployeeSearchObject? search = null)
+        {
+            var query = _context.Set<SalonEmployee>().AsQueryable();
+            query = AddFilter(query, search);
+            query = AddInclude(query, search);
+
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
+            {
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+            }
+
+            var list = await query.ToListAsync();
+
+            var responseList = _mapper.Map<List<SalonEmployeeResponse>>(list);
+
+            // Include additional properties from the user table
+            foreach (var response in responseList)
+            {
+                var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.UserId == response.EmployeeUserId);
+                if (user != null)
+                {
+                    response.FirstName = user.FirstName;
+                    response.LastName = user.LastName;
+                    response.Username = user.Username;
+                    response.Phone = user.Phone;
+                    response.Email = user.Email;
+                }
+            }
+
+            return responseList;
         }
     }
 }

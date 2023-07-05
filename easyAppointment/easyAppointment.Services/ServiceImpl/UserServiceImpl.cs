@@ -119,5 +119,41 @@ namespace easyAppointment.Services.ServiceImpl
 
             return _mapper.Map<UserResponse>(entity);
         }
+
+        public override async Task<bool> Delete(int id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var salon = _context.Salons.FirstOrDefault(s => s.OwnerUserId == id);
+                if (salon != null)
+                {
+                    _context.Salons.Remove(salon);
+                    await _context.SaveChangesAsync();
+                }
+
+                var result = await base.Delete(id);
+
+                await transaction.CommitAsync();
+
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw; // re-throw the exception so you can handle it outside this method
+            }
+        }
+        public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
+        {
+            var usersQuery = _context.Users
+                .Include("UserRoles.Role")
+                .Where(u => u.UserRoles.Any(ur => ur.Role.RoleName == roleName))
+                .Where(u => !u.SalonEmployees.Any());
+
+            var users = await usersQuery.ToListAsync();
+
+            return _mapper.Map<List<UserResponse>>(users);
+        }
     }
 }

@@ -172,6 +172,9 @@ public partial class EasyAppointmnetDbContext : DbContext
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.SlotDate).HasColumnType("datetime");
             entity.Property(e => e.StartTime).HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Employee).WithMany(p => p.TimeSlots)
                 .HasForeignKey(d => d.EmployeeId)

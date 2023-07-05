@@ -15,6 +15,7 @@ TimeSlot _$TimeSlotFromJson(Map<String, dynamic> json) => TimeSlot(
       json['slotDate'] as String?,
       json['duration'] as int?,
       json['businessId'] as int?,
+      json['status'] as String?,
     );
 
 Map<String, dynamic> _$TimeSlotToJson(TimeSlot instance) => <String, dynamic>{
@@ -26,4 +27,5 @@ Map<String, dynamic> _$TimeSlotToJson(TimeSlot instance) => <String, dynamic>{
       'slotDate': instance.slotDate,
       'duration': instance.duration,
       'businessId': instance.businessId,
+      'status': instance.status,
     };

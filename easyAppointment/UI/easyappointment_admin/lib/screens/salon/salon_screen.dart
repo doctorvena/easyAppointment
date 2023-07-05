@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:eprodaja_admin/app/user_singleton.dart';
-import 'package:eprodaja_admin/models/city.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +30,7 @@ class _SalonPageState extends State<SalonPage> {
   File? _selectedImage;
   int? selectedCityId;
   Salon? salon;
+
   @override
   void initState() {
     super.initState();
@@ -63,7 +63,7 @@ class _SalonPageState extends State<SalonPage> {
   void _fetchSalonData() async {
     try {
       var salonData = await _salonProvider
-          .getById(UserSingleton().loggedInUserSalon!.salonId!);
+          .getById(UserSingleton().loggedInUserSalon.salonId!);
       salon =
           salonData as Salon; // Assuming the response returns a single salon
 
@@ -71,15 +71,9 @@ class _SalonPageState extends State<SalonPage> {
       setState(() {
         _salonNameController.text = salon!.salonName!;
         _addressController.text = salon!.address!;
-        // if (salon.photo!.isNotEmpty) {
-        //   Uri uri = Uri.parse(salon.photo!);
-        //   _selectedImage =
-        //       File.fromUri(uri); // Assign the string to a File object
-        // }
         selectedCityId = salon!.cityId;
         bytes = base64Decode(salon!.photo!);
       });
-      print(_selectedImage);
     } catch (e) {
       // Handle any errors or display an error message
       print('Error fetching salon data: $e');
@@ -93,129 +87,108 @@ class _SalonPageState extends State<SalonPage> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'Salon',
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            GestureDetector(
-              onTap: _selectImage,
-              child: Container(
-                width: 200,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image: _selectedImage != null
-                      ? DecorationImage(
-                          image: FileImage(_selectedImage!),
-                          fit: BoxFit.cover,
-                        )
-                      : bytes != null && bytes!.isNotEmpty
-                          ? DecorationImage(
-                              image: MemoryImage(bytes!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                ),
-                child:
-                    _selectedImage == null && (bytes == null || bytes!.isEmpty)
-                        ? Icon(Icons.check_box_outline_blank,
-                            size: 60, color: Colors.grey)
-                        : null,
-              ),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _salonNameController,
-              decoration: InputDecoration(
-                labelText: 'Salon Name',
-              ),
-            ),
-            SizedBox(height: 8),
-            TextField(
-              controller: _addressController,
-              decoration: InputDecoration(
-                labelText: 'Adress',
-              ),
-            ),
-            SizedBox(height: 8),
-            FutureBuilder(
-              future: _cityProvider.get(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  List<City> cities = snapshot.data.result;
-                  return DropdownButtonFormField<int>(
-                    value: selectedCityId,
-                    onChanged: (int? newValue) {
-                      setState(() {
-                        selectedCityId = newValue;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'City',
-                    ),
-                    items: cities.map((City city) {
-                      return DropdownMenuItem<int>(
-                        value: city.cityId,
-                        child: Text(city.cityName ?? ''),
-                      );
-                    }).toList(),
-                  );
-                }
-              },
-            ),
-            SizedBox(height: 8),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // Save profile settings logic
-                  String salonName = _salonNameController.text;
-                  String address = _addressController.text;
-                  String? photo = _selectedImage != null
-                      ? await ImageHelper.fileToBytes(_selectedImage!)
-                      : salon!.photo ?? "";
-
-                  Map<String, dynamic> updateData = {
-                    'salonName': salonName,
-                    'address': address,
-                    'ownerUserId': UserSingleton().loggedInUserId,
-                    'photo': photo, // Update with the photo data if needed
-                    'cityId': selectedCityId,
-                  };
-
-                  try {
-                    int? salonId = UserSingleton().loggedInUserSalon!.salonId;
-                    _salonProvider.update(salonId!, updateData);
-                    showSuccessDialog(context);
-                  } on Exception catch (e) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("OK"),
-                          )
-                        ],
+      title: 'Business - Update Your Business Details',
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(60.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Container(
+              color: Colors.grey[200],
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: _selectImage,
+                      child: Container(
+                        width: 400, // Increase the width
+                        height: 200, // Increase the height
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          image: _selectedImage != null
+                              ? DecorationImage(
+                                  image: FileImage(_selectedImage!),
+                                  fit: BoxFit.cover,
+                                )
+                              : bytes != null && bytes!.isNotEmpty
+                                  ? DecorationImage(
+                                      image: MemoryImage(bytes!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                        ),
+                        child: _selectedImage == null &&
+                                (bytes == null || bytes!.isEmpty)
+                            ? Icon(Icons.photo_album,
+                                size: 48, color: Colors.grey)
+                            : null,
                       ),
-                    );
-                  }
-                },
-                child: Text('Save'),
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: _salonNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Salon Name',
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: _addressController,
+                      decoration: InputDecoration(
+                        labelText: 'Address',
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Save profile settings logic
+                        String salonName = _salonNameController.text;
+                        String address = _addressController.text;
+                        String? photo = _selectedImage != null
+                            ? await ImageHelper.fileToBytes(_selectedImage!)
+                            : salon!.photo ?? "";
+
+                        Map<String, dynamic> updateData = {
+                          'salonName': salonName,
+                          'address': address,
+                          'ownerUserId': UserSingleton().loggedInUserId,
+                          'photo':
+                              photo, // Update with the photo data if needed
+                          'cityId': selectedCityId,
+                        };
+
+                        try {
+                          int? salonId =
+                              UserSingleton().loggedInUserSalon.salonId;
+                          _salonProvider.update(salonId!, updateData);
+                          showSuccessDialog(context);
+                        } on Exception catch (e) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Text("Error"),
+                              content: Text(e.toString()),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("OK"),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text('Save'),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

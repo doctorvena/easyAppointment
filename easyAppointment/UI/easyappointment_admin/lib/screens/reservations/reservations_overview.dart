@@ -21,6 +21,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
   late ReservationProvider _reservationProvider;
   late SalonProvider _salonnProvider;
   searchResult<Reservation>? result;
+
   @override
   void initState() {
     super.initState();
@@ -61,21 +62,26 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
       child: Column(
         children: [
           SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddReservationPage(
+          Align(
+            alignment: Alignment.topRight,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddReservationPage(
                       salonId: UserSingleton().loggedInUserSalon.salonId,
-                      refreshData: refreshData),
-                ),
-              );
-            },
-            child: Text('Add Reservation Manualy'),
+                      refreshData: refreshData,
+                    ),
+                  ),
+                );
+              },
+              child: Text('Add Reservation Manualy'),
+            ),
           ),
           Expanded(
-            child: Center(
+            child: Card(
+              color: Colors.grey[200],
               child: SingleChildScrollView(
                 child: DataTable(
                   columns: [
@@ -134,11 +140,6 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                   rows: result?.result
                           .map(
                             (Reservation e) => DataRow(
-                              onSelectChanged: (selected) {
-                                if (selected == true) {
-                                  // Handle row selection
-                                }
-                              },
                               cells: [
                                 DataCell(Text(e.reservationId.toString())),
                                 DataCell(Text(e.timeSlotId.toString())),

@@ -6,11 +6,11 @@ import 'package:eprodaja_admin/screens/salon/salon_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../app/user_singleton.dart';
-import '../main.dart';
 import '../screens/contactus/contact_screen.dart';
 import '../screens/help/help_screen.dart';
 import '../screens/profile/prfile_screen.dart';
 import '../screens/time-slot/timeslot_list_screen.dart';
+import 'login_screen.dart';
 
 class MasterScreenWidget extends StatefulWidget {
   Widget? child;

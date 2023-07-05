@@ -21,6 +21,8 @@ public partial class TimeSlot
 
     public int? BusinessId { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual SalonEmployee? Employee { get; set; }
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();

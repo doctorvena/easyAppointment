@@ -40,7 +40,7 @@ namespace easyAppointment.Services.ServiceImpl
             if (search != null)
             {
                 query = query.Where(x =>
-                    (search.OwnerUserId == null || x.SalonId.Equals(search.OwnerUserId))
+                    (search.OwnerUserId == null || x.OwnerUserId.Equals(search.OwnerUserId))
                 );
             }
 

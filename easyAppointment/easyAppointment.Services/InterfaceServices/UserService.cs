@@ -14,5 +14,6 @@ namespace easyAppointment.Services.InterfaceServices
     {
         public Task<UserResponse> Login(string username, string password);
         UserResponse Register(UserInsertRequest request);
+        Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName);
     }
 }

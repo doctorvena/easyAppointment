@@ -8,6 +8,7 @@ import '../../models/search_result.dart';
 import '../../models/time-slot.dart';
 import '../../providers/timeslot_provider.dart';
 import '../../widgets/master_screen.dart';
+import 'add_time_slot_screen.dart';
 
 class TimeSlotOverviewScreen extends StatefulWidget {
   const TimeSlotOverviewScreen({super.key});
@@ -31,13 +32,8 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
   }
 
   Future<void> fetchData() async {
-    // var data = await _timeslotprovider.get(null);
-
     var data = await _timeslotprovider
-        .get(filter: {'businessId': UserSingleton().loggedInUserId});
-
-    print(UserSingleton().loggedInUserId);
-    print("data: $data");
+        .get(filter: {'userBusinessId': UserSingleton().loggedInUserId});
 
     setState(() {
       result = data as searchResult<TimeSlot>?;
@@ -49,81 +45,97 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: "TimeSlot",
       child: Container(
-        child: Column(children: [
-          SizedBox(
-            height: 8,
-          ),
-          Expanded(
-              child: Center(
-                  child: SingleChildScrollView(
-            child: DataTable(
-                columns: const [
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Id',
-                        style: TextStyle(fontStyle: FontStyle.normal),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: AddTimeSlotPage(),
+                        ),
+                      );
+                    },
+                  ).then((value) {
+                    if (value != null && value) {
+                      fetchData();
+                    }
+                  });
+                },
+                child: Text('Add Time Slot'),
+              ),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: Card(
+                color: Colors.grey[200],
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Id',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Start time',
-                        style: TextStyle(fontStyle: FontStyle.normal),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Start time',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'End time',
-                        style: TextStyle(fontStyle: FontStyle.normal),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'End time',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Bussines Id',
-                        style: TextStyle(fontStyle: FontStyle.normal),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Bussines Id',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Expanded(
-                      child: Text(
-                        'Duration',
-                        style: TextStyle(fontStyle: FontStyle.normal),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Duration',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  DataColumn(label: Text('Actions')),
-                ],
-                rows: result?.result
-                        .map((TimeSlot e) => DataRow(
-                                onSelectChanged: (selected) => {
-                                      if (selected == true)
-                                        {
-                                          // Navigator.of(context).push(
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             TimeSlotDetails(
-                                          //               timeSlot: e,
-                                          //             )))
-                                        },
-                                      print("selected ${e.duration}")
-                                    },
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Status',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(label: Text('Actions')),
+                    ],
+                    rows: result?.result
+                            .map(
+                              (TimeSlot e) => DataRow(
                                 cells: [
                                   DataCell(
                                       Text(e.timeSlotId?.toString() ?? "")),
@@ -132,25 +144,36 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                                   DataCell(
                                       Text(e.businessId?.toString() ?? "")),
                                   DataCell(Text(e.duration?.toString() ?? "")),
-                                  DataCell(Row(children: [
-                                    SizedBox(width: 8),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        deleteReservation(e.timeSlotId!);
-                                      },
-                                      child: Icon(Icons.delete),
+                                  DataCell(Text(e.status?.toString() ?? "")),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 8),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            deleteReservation(e.timeSlotId!);
+                                          },
+                                          child: Icon(Icons.delete),
+                                        ),
+                                      ],
                                     ),
-                                  ]))
-                                ]))
-                        .toList() ??
-                    []),
-          )))
-        ]),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void deleteReservation(int timesotId) async {
+  void deleteReservation(int timeslotId) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -162,7 +185,7 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
               onPressed: () async {
                 Navigator.of(context).pop(); // Close the dialog
                 try {
-                  await _timeslotprovider.delete(timesotId);
+                  await _timeslotprovider.delete(timeslotId);
                   await fetchData(); // Refresh data after deletion
                 } catch (e) {
                   // Handle the error

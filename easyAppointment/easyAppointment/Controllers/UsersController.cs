@@ -33,5 +33,10 @@ namespace easyAppointment.Controllers
             return await _service.Login(username, password);
         }
 
+        [HttpGet("role/{roleName}/unassigned")]
+        public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
+        {
+            return await _service.GetUsersByRoleAndUnassigned(roleName);
+        }
     }
 }

@@ -3,16 +3,17 @@ import 'package:provider/provider.dart';
 
 import '../../providers/user_provider.dart';
 
-class AddUserPage extends StatefulWidget {
+class AddEmployeePage extends StatefulWidget {
   final Function refreshData;
 
-  const AddUserPage({Key? key, required this.refreshData}) : super(key: key);
+  const AddEmployeePage({Key? key, required this.refreshData})
+      : super(key: key);
 
   @override
   _AddUserPageState createState() => _AddUserPageState();
 }
 
-class _AddUserPageState extends State<AddUserPage> {
+class _AddUserPageState extends State<AddEmployeePage> {
   late UserProvider _userProvider;
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();

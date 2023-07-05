@@ -25,9 +25,10 @@ namespace easyAppointment.Services.ServiceImpl
             if (search != null)
             {
                 query = query.Where(x =>
-                    (search.BusinessId == null || x.BusinessId.Equals(search.BusinessId)) &&
-                    (search.EmployeeId == null || x.EmployeeId.Equals(search.EmployeeId)) &&
-                    (search.ServiceId == null || x.ServiceId.Equals(search.ServiceId))
+                (search.BusinessId == null || x.BusinessId.Equals(search.BusinessId)) &&
+                (search.EmployeeId == null || x.EmployeeId.Equals(search.EmployeeId)) &&
+                (search.ServiceId == null || x.ServiceId.Equals(search.ServiceId))&& 
+                (search.Status == null || x.Status == search.Status)
                 );
             }
 
@@ -48,7 +49,7 @@ namespace easyAppointment.Services.ServiceImpl
 
                 // Check if the reservation is active
                 var isActiveReservation = await _context.Set<Reservation>()
-                    .AnyAsync(r => r.TimeSlotId == id );
+                    .AnyAsync(r => r.TimeSlotId == id);
 
                 if (isActiveReservation)
                 {

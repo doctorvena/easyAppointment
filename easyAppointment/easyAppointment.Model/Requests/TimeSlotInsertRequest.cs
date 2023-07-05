@@ -12,6 +12,8 @@ namespace easyAppointment.Model.Requests
         public DateTime? StartTime { get; set; }
 
         public DateTime? EndTime { get; set; }
+        public int Duration { get; set; }
+        public string? Status { get; set; }
 
         public int? BusinessId { get; set; }
 

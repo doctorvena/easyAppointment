@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/master_screen.dart';
+
 class ContactPage extends StatelessWidget {
   const ContactPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Contact Us'),
-      ),
-      body: Center(
+    return MasterScreenWidget(
+      title: 'User Profile',
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

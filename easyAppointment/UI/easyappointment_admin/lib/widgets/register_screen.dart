@@ -1,13 +1,15 @@
+import 'package:eprodaja_admin/providers/salon_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
 import '../providers/user_provider.dart';
+import 'login_screen.dart';
 
 class RegistrationPage extends StatelessWidget {
   final _fromKey = GlobalKey<FormBuilderState>();
   late UserProvider _userProvider = UserProvider();
+  late SalonProvider _salonProvider = SalonProvider();
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -21,9 +23,11 @@ class RegistrationPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserProvider>.value(value: _userProvider),
+        ChangeNotifierProvider<SalonProvider>.value(value: _salonProvider),
       ],
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false, // Remove back button
           title: Text("Registration"),
         ),
         body: Center(
@@ -195,7 +199,15 @@ class RegistrationPage extends StatelessWidget {
                         };
 
                         // _saveUser(requestBody);
-                        _userProvider.createUser(requestBody);
+                        var test = await _userProvider.createUser(requestBody);
+                        final Map<String, dynamic> requestBodySalon = {
+                          'salonName': "New Salon",
+                          'address': "Adress",
+                          'photo': "",
+                          'ownerUserId': test.userId,
+                          'cityId': 1,
+                        };
+                        await _salonProvider.insert(requestBodySalon);
 
                         // After registration, you can navigate to a different page
                         Navigator.of(context).push(
@@ -247,7 +259,7 @@ class RegistrationPage extends StatelessWidget {
   }
 
   bool _validateInput(String? value, BuildContext context) {
-    if (value == null || value!.isEmpty) {
+    if (value == null || value.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Field '$value' can not be empty"),
       ));

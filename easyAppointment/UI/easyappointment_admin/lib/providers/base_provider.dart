@@ -205,7 +205,7 @@ class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  void createUser(Map<String, dynamic> requestBody) async {
+  Future createUser(Map<String, dynamic> requestBody) async {
     var url1 = "$_baseUrl$_endpoint";
     final url = Uri.parse(url1);
 
@@ -220,6 +220,8 @@ class BaseProvider<T> with ChangeNotifier {
 
     if (response.statusCode == 200) {
       print('User created successfully');
+      var data = jsonDecode(response.body);
+      return fromJson(data);
     } else {
       print('Error creating user: ${response.statusCode}');
       print('Response body: ${response.body}');
