@@ -38,7 +38,7 @@ class _SalonPhotosPageState extends State<SalonPhotosPage> {
 
   // Future<void> fetchData() async {
   //   var data = await _salonPhotoProvider.get(
-  //     filter: {'salonId': UserSingleton().loggedInUserSalon.salonId},
+  //     filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
   //   );
   //   setState(() {
   //     base64Photos = data.result
@@ -49,9 +49,9 @@ class _SalonPhotosPageState extends State<SalonPhotosPage> {
   // }
 
   Future<void> fetchData2() async {
-    print(UserSingleton().loggedInUserSalon.salonId);
+    print(UserSingleton().loggedInUserSalon?.salonId);
     var data = await _salonPhotoProvider.get(
-      filter: {'salonId': UserSingleton().loggedInUserSalon.salonId},
+      filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
     );
     setState(() {
       photos = data.result; // Assign the result directly to photos
@@ -160,7 +160,7 @@ class _SalonPhotosPageState extends State<SalonPhotosPage> {
         List<int> imageBytes = file.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
         SalonPhoto photoToView = new SalonPhoto(
-            99, base64Image, UserSingleton().loggedInUserSalon.salonId);
+            99, base64Image, UserSingleton().loggedInUserSalon?.salonId);
         // Add the base64 image to the list of photos
         setState(() {
           photos.add(photoToView);
@@ -168,7 +168,7 @@ class _SalonPhotosPageState extends State<SalonPhotosPage> {
 
         var body = {
           'photo': base64Image,
-          'salonId': UserSingleton().loggedInUserSalon.salonId,
+          'salonId': UserSingleton().loggedInUserSalon?.salonId,
         };
         await _salonPhotoProvider.insert(body);
         fetchData2();

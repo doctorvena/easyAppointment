@@ -32,8 +32,14 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
   }
 
   Future<void> fetchData() async {
-    var data = await _timeslotprovider
-        .get(filter: {'userBusinessId': UserSingleton().loggedInUserId});
+    var data;
+    if (UserSingleton().role == 'Employee') {
+      data = await _timeslotprovider
+          .get(filter: {'BusinessId': UserSingleton().loggedInUserId});
+    } else {
+      data = await _timeslotprovider
+          .get(filter: {'BusinessId': UserSingleton().loggedInUserId});
+    }
 
     setState(() {
       result = data as searchResult<TimeSlot>?;

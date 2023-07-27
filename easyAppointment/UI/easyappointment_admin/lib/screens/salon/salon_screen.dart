@@ -63,7 +63,7 @@ class _SalonPageState extends State<SalonPage> {
   void _fetchSalonData() async {
     try {
       var salonData = await _salonProvider
-          .getById(UserSingleton().loggedInUserSalon.salonId!);
+          .getById(UserSingleton().loggedInUserSalon?.salonId!);
       salon =
           salonData as Salon; // Assuming the response returns a single salon
 
@@ -161,7 +161,7 @@ class _SalonPageState extends State<SalonPage> {
 
                         try {
                           int? salonId =
-                              UserSingleton().loggedInUserSalon.salonId;
+                              UserSingleton().loggedInUserSalon?.salonId;
                           _salonProvider.update(salonId!, updateData);
                           showSuccessDialog(context);
                         } on Exception catch (e) {

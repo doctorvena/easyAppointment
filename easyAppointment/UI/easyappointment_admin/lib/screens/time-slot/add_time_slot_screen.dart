@@ -35,7 +35,7 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
   Future<void> _fetchEmployees() async {
     try {
       var employees = await _salonEmployeeProvider
-          .get(filter: {'salonId': UserSingleton().loggedInUserSalon.salonId});
+          .get(filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId});
       setState(() {
         _employees = employees.result;
       });
@@ -45,8 +45,41 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
   }
 
   void _addTimeSlot() async {
-    final int? salonId = UserSingleton().loggedInUserSalon.salonId;
-    final int employeeId = _selectedEmployee?.employeeUserId ?? 0;
+    int? employeeId;
+    int? salonId;
+    if (UserSingleton().role == 'Employee') {
+      var salonEmployee = await _salonEmployeeProvider.get(
+        filter: {'employeeUserId': UserSingleton().loggedInUserId},
+      );
+      if (salonEmployee.count > 0) {
+        employeeId = salonEmployee.result[0].employeeUserId;
+        salonId = salonEmployee.result[0].salonId;
+      } else {
+        // No salon employee found
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Attention'),
+              content: Text('You need to work at a salon first!'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        return; // Exit the function or perform any necessary actions
+      }
+    } else {
+      employeeId =
+          _selectedEmployee?.employeeUserId ?? UserSingleton().loggedInUserId;
+      salonId = UserSingleton().loggedInUserSalon?.salonId;
+    }
     final int duration = _endTime.difference(_startTime).inMinutes;
 
     final Map<String, dynamic> newTimeSlot = {
@@ -167,27 +200,29 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              Text(
-                'Employees',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 8),
-              DropdownButtonFormField<SalonEmployee>(
-                value: _selectedEmployee,
-                onChanged: (SalonEmployee? newValue) {
-                  setState(() {
-                    _selectedEmployee = newValue;
-                  });
-                },
-                items: _employees.map<DropdownMenuItem<SalonEmployee>>(
-                    (SalonEmployee employee) {
-                  return DropdownMenuItem<SalonEmployee>(
-                    value: employee,
-                    child: Text(employee.employeeUserId.toString()),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 16),
+              if (UserSingleton().role != 'Employee') ...[
+                Text(
+                  'Employees',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 8),
+                DropdownButtonFormField<SalonEmployee>(
+                  value: _selectedEmployee,
+                  onChanged: (SalonEmployee? newValue) {
+                    setState(() {
+                      _selectedEmployee = newValue;
+                    });
+                  },
+                  items: _employees.map<DropdownMenuItem<SalonEmployee>>(
+                      (SalonEmployee employee) {
+                    return DropdownMenuItem<SalonEmployee>(
+                      value: employee,
+                      child: Text(employee.employeeUserId.toString()),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 16),
+              ],
               ElevatedButton(
                 onPressed: _addTimeSlot,
                 child: Text('Add Time Slot'),

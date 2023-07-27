@@ -206,7 +206,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Future createUser(Map<String, dynamic> requestBody) async {
-    var url1 = "$_baseUrl$_endpoint";
+    var url1 = "$_baseUrl$_endpoint/register";
     final url = Uri.parse(url1);
 
     final response = await http.post(

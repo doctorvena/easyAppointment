@@ -6,8 +6,6 @@ part of 'employee_salon.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-// employee_salon.g.dart
-
 SalonEmployee _$SalonEmployeeFromJson(Map<String, dynamic> json) =>
     SalonEmployee(
       json['salonEmployeeId'] as int?,

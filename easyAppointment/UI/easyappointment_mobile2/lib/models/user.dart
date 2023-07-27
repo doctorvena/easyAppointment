@@ -1,0 +1,51 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'package:easyappointment_mobile/models/user_role.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+/// This allows the `User` class to access private members in
+/// the generated file. The value for this is *.g.dart, where
+/// the star denotes the source file name.
+part 'user.g.dart';
+
+@JsonSerializable()
+class User {
+  User(
+      this.userId,
+      this.firstName,
+      this.lastName,
+      this.roleId,
+      this.email,
+      this.phone,
+      this.photo,
+      this.username,
+      this.password,
+      this.passwordRepeat,
+      this.status,
+      this.sexId,
+      this.userRoles);
+
+  int? userId;
+  String? firstName;
+  String? lastName;
+  int? roleId;
+  String? email;
+  String? phone;
+  String? photo;
+  String? username;
+  String? password;
+  String? passwordRepeat;
+  String? status;
+  int? sexId;
+  List<UserRole>? userRoles;
+
+  /// A necessary factory constructor for creating a new User instance
+  /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
+  /// The constructor is named after the source class, in this case, User.
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  /// `toJson` is the convention for a class to declare support for serialization
+  /// to JSON. The implementation simply calls the private, generated
+  /// helper method `_$UserToJson`.
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+}

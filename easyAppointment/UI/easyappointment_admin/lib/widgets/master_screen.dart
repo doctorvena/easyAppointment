@@ -34,16 +34,19 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       drawer: Drawer(
         child: ListView(
           children: [
-            ListTile(
-              title: Text('Salon'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const SalonPage(),
-                  ),
-                );
-              },
-            ),
+            if (UserSingleton().role != 'Employee' &&
+                UserSingleton().role != 'Customer') ...[
+              ListTile(
+                title: Text('Salon'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SalonPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
             ListTile(
               title: Text('TimeSlot'),
               onTap: () {
@@ -64,26 +67,32 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 );
               },
             ),
-            ListTile(
-              title: Text('Employee'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const EmployeeOverview(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Photos'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const SalonPhotosPage(),
-                  ),
-                );
-              },
-            ),
+            if (UserSingleton().role != 'Employee' &&
+                UserSingleton().role != 'Customer') ...[
+              ListTile(
+                title: Text('Employee'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const EmployeeOverview(),
+                    ),
+                  );
+                },
+              ),
+            ],
+            if (UserSingleton().role != 'Employee' &&
+                UserSingleton().role != 'Customer') ...[
+              ListTile(
+                title: Text('Photos'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SalonPhotosPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
             ListTile(
               title: Text('Help'),
               onTap: () {
@@ -138,7 +147,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onPressed: () {
                 // Call the logoutUser function to log out the user
                 UserSingleton().loggedInUserId = -1;
-                UserSingleton().loggedInUserSalon.salonId = -1;
+                UserSingleton().loggedInUserSalon?.salonId = -1;
 
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => LoginPage()),

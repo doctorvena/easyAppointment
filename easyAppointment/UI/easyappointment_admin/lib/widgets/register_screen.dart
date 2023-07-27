@@ -1,4 +1,5 @@
 import 'package:eprodaja_admin/providers/salon_provider.dart';
+import 'package:eprodaja_admin/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class RegistrationPage extends StatelessWidget {
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
+  String? selectedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +132,31 @@ class RegistrationPage extends StatelessWidget {
                         return null;
                       },
                     ),
+                    DropdownButtonFormField<String>(
+                      value: selectedRole,
+                      onChanged: (value) {
+                        selectedRole = value;
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Role",
+                      ),
+                      items: [
+                        DropdownMenuItem(
+                          value: "business_owner",
+                          child: Text("Business Owner"),
+                        ),
+                        DropdownMenuItem(
+                          value: "employee",
+                          child: Text("Employee"),
+                        ),
+                      ],
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Role is required';
+                        }
+                        return null;
+                      },
+                    ),
                     ElevatedButton(
                       onPressed: () async {
                         String firstName = _firstNameController.text;
@@ -188,7 +215,7 @@ class RegistrationPage extends StatelessWidget {
                         final Map<String, dynamic> requestBody = {
                           'firstName': firstName,
                           'lastName': lastName,
-                          'roleId': 2,
+                          'roleId': selectedRole == "employee" ? 4 : 2,
                           'email': email,
                           'phone': phone,
                           'username': username,
@@ -207,7 +234,12 @@ class RegistrationPage extends StatelessWidget {
                           'ownerUserId': test.userId,
                           'cityId': 1,
                         };
-                        await _salonProvider.insert(requestBodySalon);
+                        Authorization.username = username;
+                        Authorization.password = password;
+
+                        selectedRole != "employee"
+                            ? _salonProvider.insert(requestBodySalon)
+                            : {};
 
                         // After registration, you can navigate to a different page
                         Navigator.of(context).push(

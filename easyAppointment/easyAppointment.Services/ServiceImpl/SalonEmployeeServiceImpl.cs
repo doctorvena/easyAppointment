@@ -66,5 +66,67 @@ namespace easyAppointment.Services.ServiceImpl
 
             return responseList;
         }
+
+        public override async Task BeforeInsert(SalonEmployee db, SalonEmployeeInsertRequest insert)
+        {
+            var existingEmployee = await _context.Set<SalonEmployee>()
+                .FirstOrDefaultAsync(x => x.EmployeeUserId == insert.EmployeeUserId);
+
+            if (existingEmployee != null)
+            {
+                throw new Exception("Employee is already associated with a salon");
+            }
+
+            await base.BeforeInsert(db, insert);
+        }
+
+        public virtual async Task<SalonEmployeeResponse> AddSalonEmployee(string username, int salonId)
+        {
+            // Find the user by username
+            var user = await _context.Set<User>().FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var existingEmployee = await _context.Set<SalonEmployee>().FirstOrDefaultAsync(e => e.EmployeeUserId == user.UserId);
+            if (existingEmployee != null)
+            {
+                throw new Exception("Employee is already employed");
+            }
+
+            // Create the salon employee object
+            var salonEmployee = new SalonEmployee
+            {
+                SalonId = salonId,
+                EmployeeUserId = user.UserId,
+                Photo = user.Photo
+            };
+
+            await BeforeInsert(salonEmployee, new SalonEmployeeInsertRequest
+            {
+                SalonId = salonEmployee.SalonId,
+                EmployeeUserId = salonEmployee.EmployeeUserId,
+                Photo = salonEmployee.Photo
+            });
+
+            // Insert the salon employee into the database
+            _context.Set<SalonEmployee>().Add(salonEmployee);
+            await _context.SaveChangesAsync();
+
+            // Map the salon employee to the response object
+            var response = _mapper.Map<SalonEmployeeResponse>(salonEmployee);
+
+            // Include additional properties from the user table
+            response.FirstName = user.FirstName;
+            response.LastName = user.LastName;
+            response.Username = user.Username;
+            response.Phone = user.Phone;
+            response.Email = user.Email;
+
+            return response;
+        }
+
+
     }
 }

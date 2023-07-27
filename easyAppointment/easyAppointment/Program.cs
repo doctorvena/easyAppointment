@@ -104,10 +104,6 @@ using (var scope = app.Services.CreateScope())
     //new SetupService().Init(dataContext);
     //new SetupService().InsertData(dataContext);
 
-
-    //var conn = dataContext.Database.GetConnectionString();
-
-    //dataContext.Database.Migrate();
 }
 
 app.Run();

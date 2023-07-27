@@ -32,24 +32,8 @@ class Reservation {
   /// The constructor is named after the source class, in this case, User.
   // factory Reservation.fromJson(Map<String, dynamic> json) =>
   //     _$ReservationFromJson(json);
-
-  factory Reservation.fromJson(Map<String, dynamic> json) {
-    final List<dynamic>? timeslotsJson = json['timeslots'] as List<dynamic>?;
-
-    return Reservation(
-      json['reservationId'] as int?,
-      json['salonId'] as int?,
-      json['userCustomerId'] as int?,
-      json['timeSlotId'] as int?,
-      DateTime.parse(json['reservationDate'] as String),
-      json['reservationName'] as String?,
-      timeslotsJson != null
-          ? timeslotsJson
-              .map((slotJson) => TimeSlot.fromJson(slotJson))
-              .toList()
-          : null,
-    );
-  }
+  factory Reservation.fromJson(Map<String, dynamic> json) =>
+      _$ReservationFromJson(json);
 
   /// `toJson` is the convention for a class to declare support for serialization
   /// to JSON. The implementation simply calls the private, generated

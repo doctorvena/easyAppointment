@@ -7,6 +7,7 @@ import '/providers/salon_provider.dart';
 import '/providers/user_provider.dart';
 import '/screens/reservations/reservations_overview.dart';
 import '/utils/utils.dart';
+import '../providers/employee_salon_provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   late UserProvider _userProvider;
+  late SalonEmployeeProvider _salonEmployeeProvider;
   late SalonProvider _salonProvider;
   bool isLoading = false;
 
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _userProvider = context.read<UserProvider>();
+    _salonEmployeeProvider = context.read<SalonEmployeeProvider>();
     _salonProvider = context.read<SalonProvider>();
   }
 
@@ -103,17 +106,25 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       UserSingleton().loggedInUserId = loggedUser.userId!;
-      try {
-        var loggedUserSalon = await _salonProvider.get(
-          filter: {'ownerUserId': UserSingleton().loggedInUserId},
-        );
+      UserSingleton().role = loggedUser.userRoles![0].role?.roleName ?? '';
+      if (UserSingleton().role == 'Employee') {
+        var salon = await _salonProvider
+            .getSalonByEmployeeId(UserSingleton().loggedInUserId);
 
-        if (loggedUserSalon == null || loggedUserSalon.result.length == 0) {
-          throw Exception('User login failed');
-        } else {
-          UserSingleton().loggedInUserSalon = loggedUserSalon.result[0];
-        }
-      } catch (e) {}
+        salon == null ? {} : UserSingleton().loggedInUserSalon = salon;
+      } else {
+        try {
+          var loggedUserSalon = await _salonProvider.get(
+            filter: {'ownerUserId': UserSingleton().loggedInUserId},
+          );
+
+          if (loggedUserSalon == null || loggedUserSalon.result.length == 0) {
+            throw Exception('User login failed');
+          } else {
+            UserSingleton().loggedInUserSalon = loggedUserSalon.result[0];
+          }
+        } catch (e) {}
+      }
 
       Navigator.of(context).push(
         MaterialPageRoute(

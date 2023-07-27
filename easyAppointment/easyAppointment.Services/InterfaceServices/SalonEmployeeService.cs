@@ -11,5 +11,6 @@ namespace easyAppointment.Services.InterfaceServices
 {
     public interface SalonEmployeeService : ICRUDService<SalonEmployeeResponse, SalonEmployeeSearchObject, SalonEmployeeInsertRequest, SalonEmployeeUpdateRequest>
     {
+        Task<SalonEmployeeResponse> AddSalonEmployee(string username, int salonId);
     }
 }

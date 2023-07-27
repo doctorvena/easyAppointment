@@ -68,5 +68,26 @@ namespace easyAppointment.Services.ServiceImpl
             }
         }
 
+        public override async Task BeforeInsert(TimeSlot db, TimeSlotInsertRequest insert)
+        {
+            // Check if the employee already has a timeslot within the same time span
+            bool hasConflictingTimeslot = await _context.Set<TimeSlot>()
+                .AnyAsync(t =>
+                    t.EmployeeId == insert.EmployeeId &&
+                    (
+                        (t.StartTime <= insert.StartTime && insert.StartTime < t.EndTime) ||
+                        (t.StartTime < insert.EndTime && insert.EndTime <= t.EndTime) ||
+                        (insert.StartTime <= t.StartTime && t.StartTime < insert.EndTime) ||
+                        (insert.StartTime < t.EndTime && t.EndTime <= insert.EndTime)
+                    )
+                );
+
+            if (hasConflictingTimeslot)
+            {
+                throw new Exception("The employee already has a timeslot within the same time span.");
+            }
+        }
+
+
     }
 }

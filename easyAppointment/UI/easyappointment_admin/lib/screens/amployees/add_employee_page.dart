@@ -1,3 +1,5 @@
+import 'package:eprodaja_admin/app/user_singleton.dart';
+import 'package:eprodaja_admin/providers/employee_salon_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,84 +17,140 @@ class AddEmployeePage extends StatefulWidget {
 
 class _AddUserPageState extends State<AddEmployeePage> {
   late UserProvider _userProvider;
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+  late SalonEmployeeProvider _salonEmployeeProvider;
+  TextEditingController _usernameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _userProvider = context.read<UserProvider>();
+    _salonEmployeeProvider = context.read<SalonEmployeeProvider>();
   }
 
   @override
   void dispose() {
-    _userNameController.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
-  void addUser() async {
-    String userName = _userNameController.text.trim();
-    String email = _emailController.text.trim();
+  void addEmployee() async {
+    String username = _usernameController.text.trim();
+    bool isEmployee = false; // Set the isEmployee flag to false
 
-    if (userName.isNotEmpty && email.isNotEmpty) {
+    if (username.isNotEmpty) {
       try {
-        // await _userProvider.insert(
-        //     userName, email, UserSingleton().loggedInUserId);
-        widget.refreshData();
-        Navigator.pop(context);
+        print(UserSingleton().role);
+        if (UserSingleton().role == 'BussinesOwner') {
+          // Check if the user is not an employee
+          await _salonEmployeeProvider.addEmplyeeAsOwner(username);
+          widget.refreshData();
+          Navigator.pop(context);
+        } else {
+          // Show an error message that only business users can add employees
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Permission Denied'),
+                content: Text('Only business users can add employees.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       } catch (e) {
         // Handle the error
-        print('Error adding user: $e');
+        print('Error adding employee: $e');
         // Show an error message or perform any necessary error handling
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('$e Failed to add employee. '),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       }
     } else {
-      // Show an error message or validation message if the required fields are not filled
+      // Show an error message or validation message if the required field is not filled
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Validation Error'),
+            content: Text('Please enter a username.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isEmployee = UserSingleton().role ==
+        'Employee'; // Get the isEmployee flag from the user provider
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add User'),
+        title: Text('Add Employee'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'User Name:',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8.0),
-            TextFormField(
-              controller: _userNameController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Email:',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8.0),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200],
+              SizedBox(height: 8.0),
+              TextFormField(
+                controller: _usernameController,
+                enabled:
+                    !isEmployee, // Disable the input field for business users
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  hintText: 'Enter username',
+                ),
               ),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: addUser,
-              child: Text('Add User'),
-            ),
-          ],
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: addEmployee,
+                child: Text('Add Employee'),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -28,7 +28,7 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
 
   Future<void> fetchData() async {
     var data = await _salonEmployeeProvider.get(
-      filter: {'salonId': UserSingleton().loggedInUserSalon.salonId},
+      filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
     );
 
     setState(() {

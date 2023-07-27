@@ -43,7 +43,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
 
   Future<void> fetchData() async {
     var data = await _reservationProvider.get(
-      filter: {'salonId': UserSingleton().loggedInUserSalon.salonId},
+      filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
     );
 
     setState(() {
@@ -58,7 +58,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'Reservations - ${UserSingleton().loggedInUserSalon.salonName}',
+      title: 'Reservations - ${UserSingleton().loggedInUserSalon?.salonName}',
       child: Column(
         children: [
           SizedBox(height: 8),
@@ -70,7 +70,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AddReservationPage(
-                      salonId: UserSingleton().loggedInUserSalon.salonId,
+                      salonId: UserSingleton().loggedInUserSalon?.salonId,
                       refreshData: refreshData,
                     ),
                   ),

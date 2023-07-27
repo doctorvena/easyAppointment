@@ -47,5 +47,22 @@ namespace easyAppointment.Services.ServiceImpl
 
             return base.AddFilter(query, search);
         }
+        public async Task<SalonResponse> GetSalonByEmployeeId(int employeeId)
+        {
+            var salonEmployee = await _context.Set<SalonEmployee>()
+                .Include(se => se.Salon)
+                .FirstOrDefaultAsync(e => e.EmployeeUserId == employeeId);
+
+
+            if (salonEmployee == null)
+            {
+                return null;
+            }
+
+            var salon = salonEmployee.Salon;
+            return _mapper.Map<SalonResponse>(salon);
+        }
+
+
     }
 }

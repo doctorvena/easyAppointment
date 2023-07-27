@@ -1,3 +1,4 @@
+import 'package:eprodaja_admin/models/user_role.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -8,19 +9,19 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   User(
-    this.userId,
-    this.firstName,
-    this.lastName,
-    this.roleId,
-    this.email,
-    this.phone,
-    this.photo,
-    this.username,
-    this.password,
-    this.passwordRepeat,
-    this.status,
-    this.sexId,
-  );
+      this.userId,
+      this.firstName,
+      this.lastName,
+      this.roleId,
+      this.email,
+      this.phone,
+      this.photo,
+      this.username,
+      this.password,
+      this.passwordRepeat,
+      this.status,
+      this.sexId,
+      this.userRoles);
 
   int? userId;
   String? firstName;
@@ -34,6 +35,7 @@ class User {
   String? passwordRepeat;
   String? status;
   int? sexId;
+  List<UserRole>? userRoles;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

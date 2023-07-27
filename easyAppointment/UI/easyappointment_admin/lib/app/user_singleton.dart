@@ -10,5 +10,6 @@ class UserSingleton {
   UserSingleton._internal();
 
   late int loggedInUserId;
-  late Salon loggedInUserSalon;
+  late Salon? loggedInUserSalon = null;
+  late String role;
 }
