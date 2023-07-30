@@ -7,9 +7,9 @@ class NarudzbePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(
+    return MasterScreenWidget(
       title: "narudzbe",
-      index: 2,
+      index: 1,
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.95,
       ),

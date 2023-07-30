@@ -36,6 +36,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Remove back button
+        title: Text("Login"),
+      ),
       body: SingleChildScrollView(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -186,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
       UserSingleton().role = loggedUser.userRoles![0].role?.roleName ?? '';
       if (UserSingleton().role != 'Customer') {}
 
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const SalonListScreen(),
         ),

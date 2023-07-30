@@ -1,14 +1,18 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, non_constant_identifier_names
-import 'package:easyappointment_mobile/screens/navigation_bar.dart';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+import '../screens/navigation_bar.dart';
+import '../utils/user_singleton.dart';
+import 'login_page.dart';
+
+class MasterScreenWidget extends StatefulWidget {
   Widget? child;
   String? title;
-  Widget? title_widget;
   int index;
+  Widget? title_widget;
 
-  HomePage(
+  MasterScreenWidget(
       {this.child,
       this.title,
       this.title_widget,
@@ -17,26 +21,52 @@ class HomePage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: widget.title_widget ?? Text(widget.title ?? ""),
-        leading: BackButton(
-          color: Colors.white,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
       ),
       body: widget.child!,
       bottomNavigationBar: NavigationBarPage(
         index: widget.index,
       ),
+    );
+  }
+
+  Future<void> _showLogoutDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Call the logoutUser function to log out the user
+                UserSingleton().loggedInUserId = -1;
+                UserSingleton().loggedInUserSalon?.salonId = -1;
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: const Text('Logout'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -182,4 +182,27 @@ class BaseProvider<T> with ChangeNotifier {
       // Handle the login error here
     }
   }
+
+  Future createUser(Map<String, dynamic> requestBody) async {
+    var url1 = "$_baseUrl$_endpoint/register";
+    final url = Uri.parse(url1);
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      print('User created successfully');
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      print('Error creating user: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
 }

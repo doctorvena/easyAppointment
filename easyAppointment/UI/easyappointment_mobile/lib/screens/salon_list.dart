@@ -64,7 +64,7 @@ class _SalonListScreenState extends State<SalonListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(
+    return MasterScreenWidget(
       title: "EasyAppointment",
       index: 0,
       child: SizedBox(

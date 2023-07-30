@@ -47,7 +47,7 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(
+    return MasterScreenWidget(
       title: "Pregled radnje",
       index: 0,
       child: SingleChildScrollView(

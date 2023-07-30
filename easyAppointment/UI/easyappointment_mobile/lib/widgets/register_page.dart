@@ -245,7 +245,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 14.0),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     String firstName = _firstNameController.text;
                     String lastName = _lastNameController.text;
                     String username = _usernameController.text;
@@ -254,6 +254,63 @@ class RegisterPage extends StatelessWidget {
                     String password = _passwordController.text;
                     String confirmPassword = _confirmPasswordController.text;
                     int roleId = 3;
+
+                    // if (firstName == null || firstName.isEmpty) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text("FirstName can not be empty"),
+                    //   ));
+                    //   return;
+                    // }
+
+                    // if (lastName == null || lastName.isEmpty) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text("LastName can not be empty"),
+                    //   ));
+                    //   return;
+                    // }
+
+                    // if (email == null || email.isEmpty) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text("Email can not be empty"),
+                    //   ));
+                    //   return;
+                    // }
+
+                    // if (!validateStructure(password)) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text(
+                    //         "Password must contain one upercase letter one special char and number"),
+                    //   ));
+                    //   return;
+                    // }
+
+                    // if (password != confirmPassword) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text("Passwors must match!"),
+                    //   ));
+                    //   return;
+                    // }
+
+                    final Map<String, dynamic> requestBody = {
+                      'firstName': firstName,
+                      'lastName': lastName,
+                      'roleId': 4,
+                      'email': email,
+                      'phone': "phone",
+                      'username': username,
+                      'password': password,
+                      'passwordRepeat': confirmPassword,
+                      'sexId': 1,
+                      'status': 'Active',
+                    };
+                    var test = await _userProvider.createUser(requestBody);
+
+                    // After registration, you can navigate to a different page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
                     _firstNameController.clear();
                     _lastNameController.clear();
                     _usernameController.clear();
@@ -262,62 +319,6 @@ class RegisterPage extends StatelessWidget {
                     _passwordController.clear();
                     _confirmPasswordController.clear();
 
-                    validateRegister();
-
-                    if (firstName == null || firstName.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("FirstName can not be empty"),
-                      ));
-                      return;
-                    }
-
-                    if (lastName == null || lastName.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("LastName can not be empty"),
-                      ));
-                      return;
-                    }
-
-                    if (email == null || email.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Email can not be empty"),
-                      ));
-                      return;
-                    }
-
-                    if (!validateStructure(password)) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "Password must contain one upercase letter one special char and number"),
-                      ));
-                      return;
-                    }
-
-                    if (password != confirmPassword) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Passwors must match!"),
-                      ));
-                      return;
-                    }
-
-                    var request = {
-                      'firstName': firstName,
-                      'lastName': lastName,
-                      'roleId': 1,
-                      'email': email,
-                      'phone': phone,
-                      'username': username,
-                      'password': password,
-                      'passwordRepeat': confirmPassword,
-                    };
-                    _saveUser(request);
-
-                    // After registration, you can navigate to a different page
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SalonListScreen(),
-                      ),
-                    );
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Registracija uspješna!')),
                     );
@@ -353,19 +354,6 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _saveUser(var request) async {
-    try {
-      _fromKey.currentState?.saveAndValidate();
-      await _userProvider.insert(request);
-    } catch (e, stackTrace) {
-      // Exception or error handling code.
-      // e: The caught exception or error object.
-      // stackTrace: Stack trace of the error or exception.
-
-      // Handle the exception or error here.
-    }
   }
 
   bool _validateInput(String? value, BuildContext context) {

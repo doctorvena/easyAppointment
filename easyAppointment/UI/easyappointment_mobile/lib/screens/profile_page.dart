@@ -7,7 +7,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(
+    return MasterScreenWidget(
       title: "profile",
       index: 2,
       child: SizedBox(
