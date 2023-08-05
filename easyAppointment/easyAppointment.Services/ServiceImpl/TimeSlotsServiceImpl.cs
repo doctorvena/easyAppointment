@@ -25,16 +25,17 @@ namespace easyAppointment.Services.ServiceImpl
             if (search != null)
             {
                 query = query.Where(x =>
-                (search.BusinessId == null || x.BusinessId.Equals(search.BusinessId)) &&
+                (search.BusinessUserId == null || x.BusinessUserId.Equals(search.BusinessUserId)) &&
                 (search.EmployeeId == null || x.EmployeeId.Equals(search.EmployeeId)) &&
-                (search.ServiceId == null || x.ServiceId.Equals(search.ServiceId))&& 
-                (search.Status == null || x.Status == search.Status)
+                (search.SalonId == null || x.SalonId.Equals(search.SalonId)) &&
+                (search.Status == null || x.Status == search.Status) &&
+                (search.SearchDate == null || (x.StartTime.HasValue && x.StartTime.Value.Date == search.SearchDate.Value.Date))
                 );
             }
 
-
             return query;
         }
+
 
         public override async Task<bool> Delete(int id)
         {
@@ -70,6 +71,16 @@ namespace easyAppointment.Services.ServiceImpl
 
         public override async Task BeforeInsert(TimeSlot db, TimeSlotInsertRequest insert)
         {
+            // Fetch the SalonEmployeeId that corresponds to the EmployeeId
+            var salonEmployee = await _context.SalonEmployees.FirstOrDefaultAsync(e => e.EmployeeUserId == insert.EmployeeId);
+            if (salonEmployee == null)
+            {
+                throw new Exception("Employee does not exist.");
+            }
+
+            // Assign SalonEmployeeId to the TimeSlot object
+            db.EmployeeId = salonEmployee.SalonEmployeeId;
+
             // Check if the employee already has a timeslot within the same time span
             bool hasConflictingTimeslot = await _context.Set<TimeSlot>()
                 .AnyAsync(t =>
@@ -87,6 +98,7 @@ namespace easyAppointment.Services.ServiceImpl
                 throw new Exception("The employee already has a timeslot within the same time span.");
             }
         }
+
 
 
     }

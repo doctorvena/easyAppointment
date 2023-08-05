@@ -55,7 +55,7 @@ class _NavigationBarPageState extends State<NavigationBarPage>
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const NarudzbePage(),
+                builder: (context) => const ReservationsPage(),
               ),
             );
           } else if (_tabController.index == 2) {

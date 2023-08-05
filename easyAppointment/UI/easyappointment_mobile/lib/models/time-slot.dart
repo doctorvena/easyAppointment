@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, depend_on_referenced_packages
-
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -9,14 +7,27 @@ part 'time-slot.g.dart';
 
 @JsonSerializable()
 class TimeSlot {
-  TimeSlot(this.timeSlotId, this.startTime, this.endTime, this.businessId,
-      this.duration);
+  TimeSlot(
+    this.timeSlotId,
+    this.startTime,
+    this.endTime,
+    this.salonId,
+    this.employeeId,
+    this.slotDate,
+    this.duration,
+    this.businessId,
+    this.status,
+  );
 
   int? timeSlotId;
   String? startTime;
   String? endTime;
+  int? salonId;
+  int? employeeId;
+  String? slotDate;
+  int? duration;
   int? businessId;
-  String? duration;
+  String? status;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

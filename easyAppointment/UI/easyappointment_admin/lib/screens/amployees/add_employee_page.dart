@@ -40,7 +40,7 @@ class _AddUserPageState extends State<AddEmployeePage> {
     if (username.isNotEmpty) {
       try {
         print(UserSingleton().role);
-        if (UserSingleton().role == 'BussinesOwner') {
+        if (UserSingleton().role == 'BusinessOwner') {
           // Check if the user is not an employee
           await _salonEmployeeProvider.addEmplyeeAsOwner(username);
           widget.refreshData();

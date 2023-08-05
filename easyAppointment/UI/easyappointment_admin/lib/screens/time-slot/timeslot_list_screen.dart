@@ -35,10 +35,10 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
     var data;
     if (UserSingleton().role == 'Employee') {
       data = await _timeslotprovider
-          .get(filter: {'BusinessId': UserSingleton().loggedInUserId});
+          .get(filter: {'EmployeeId': UserSingleton().loggedInUserId});
     } else {
       data = await _timeslotprovider
-          .get(filter: {'BusinessId': UserSingleton().loggedInUserId});
+          .get(filter: {'SalonId': UserSingleton().loggedInUserSalon?.salonId});
     }
 
     setState(() {
@@ -116,7 +116,15 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                       DataColumn(
                         label: Expanded(
                           child: Text(
-                            'Bussines Id',
+                            'Salon Id',
+                            style: TextStyle(fontStyle: FontStyle.normal),
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Expanded(
+                          child: Text(
+                            'Business User Id',
                             style: TextStyle(fontStyle: FontStyle.normal),
                           ),
                         ),
@@ -147,8 +155,9 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                                       Text(e.timeSlotId?.toString() ?? "")),
                                   DataCell(Text(e.startTime ?? "")),
                                   DataCell(Text(e.endTime ?? "")),
+                                  DataCell(Text(e.salonId?.toString() ?? "")),
                                   DataCell(
-                                      Text(e.businessId?.toString() ?? "")),
+                                      Text(e.businessUserId?.toString() ?? "")),
                                   DataCell(Text(e.duration?.toString() ?? "")),
                                   DataCell(Text(e.status?.toString() ?? "")),
                                   DataCell(

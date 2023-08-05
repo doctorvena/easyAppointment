@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:easyappointment_mobile/models/salon.dart';
+import 'package:easyappointment_mobile/screens/reservation_screen.dart';
 import 'package:easyappointment_mobile/widgets/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -47,109 +48,128 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      title: "Pregled radnje",
-      index: 0,
-      child: SingleChildScrollView(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 180,
-                decoration: BoxDecoration(
-                  image: _selectedImage != null
-                      ? DecorationImage(
-                          image: FileImage(_selectedImage!),
-                          fit: BoxFit.cover,
-                        )
-                      : bytes != null && bytes!.isNotEmpty
-                          ? DecorationImage(
-                              image: MemoryImage(bytes!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                  color: Colors.red,
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, top: 15.0),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 90,
-                            height: 90,
-                            decoration: BoxDecoration(
-                                image: _selectedImage != null
-                                    ? DecorationImage(
-                                        image: FileImage(_selectedImage!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : bytes != null && bytes!.isNotEmpty
-                                        ? DecorationImage(
-                                            image: MemoryImage(bytes!),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : null,
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(45)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  widget.salon.salonName ?? "",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: 160,
-                                  child: ListView.builder(
-                                    primary: false,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: 5,
-                                    itemBuilder: (context, index) {
-                                      return Icon(
-                                        Icons.star,
-                                        size: 30,
-                                        color:
-                                            Color.fromARGB(255, 255, 167, 34),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Text(widget.salon.address ?? ""),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 20),
-                child: Text(
-                  "Naši uposlenici",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: MasterScreenWidget(
+        hideNavBar: true,
+        title: "Pregled radnje",
+        index: 0,
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 180,
+                  decoration: BoxDecoration(
+                    image: _selectedImage != null
+                        ? DecorationImage(
+                            image: FileImage(_selectedImage!),
+                            fit: BoxFit.cover,
+                          )
+                        : bytes != null && bytes!.isNotEmpty
+                            ? DecorationImage(
+                                image: MemoryImage(bytes!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                    color: Colors.red,
                   ),
                 ),
-              )
-              //ListView.builder()
-            ],
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 15.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                  image: _selectedImage != null
+                                      ? DecorationImage(
+                                          image: FileImage(_selectedImage!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : bytes != null && bytes!.isNotEmpty
+                                          ? DecorationImage(
+                                              image: MemoryImage(bytes!),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : null,
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(45)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    widget.salon.salonName ?? "",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    width: 160,
+                                    child: ListView.builder(
+                                      primary: false,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 5,
+                                      itemBuilder: (context, index) {
+                                        return Icon(
+                                          Icons.star,
+                                          size: 30,
+                                          color:
+                                              Color.fromARGB(255, 255, 167, 34),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Text(widget.salon.address ?? ""),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0, left: 20),
+                  child: Text(
+                    "Naši uposlenici",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                //ListView.builder()
+              ],
+            ),
           ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ReservationScreen(
+                  salon: widget.salon,
+                ),
+              ),
+            );
+          },
+          child: const Text('Rezerviši Termin'),
         ),
       ),
     );

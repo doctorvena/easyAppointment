@@ -1,4 +1,5 @@
 import 'package:easyappointment_mobile/providers/city_provider.dart';
+import 'package:easyappointment_mobile/providers/reservation_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_provider.dart';
 import 'package:easyappointment_mobile/providers/timeslot_provider.dart';
 import 'package:easyappointment_mobile/providers/user_provider.dart';
@@ -10,6 +11,7 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
+      ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => SalonProvider()),
       ChangeNotifierProvider(create: (_) => CityProvider()),

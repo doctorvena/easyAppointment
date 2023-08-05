@@ -71,6 +71,7 @@ class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
+    print(request);
     var jsonRequest = jsonEncode(request);
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);

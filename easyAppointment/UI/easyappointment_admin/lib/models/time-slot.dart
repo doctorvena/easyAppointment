@@ -11,22 +11,22 @@ class TimeSlot {
     this.timeSlotId,
     this.startTime,
     this.endTime,
-    this.serviceId,
+    this.salonId,
     this.employeeId,
     this.slotDate,
     this.duration,
-    this.businessId,
+    this.businessUserId,
     this.status,
   );
 
   int? timeSlotId;
   String? startTime;
   String? endTime;
-  int? serviceId;
+  int? salonId;
   int? employeeId;
   String? slotDate;
   int? duration;
-  int? businessId;
+  int? businessUserId;
   String? status;
 
   /// A necessary factory constructor for creating a new User instance

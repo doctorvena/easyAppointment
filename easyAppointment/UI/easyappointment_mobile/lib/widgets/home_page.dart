@@ -11,12 +11,14 @@ class MasterScreenWidget extends StatefulWidget {
   String? title;
   int index;
   Widget? title_widget;
+  bool hideNavBar;
 
   MasterScreenWidget(
       {this.child,
       this.title,
       this.title_widget,
       required this.index,
+      this.hideNavBar = false,
       Key? key})
       : super(key: key);
 
@@ -32,9 +34,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         title: widget.title_widget ?? Text(widget.title ?? ""),
       ),
       body: widget.child!,
-      bottomNavigationBar: NavigationBarPage(
-        index: widget.index,
-      ),
+      bottomNavigationBar:
+          widget.hideNavBar ? null : NavigationBarPage(index: widget.index),
     );
   }
 
@@ -50,7 +51,6 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onPressed: () {
                 // Call the logoutUser function to log out the user
                 UserSingleton().loggedInUserId = -1;
-                UserSingleton().loggedInUserSalon?.salonId = -1;
 
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => LoginPage()),

@@ -180,8 +180,8 @@ public partial class EasyAppointmnetDbContext : DbContext
                 .HasForeignKey(d => d.EmployeeId)
                 .HasConstraintName("FK__TimeSlots__Emplo__412EB0B6");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.TimeSlots)
-                .HasForeignKey(d => d.ServiceId)
+            entity.HasOne(d => d.Salon).WithMany(p => p.TimeSlots)
+                .HasForeignKey(d => d.SalonId)
                 .HasConstraintName("FK__TimeSlots__Servi__403A8C7D");
         });
 

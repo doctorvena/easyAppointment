@@ -87,7 +87,7 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
       'endTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_endTime),
       'employeeId': employeeId,
       'duration': duration,
-      'businessId': salonId,
+      'salonId': salonId,
       'status': 'Available'
     };
 

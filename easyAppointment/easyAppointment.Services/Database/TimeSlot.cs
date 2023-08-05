@@ -11,7 +11,7 @@ public partial class TimeSlot
 
     public DateTime? EndTime { get; set; }
 
-    public int? ServiceId { get; set; }
+    public int? SalonId { get; set; }
 
     public int? EmployeeId { get; set; }
 
@@ -19,7 +19,7 @@ public partial class TimeSlot
 
     public int Duration { get; set; }
 
-    public int? BusinessId { get; set; }
+    public int? BusinessUserId { get; set; }
 
     public string? Status { get; set; }
 
@@ -27,5 +27,5 @@ public partial class TimeSlot
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
-    public virtual Service? Service { get; set; }
+    public virtual Salon? Salon { get; set; }
 }
