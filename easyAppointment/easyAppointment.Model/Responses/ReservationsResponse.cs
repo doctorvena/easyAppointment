@@ -13,7 +13,7 @@ namespace easyAppointment.Model.Responses
         public int? SalonId { get; set; }
 
         public int? UserCustomerId { get; set; }
-
+        public string? Status { get; set; }
         public int? TimeSlotId { get; set; }
 
         public DateTime? ReservationDate { get; set; }

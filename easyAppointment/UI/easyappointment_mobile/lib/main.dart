@@ -1,5 +1,6 @@
 import 'package:easyappointment_mobile/providers/city_provider.dart';
 import 'package:easyappointment_mobile/providers/reservation_provider.dart';
+import 'package:easyappointment_mobile/providers/salon_employee_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_provider.dart';
 import 'package:easyappointment_mobile/providers/timeslot_provider.dart';
 import 'package:easyappointment_mobile/providers/user_provider.dart';
@@ -8,9 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print(details.toString());
+  };
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
+      ChangeNotifierProvider(create: (_) => SalonEmployeeProvider()),
       ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => SalonProvider()),

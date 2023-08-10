@@ -8,7 +8,9 @@ part of 'time-slot.dart';
 
 TimeSlot _$TimeSlotFromJson(Map<String, dynamic> json) => TimeSlot(
       json['timeSlotId'] as int?,
-      json['startTime'] as String?,
+      json['startTime'] == null
+          ? null
+          : DateTime.parse(json['startTime'] as String),
       json['endTime'] as String?,
       json['salonId'] as int?,
       json['employeeId'] as int?,
@@ -16,6 +18,9 @@ TimeSlot _$TimeSlotFromJson(Map<String, dynamic> json) => TimeSlot(
       json['duration'] as int?,
       json['businessId'] as int?,
       json['status'] as String?,
+      json['employee'] == null
+          ? null
+          : User.fromJson(json['employee'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TimeSlotToJson(TimeSlot instance) => <String, dynamic>{
@@ -28,4 +33,5 @@ Map<String, dynamic> _$TimeSlotToJson(TimeSlot instance) => <String, dynamic>{
       'duration': instance.duration,
       'businessId': instance.businessId,
       'status': instance.status,
+      'employee': instance.employee,
     };

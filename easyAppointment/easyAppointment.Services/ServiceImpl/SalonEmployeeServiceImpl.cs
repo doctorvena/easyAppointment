@@ -35,6 +35,17 @@ namespace easyAppointment.Services.ServiceImpl
             return base.AddFilter(query, search);
         }
 
+        public override IQueryable<SalonEmployee> AddInclude(IQueryable<SalonEmployee> query, SalonEmployeeSearchObject? search = null)
+        {
+            if(search != null && search.AreUsersIncluded==true)
+            {
+                query = query.Include(x => x.EmployeeUser);
+
+            }
+
+            return base.AddInclude(query, search);
+        }
+
         public override async Task<List<SalonEmployeeResponse>> Get(SalonEmployeeSearchObject? search = null)
         {
             var query = _context.Set<SalonEmployee>().AsQueryable();

@@ -9,6 +9,7 @@ import '../app/user_singleton.dart';
 import '../screens/contactus/contact_screen.dart';
 import '../screens/help/help_screen.dart';
 import '../screens/profile/prfile_screen.dart';
+import '../screens/report/report_screen.dart';
 import '../screens/time-slot/timeslot_list_screen.dart';
 import 'login_screen.dart';
 
@@ -109,6 +110,16 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ContactPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Report'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ReportPage(),
                   ),
                 );
               },

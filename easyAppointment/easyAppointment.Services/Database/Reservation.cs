@@ -13,6 +13,9 @@ public partial class Reservation
 
     public int? TimeSlotId { get; set; }
 
+    public string? Status { get; set; }
+    public DateTime? CancellationDate { get; set; }
+
     public DateTime? ReservationDate { get; set; }
 
     public string? ReservationName { get; set; }

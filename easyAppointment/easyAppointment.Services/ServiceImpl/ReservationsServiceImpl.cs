@@ -55,20 +55,31 @@ namespace easyAppointment.Services.ServiceImpl
 
         public override IQueryable<Reservation> AddFilter(IQueryable<Reservation> query, ReservationSearchObjecs? search = null)
         {
-
             if (search != null)
             {
                 query = query.Where(x =>
                     (search.SalonId == null || x.SalonId.Equals(search.SalonId)) &&
-                    (search.UserCustomerId == null || x.UserCustomer.Equals(search.UserCustomerId)) &&
+                    (search.UserCustomerId == null || x.UserCustomerId.Equals(search.UserCustomerId)) &&
                     (search.TimeSlotId == null || x.TimeSlotId.Equals(search.TimeSlotId)) &&
                     (search.ReservationDate == null || x.ReservationDate.Equals(search.ReservationDate))
                 );
-            }
 
+                if (search.IsActive.HasValue)
+                {
+                    if (search.IsActive.Value)
+                    {
+                        query = query.Where(x => x.Status.Equals("Active"));
+                    }
+                    else
+                    {
+                        query = query.Where(x => x.Status.Equals("Canceled") || x.Status.Equals("Completed"));
+                    }
+                }
+            }
 
             return base.AddFilter(query, search);
         }
+
 
     }
 }

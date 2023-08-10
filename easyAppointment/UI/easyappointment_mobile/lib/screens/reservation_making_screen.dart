@@ -6,6 +6,8 @@ import '../models/salon.dart';
 import '../models/time-slot.dart';
 import '../providers/reservation_provider.dart';
 import '../providers/timeslot_provider.dart';
+import '../utils/user_singleton.dart';
+import 'narudzbe_page.dart';
 
 class ReservationDetailsScreen extends StatelessWidget {
   final DateTime selectedDay;
@@ -21,8 +23,8 @@ class ReservationDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('MMMM d, y').format(selectedDay);
-    String formattedStartTime = DateFormat('hh:mm a')
-        .format(DateTime.parse(selectedTimeSlot.startTime!));
+    String formattedStartTime =
+        DateFormat('hh:mm a').format(selectedTimeSlot.startTime!);
     String formattedEndTime =
         DateFormat('hh:mm a').format(DateTime.parse(selectedTimeSlot.endTime!));
 
@@ -130,8 +132,8 @@ class ReservationDetailsScreen extends StatelessWidget {
   void showReservationDialog(
       BuildContext context, DateTime selectedDay, TimeSlot selectedTimeSlot) {
     String formattedDate = DateFormat('MMMM d, y').format(selectedDay);
-    String formattedStartTime = DateFormat('hh:mm a')
-        .format(DateTime.parse(selectedTimeSlot.startTime!));
+    String formattedStartTime =
+        DateFormat('hh:mm a').format(selectedTimeSlot.startTime!);
     String formattedEndTime =
         DateFormat('hh:mm a').format(DateTime.parse(selectedTimeSlot.endTime!));
 
@@ -160,10 +162,8 @@ class ReservationDetailsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
-                    print('Pay Now button clicked');
-                  },
-                  child: Text('Pay Now'),
+                  onPressed: () {},
+                  child: Text('Pay With Card'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
                     padding: const EdgeInsets.symmetric(
@@ -174,7 +174,14 @@ class ReservationDetailsScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    print('Pay Later button clicked');
+                    Navigator.of(context)
+                        .pop(); // Close the current dialog or popup
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => const ReservationsPage()),
+                      (Route<dynamic> route) =>
+                          false, // This ensures all previous routes are removed
+                    );
                   },
                   child: Text('Pay Later'),
                   style: ElevatedButton.styleFrom(
@@ -183,7 +190,7 @@ class ReservationDetailsScreen extends StatelessWidget {
                         horizontal: 16.0, vertical: 12.0),
                     textStyle: TextStyle(fontSize: 20),
                   ),
-                ),
+                )
               ],
             ),
           ),
@@ -202,6 +209,8 @@ class ReservationDetailsScreen extends StatelessWidget {
       "timeSlotId": selectedTimeSlot.timeSlotId,
       "reservationDate": DateTime.now().toIso8601String(),
       "reservationName": "CUSTOMER_NAME_OR_ID", // Modify as needed
+      "status": "Active",
+      "userCustomerId": UserSingleton().loggedInUserId
     };
 
     try {

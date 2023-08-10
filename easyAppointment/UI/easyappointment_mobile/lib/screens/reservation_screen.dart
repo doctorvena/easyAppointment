@@ -160,7 +160,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                 : Colors.green, // Colored indicator
                           ),
                           Text(
-                            '${DateFormat('hh:mm a').format(parseDateTime(timeSlot.startTime)!)} - ${DateFormat('hh:mm a').format(parseDateTime(timeSlot.endTime)!)}',
+                            '${DateFormat('hh:mm a').format(timeSlot.startTime!)} - ${DateFormat('hh:mm a').format(parseDateTime(timeSlot.endTime)!)}',
                           ),
                         ],
                       ),

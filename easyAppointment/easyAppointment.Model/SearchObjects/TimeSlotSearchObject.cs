@@ -8,6 +8,8 @@ namespace easyAppointment.Model.SearchObjects
 {
     public class TimeSlotSearchObject : BaseSearchObject
     {
+        public bool? AreEmployeesIncluded { get; set; }
+
         public int duration {get; set;}
 
         public int? SalonId { get; set; }

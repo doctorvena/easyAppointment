@@ -1,3 +1,4 @@
+import 'package:easyappointment_mobile/models/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /// This allows the `User` class to access private members in
@@ -17,10 +18,11 @@ class TimeSlot {
     this.duration,
     this.businessId,
     this.status,
+    this.employee,
   );
 
   int? timeSlotId;
-  String? startTime;
+  DateTime? startTime;
   String? endTime;
   int? salonId;
   int? employeeId;
@@ -28,6 +30,7 @@ class TimeSlot {
   int? duration;
   int? businessId;
   String? status;
+  User? employee;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

@@ -12,6 +12,7 @@ namespace easyAppointment.Model.SearchObjects
 
         public int? UserCustomerId { get; set; }
 
+        public bool? IsActive { get; set; }
         public int? TimeSlotId { get; set; }
 
         public DateTime? ReservationDate { get; set; }

@@ -36,6 +36,19 @@ namespace easyAppointment.Services.ServiceImpl
             return query;
         }
 
+        public override IQueryable<TimeSlot> AddInclude(IQueryable<TimeSlot> query, TimeSlotSearchObject? search = null)
+        {
+            if (search != null && search.AreEmployeesIncluded==true)
+            {
+                query = query
+                    .Include(x => x.Employee)
+                        .ThenInclude(e => e.EmployeeUser);
+            }
+
+            return base.AddInclude(query, search);
+        }
+
+
 
         public override async Task<bool> Delete(int id)
         {

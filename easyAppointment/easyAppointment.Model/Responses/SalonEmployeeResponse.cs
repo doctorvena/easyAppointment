@@ -11,6 +11,7 @@ namespace easyAppointment.Model.Responses
         public int SalonEmployeeId { get; set; }
         public int? SalonId { get; set; }
         public int? EmployeeUserId { get; set; }
+        public UserResponse User { get; set; }
         public byte[]? Photo { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

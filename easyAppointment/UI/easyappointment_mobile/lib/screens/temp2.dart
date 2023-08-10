@@ -1,108 +1,18 @@
 import 'package:easyappointment_mobile/models/reservation.dart';
-import 'package:easyappointment_mobile/utils/user_singleton.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../providers/reservation_provider.dart';
-import '../widgets/home_page.dart';
-
-class ReservationsPage extends StatefulWidget {
-  const ReservationsPage({Key? key}) : super(key: key);
-
-  @override
-  ReservationsPageState createState() => ReservationsPageState();
-}
-
-class ReservationsPageState extends State<ReservationsPage> {
-  late ReservationProvider _reservationProvider;
-  List<Reservation> activeReservations = [];
-  List<Reservation> pastReservations = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _reservationProvider = context.read<ReservationProvider>();
-    fetchReservations();
-  }
-
-  Future<void> fetchReservations() async {
-    var activeData = await _reservationProvider.get(
-      filter: {
-        'IsActive': true,
-        'userCustomerId': UserSingleton().loggedInUserId
-      },
-    );
-    var pastData = await _reservationProvider.get(
-      filter: {
-        'IsActive': false,
-        'userCustomerId': UserSingleton().loggedInUserId
-      },
-    );
-
-    setState(() {
-      if (mounted) {
-        activeReservations = activeData.result;
-        pastReservations = pastData.result;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: MasterScreenWidget(
-        title: "Reservations",
-        index: 1,
-        child: Column(
-          children: [
-            TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              tabs: [
-                Tab(text: "Active Reservations"),
-                Tab(text: "Past Reservations"),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  ReservationsList(
-                    reservations: activeReservations,
-                    reservationProvider: _reservationProvider,
-                    onReservationCancel: (canceledReservation) {
-                      setState(() {
-                        activeReservations.remove(canceledReservation);
-                        pastReservations.add(canceledReservation);
-                      });
-                    },
-                    onDataChanged: fetchReservations,
-                  ),
-                  ReservationsList(
-                      reservations: pastReservations,
-                      reservationProvider: _reservationProvider),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class ReservationsList extends StatelessWidget {
   final List<Reservation> reservations;
   final ReservationProvider reservationProvider;
   final void Function(Reservation)? onReservationCancel;
-  final Function? onDataChanged;
 
   ReservationsList({
     required this.reservations,
     required this.reservationProvider,
     this.onReservationCancel,
-    this.onDataChanged,
   });
 
   @override
@@ -115,7 +25,6 @@ class ReservationsList extends StatelessWidget {
       child: ListView.builder(
         itemCount: reservations.length,
         itemBuilder: (ctx, index) {
-          // ... // Keep everything else unchanged
           // Formatting the date and time
           String formattedDate = DateFormat('dd MMM yyyy, EEEE')
               .format(reservations[index].reservationDate!);
@@ -198,12 +107,10 @@ class ReservationsList extends StatelessWidget {
       };
       await reservationProvider.update(reservation.reservationId!, requestData);
 
+      Navigator.pop(context); // Close the dialog
+
       if (onReservationCancel != null) {
         onReservationCancel!(reservation);
-      }
-
-      if (onDataChanged != null) {
-        onDataChanged!();
       }
     } catch (e) {
       print('Error canceling reservation: $e');
@@ -211,5 +118,3 @@ class ReservationsList extends StatelessWidget {
     }
   }
 }
-
-// Your Reservation, ReservationProvider, UserSingleton, etc. classes would also be defined in the same file or imported at the top if they are in separate files.

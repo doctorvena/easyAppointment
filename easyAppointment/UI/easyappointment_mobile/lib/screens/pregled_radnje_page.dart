@@ -8,6 +8,10 @@ import 'package:easyappointment_mobile/models/salon.dart';
 import 'package:easyappointment_mobile/screens/reservation_screen.dart';
 import 'package:easyappointment_mobile/widgets/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/salon_employee.dart';
+import '../providers/salon_employee_provider.dart';
 
 class PregledRadnjePage extends StatefulWidget {
   Salon salon;
@@ -20,20 +24,27 @@ class PregledRadnjePage extends StatefulWidget {
 class _PregledRadnjePageState extends State<PregledRadnjePage> {
   Uint8List? bytes;
   File? _selectedImage;
+  List<SalonEmployee> employees = [];
+  late SalonEmployeeProvider _salonEmployeeProvider;
 
   @override
   void initState() {
     super.initState();
-
-    // Perform actions or initialize data when the page loads
+    _salonEmployeeProvider = context.read<SalonEmployeeProvider>();
     fetchData();
     initializeData();
   }
 
   Future<void> fetchData() async {
+    var data = await _salonEmployeeProvider.get(
+      filter: {
+        'SalonId': widget.salon.salonId,
+        'AreUsersIncluded': true,
+      },
+    );
+    employees = data.result;
     setState(() {
       bytes = base64Decode(widget.salon.photo!);
-      print(bytes);
     });
   }
 
@@ -143,15 +154,52 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0, left: 20),
                   child: Text(
-                    "Naši uposlenici",
+                    "Our Employees",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-
-                //ListView.builder()
+                Container(
+                  height: 200, // Specify the height for the ListView
+                  child: ListView.builder(
+                    itemCount: employees.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          leading: Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              image: (employees[index].user?.photo != null &&
+                                      employees[index].user?.photo != "")
+                                  ? DecorationImage(
+                                      image: MemoryImage(
+                                        getUint8List(
+                                            employees[index].user?.photo),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: (employees[index].user?.photo == null ||
+                                    employees[index].user?.photo == "")
+                                ? Icon(
+                                    Icons.person_3_sharp,
+                                    size: 24,
+                                    color: Colors.grey,
+                                  )
+                                : null,
+                          ),
+                          title: Text(
+                              '${employees[index].firstName} ${employees[index].lastName}'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -173,5 +221,12 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
         ),
       ),
     );
+  }
+
+  getUint8List(String? photo) {
+    print("photo");
+
+    if (photo == null) return true;
+    return base64Decode(photo);
   }
 }

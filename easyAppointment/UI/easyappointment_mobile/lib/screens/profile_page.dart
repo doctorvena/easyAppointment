@@ -9,6 +9,7 @@ import '../providers/user_provider.dart';
 import '../utils/image_helper.dart';
 import '../utils/user_singleton.dart';
 import '../widgets/home_page.dart';
+import '../widgets/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -255,6 +256,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 },
               ),
+              ElevatedButton(
+                onPressed: () => _logOutUser(context),
+                child: Text('Log Out'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors
+                      .red, // Making it red to indicate a cautionary action
+                ),
+              )
             ],
           ),
           // ),
@@ -292,5 +301,38 @@ class _ProfilePageState extends State<ProfilePage> {
     } else {
       _isFormChanged.value = false;
     }
+  }
+
+  void _logOutUser(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Logout'),
+          content: Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                // Log out the user and reset the necessary variables
+                UserSingleton().loggedInUserId = -1;
+
+                // Close the dialog and navigate to LoginPage
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
