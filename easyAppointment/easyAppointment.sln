@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment.Gateway", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment.Salon", "easyAppointment.Salon\easyAppointment.Salon.csproj", "{DF0FB7CB-0A75-4441-A92D-5C88B9C98E87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "easyAppointment.User", "easyAppointment.User\easyAppointment.User.csproj", "{5DD2C59E-4726-4F88-B494-AF2B417384B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment.Contributor", "easyAppointment.User\easyAppointment.Contributor.csproj", "{5DD2C59E-4726-4F88-B494-AF2B417384B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
