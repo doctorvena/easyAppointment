@@ -65,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: "Password",
                       prefixIcon: Icon(Icons.password),
                     ),
+                    obscureText: true,
                     controller: _passwordController,
                   ),
                   SizedBox(height: 8),

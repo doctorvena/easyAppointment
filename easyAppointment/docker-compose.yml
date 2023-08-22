@@ -15,7 +15,7 @@ services:
     networks:
       - easyappointmentnet2023
 
-  easyappointment-api:
+  easyAppointment.Gateway-api:
     restart: unless-stopped
     build:
       context: .
@@ -23,14 +23,56 @@ services:
       - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=easyAppointmnetDB;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - 7198:7198
+      - 7198:7198   # Choose a different port if 7198 is taken by easyappointment-api
     networks:
       - easyappointmentnet2023
     links:
       - easyappointment-sql
     depends_on:
       - easyappointment-sql
-      
+
+  easyAppointment.Reservations-api:
+      restart: unless-stopped
+      build:
+        context: .
+      environment:
+        - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaReservationMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+        - ASPNETCORE_ENVIRONMENT=Development
+      ports:
+        - 7143:7143   # HTTPS
+      networks:
+        - easyappointmentnet2023
+      depends_on:
+        - easyappointment-sql
+
+  easyAppointment.Salon-api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaSalonMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 7118:7118   # HTTPS
+    networks:
+      - easyappointmentnet2023
+    depends_on:
+      - easyappointment-sql
+
+  easyAppointment.User-api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaUserMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 7122:7122   # HTTPS
+    networks:
+      - easyappointmentnet2023
+    depends_on:
+      - easyappointment-sql
+
 networks:
   easyappointmentnet2023:
     driver: bridge      

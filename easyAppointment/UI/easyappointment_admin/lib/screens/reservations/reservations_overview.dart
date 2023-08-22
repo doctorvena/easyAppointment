@@ -134,6 +134,14 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                       ),
                     ),
                     DataColumn(
+                      label: const Expanded(
+                        child: const Text(
+                          'Status',
+                          style: const TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                    ),
+                    DataColumn(
                       label: Text('Delete'),
                     ),
                   ],
@@ -165,6 +173,13 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                                   e.timeSlots != null && e.timeSlots!.isNotEmpty
                                       ? Text(e.timeSlots![0].endTime.toString())
                                       : Text(''),
+                                ),
+                                DataCell(
+                                  Text(e.status.toString()),
+                                  showEditIcon:
+                                      false, // Optional: If you want an edit icon
+
+                                  placeholder: false,
                                 ),
                                 DataCell(
                                   Row(

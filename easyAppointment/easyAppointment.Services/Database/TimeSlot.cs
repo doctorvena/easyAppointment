@@ -13,13 +13,13 @@ public partial class TimeSlot
 
     public int? SalonId { get; set; }
 
-    public int? EmployeeId { get; set; }
+    public int? SalonEmployeeId { get; set; }
 
     public DateTime? SlotDate { get; set; }
 
     public int Duration { get; set; }
 
-    public int? BusinessUserId { get; set; }
+    public int? OwnerUserId { get; set; }
 
     public string? Status { get; set; }
 

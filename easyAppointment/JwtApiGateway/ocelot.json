@@ -1,0 +1,282 @@
+{
+  "Routes": [
+    //7126,
+    //Sex
+    {
+      "DownstreamPathTemplate": "/Sex",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Sex",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Sex/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Sex/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    //Login
+    {
+      "DownstreamPathTemplate": "/Login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Login",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Login/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Login/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    //Role
+    {
+      "DownstreamPathTemplate": "/Role",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Role",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Role/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/Role/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    //User
+    {
+      "DownstreamPathTemplate": "/User",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/User",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/User/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7122
+        }
+      ],
+      "UpstreamPathTemplate": "/User/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    //City
+    {
+      "DownstreamPathTemplate": "/City",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/City",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/City/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/City/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+
+    // Salon
+    {
+      "DownstreamPathTemplate": "/Salon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/Salon",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Salon/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/Salon/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+
+    {
+      "RouteGroup": "SalonEmployee",
+      "DownstreamPathTemplate": "/SalonEmployee",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonEmployee",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/SalonEmployee/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonEmployee/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "RouteGroup": "SalonPhoto",
+      "DownstreamPathTemplate": "/SalonPhoto",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonPhoto",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "RouteGroup": "SalonPhoto",
+      "DownstreamPathTemplate": "/SalonPhoto/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonPhoto/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/SalonRating",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonRating",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/SalonRating/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7118
+        }
+      ],
+      "UpstreamPathTemplate": "/SalonRating/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "RouteGroup": "Reservation",
+      "DownstreamPathTemplate": "/Reservation",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7198
+        }
+      ],
+      "UpstreamPathTemplate": "/Reservation",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Reservation/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7198
+        }
+      ],
+      "UpstreamPathTemplate": "/Reservation/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "RouteGroup": "TimeSlot",
+      "DownstreamPathTemplate": "/TimeSlot",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7198
+        }
+      ],
+      "UpstreamPathTemplate": "/TimeSlot",
+      "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/TimeSlot/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7198
+        }
+      ],
+      "UpstreamPathTemplate": "/TimeSlot/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    }
+  ]
+}

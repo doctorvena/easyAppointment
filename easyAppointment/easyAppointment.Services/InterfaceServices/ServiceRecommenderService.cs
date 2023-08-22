@@ -9,7 +9,7 @@ namespace easyAppointment.Services.InterfaceServices
 {
     public interface SalonRecommenderService
     {
-        List<SalonResponse> Recommend(int proizvodid);
+        List<SalonResponse> Recommend(int salonId);
 
     }
 }

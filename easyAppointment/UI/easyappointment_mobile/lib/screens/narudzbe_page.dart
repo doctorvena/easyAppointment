@@ -120,7 +120,7 @@ class ReservationsList extends StatelessWidget {
           String formattedDate = DateFormat('dd MMM yyyy, EEEE')
               .format(reservations[index].reservationDate!);
           String formattedTime = DateFormat('HH:mm')
-              .format(reservations[index].timeslots![0].startTime as DateTime);
+              .format(reservations[index].timeSlots![0].startTime as DateTime);
 
           // Setting the indicator color based on the status
           Color indicatorColor = Colors.transparent;

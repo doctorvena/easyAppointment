@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eprodaja_admin/models/login_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -180,9 +181,9 @@ class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 
-  Future<T> loginUser(String username, String password) async {
-    final url = Uri.parse(
-        '$_baseUrl$_endpoint/login?username=$username&password=$password');
+  Future<LoginResponse> loginUser(String username, String password) async {
+    final url =
+        Uri.parse('$_baseUrl/Login?username=$username&password=$password');
 
     final response = await http.post(
       url,

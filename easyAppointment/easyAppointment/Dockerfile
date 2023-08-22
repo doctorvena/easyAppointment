@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["easyAppointment/easyAppointment.csproj", "easyAppointment/"]
-RUN dotnet restore "easyAppointment/easyAppointment.csproj"
+COPY ["easyAppointment.Reservation/easyAppointment.Reservation.csproj", "easyAppointment.Reservation/"]
+RUN dotnet restore "easyAppointment.Reservation/easyAppointment.Reservation.csproj"
 COPY . .
-WORKDIR "/src/easyAppointment"
-RUN dotnet build "easyAppointment.csproj" -c Release -o /app/build
+WORKDIR "/src/easyAppointment.Reservation"
+RUN dotnet build "easyAppointment.Reservation.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "easyAppointment.csproj" -c Release -o /app/publish 
+RUN dotnet publish "easyAppointment.Reservation.csproj" -c Release -o /app/publish 
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "easyAppointment.dll"]
+ENTRYPOINT ["dotnet", "easyAppointment.Reservation.dll"]

@@ -27,6 +27,10 @@ class SalonEmployeeProvider extends BaseProvider<SalonEmployee> {
       throw new Exception("Employee is already employed!");
     }
 
+    if (response.body.contains("User not found")) {
+      throw new Exception("Employee not found!");
+    }
+
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 

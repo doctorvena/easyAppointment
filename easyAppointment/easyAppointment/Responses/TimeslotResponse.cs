@@ -1,0 +1,24 @@
+﻿using easyAppointment.Reservation.FeignResponses;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace easyAppointment.Reservation.Responses
+{
+    public partial class TimeslotResponse
+    {
+        public int TimeSlotId { get; set; }
+        public string? Status { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public int? ServiceId { get; set; }
+        public int? SalonEmployeeId { get; set; }
+        public DateTime? SlotDate { get; set; }
+        public int Duration { get; set; }
+        public int? BusinessId { get; set; }
+        public SalonEmployeeResponse Employee { get; set; }
+
+    }
+}

@@ -17,7 +17,7 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
           ? null
           : DateTime.parse(json['reservationDate'] as String),
       json['reservationName'] as String?,
-      (json['timeslots'] as List<dynamic>?)
+      (json['timeSlots'] as List<dynamic>?)
           ?.map((e) => TimeSlot.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -32,5 +32,5 @@ Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
       'reservationDate': instance.reservationDate?.toIso8601String(),
       'reservationName': instance.reservationName,
       'status': instance.status,
-      'timeslots': instance.timeslots,
+      'timeSlots': instance.timeSlots,
     };

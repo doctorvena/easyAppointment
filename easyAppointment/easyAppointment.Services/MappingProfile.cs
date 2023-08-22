@@ -16,7 +16,7 @@ namespace easyAppointment.Services
         public MappingProfile()
         {
             //User
-            CreateMap<User, UserResponse>();
+            //CreateMap<User, UserResponse>();
             CreateMap<UserInsertRequest, User>();
             CreateMap<UserUpdateRequest, User>();
 

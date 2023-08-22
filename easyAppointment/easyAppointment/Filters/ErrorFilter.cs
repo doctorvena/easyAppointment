@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
-namespace easyAppointment.Filters
+namespace easyAppointment.Reservation.Filters
 {
     public class ErrorFilter : ExceptionFilterAttribute
     {

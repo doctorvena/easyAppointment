@@ -48,7 +48,7 @@ namespace easyAppointment.Services.ServiceImpl
 
             HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
             byte[] inArray = algorithm.ComputeHash(dst);
-            return Convert.ToBase64String(inArray);
+            return Convert.ToBase64String(inArray); 
         }
 
         public override IQueryable<User> AddInclude(IQueryable<User> query, UserSearchObject? search = null)

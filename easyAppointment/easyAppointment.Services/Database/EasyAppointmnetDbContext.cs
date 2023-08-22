@@ -179,7 +179,7 @@ public partial class EasyAppointmnetDbContext : DbContext
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Employee).WithMany(p => p.TimeSlots)
-                .HasForeignKey(d => d.EmployeeId)
+                .HasForeignKey(d => d.SalonEmployeeId)
                 .HasConstraintName("FK__TimeSlots__Emplo__412EB0B6");
 
             entity.HasOne(d => d.Salon).WithMany(p => p.TimeSlots)

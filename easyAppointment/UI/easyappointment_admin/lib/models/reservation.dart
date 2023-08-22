@@ -12,7 +12,9 @@ class Reservation {
     this.reservationId,
     this.salonId,
     this.userCustomerId,
+    this.userBusinessId,
     this.timeSlotId,
+    this.status,
     this.reservationDate,
     this.reservationName,
     this.timeSlots,
@@ -21,10 +23,11 @@ class Reservation {
   int? reservationId;
   int? salonId;
   int? userCustomerId;
+  int? userBusinessId;
   int? timeSlotId;
   DateTime? reservationDate;
   String? reservationName;
-  @JsonKey(name: 'timeslots')
+  String? status;
   List<TimeSlot>? timeSlots;
 
   /// A necessary factory constructor for creating a new User instance

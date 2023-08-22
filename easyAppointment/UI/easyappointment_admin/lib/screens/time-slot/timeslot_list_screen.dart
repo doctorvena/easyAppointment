@@ -157,7 +157,7 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                                   DataCell(Text(e.endTime ?? "")),
                                   DataCell(Text(e.salonId?.toString() ?? "")),
                                   DataCell(
-                                      Text(e.businessUserId?.toString() ?? "")),
+                                      Text(e.OwnerUserId?.toString() ?? "")),
                                   DataCell(Text(e.duration?.toString() ?? "")),
                                   DataCell(Text(e.status?.toString() ?? "")),
                                   DataCell(

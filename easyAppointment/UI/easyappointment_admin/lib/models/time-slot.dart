@@ -15,7 +15,7 @@ class TimeSlot {
     this.employeeId,
     this.slotDate,
     this.duration,
-    this.businessUserId,
+    this.OwnerUserId,
     this.status,
   );
 
@@ -26,7 +26,7 @@ class TimeSlot {
   int? employeeId;
   String? slotDate;
   int? duration;
-  int? businessUserId;
+  int? OwnerUserId;
   String? status;
 
   /// A necessary factory constructor for creating a new User instance

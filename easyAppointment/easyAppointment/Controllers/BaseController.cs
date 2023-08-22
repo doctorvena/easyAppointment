@@ -1,10 +1,7 @@
-using easyAppointment.Model;
-using easyAppointment.Services.Database;
-using easyAppointment.Services.InterfaceServices;
-using Microsoft.AspNetCore.Authorization;
+using easyAppointment.Reservation.InterfaceServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace easyAppointment.Controllers
+namespace easyAppointment.Reservation.Controllers
 {
     [Route("[controller]")]
     public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch: class

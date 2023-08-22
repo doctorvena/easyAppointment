@@ -47,7 +47,7 @@ namespace easyAppointment.Services.ServiceImpl
 
             foreach (var reservationsResponse in reservationsResponseList)
             {
-                reservationsResponse.Timeslots = timeSlotResponses.Where(t => t.TimeSlotId == reservationsResponse.TimeSlotId).ToList();
+                reservationsResponse.TimeSlots = timeSlotResponses.Where(t => t.TimeSlotId == reservationsResponse.TimeSlotId).ToList();
             }
 
             return reservationsResponseList;

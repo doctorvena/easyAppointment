@@ -1,8 +1,8 @@
-using easyAppointment.Model.Requests;
-using easyAppointment.Model.Responses;
-using easyAppointment.Model.SearchObjects;
-using easyAppointment.Services.InterfaceServices;
-using Microsoft.AspNetCore.Authorization;
+using easyAppointment.Reservation.Controllers;
+using easyAppointment.Reservation.InterfaceServices;
+using easyAppointment.Reservation.Requests;
+using easyAppointment.Reservation.Responses;
+using easyAppointment.Reservation.SearchObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Controllers

@@ -39,7 +39,6 @@ class _AddUserPageState extends State<AddEmployeePage> {
 
     if (username.isNotEmpty) {
       try {
-        print(UserSingleton().role);
         if (UserSingleton().role == 'BusinessOwner') {
           // Check if the user is not an employee
           await _salonEmployeeProvider.addEmplyeeAsOwner(username);
@@ -67,14 +66,13 @@ class _AddUserPageState extends State<AddEmployeePage> {
         }
       } catch (e) {
         // Handle the error
-        print('Error adding employee: $e');
         // Show an error message or perform any necessary error handling
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Error'),
-              content: Text('$e Failed to add employee. '),
+              content: Text('$e'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -125,7 +123,7 @@ class _AddUserPageState extends State<AddEmployeePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Username',
+                'Employee Username',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -141,7 +139,7 @@ class _AddUserPageState extends State<AddEmployeePage> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey[200],
-                  hintText: 'Enter username',
+                  hintText: 'Enter employee username',
                 ),
               ),
               SizedBox(height: 16.0),
