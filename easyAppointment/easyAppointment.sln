@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment.Gateway", "easyAppointment.Gateway\easyAppointment.Gateway.csproj", "{7B74D37F-467B-4E5C-81E7-4F17A3944B05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment", "easyAppointment\easyAppointment.csproj", "{7B74D37F-467B-4E5C-81E7-4F17A3944B05}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easyAppointment.Salon", "easyAppointment.Salon\easyAppointment.Salon.csproj", "{DF0FB7CB-0A75-4441-A92D-5C88B9C98E87}"
 EndProject

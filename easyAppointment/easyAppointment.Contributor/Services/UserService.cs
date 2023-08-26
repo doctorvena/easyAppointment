@@ -66,8 +66,11 @@ namespace easyAppointment.Contributor.Services
                     throw new UserException("Wrong username or password");
                 }
 
-                // If authentication succeeds, generate JWT
-                var token = CreateToken(username);
+                // Get the roles from the user entity
+                var roles = entity.UserRoles.Select(ur => ur.Role.RoleName).ToList(); // Assuming RoleName is the name of the role in your model
+
+                // Generate the JWT, including roles
+                var token = CreateToken(username, roles);
 
                 return (_mapper.Map<UserResponse>(entity), token); // Return the mapped user and the JWT
             }
@@ -121,12 +124,18 @@ namespace easyAppointment.Contributor.Services
             return _mapper.Map<UserResponse>(entity);
         }
 
-        private string CreateToken(string username)
+        private string CreateToken(string username, List<string> roles)
         {
             List<Claim> claims = new()
-        {
-            new Claim("username", Convert.ToString(username)),
-        };
+            {
+                new Claim("username", Convert.ToString(username)),
+            };
+
+            // Add user roles to the claims
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

@@ -12,7 +12,7 @@ namespace easyAppointment.Reservation
 
         public void InsertData(EasyAppointmnetReservationDbContext context)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "dataSeed.sql");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "dataSeedReservations.sql");
             var query = File.ReadAllText(path);
 
 

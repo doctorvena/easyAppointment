@@ -12,30 +12,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddScoped<ReservationsService, ReservationsServiceImpl>();
 builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
 
 builder.Services.AddHttpClient<UserFeignClient>();
 builder.Services.AddHttpClient<SalonEmployeeFeignClient>();
 
-builder.Services.AddControllers(x=>
-{
-    //x.Filters.Add<ErrorFilter>();
-});
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<EasyAppointmnetReservationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
-builder.Services.AddAutoMapper(typeof(ReservationsService));
-builder.Services.AddAutoMapper(typeof(TimeSlotsService));
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -51,10 +36,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     }
   );
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<EasyAppointmnetReservationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -64,18 +51,17 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    //var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetReservationDbContext>();
-    //dataContext.Database.EnsureCreated();
+    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetReservationDbContext>();
+    dataContext.Database.EnsureCreated();
 
-    //new SetupService().Init(dataContext);
-    //new SetupService().InsertData(dataContext);
+    new SetupService().Init(dataContext);
+    new SetupService().InsertData(dataContext);
 
 }
 

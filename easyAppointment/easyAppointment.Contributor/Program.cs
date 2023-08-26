@@ -13,8 +13,6 @@ builder.Services.AddScoped<Service<RoleResponse, RoleSearchObject>, RolesService
 
 builder.Services.AddAutoMapper(typeof(IUserService));
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,8 +22,6 @@ builder.Services.AddDbContext<EasyAppointmnetUserDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,12 +38,11 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    //var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetUserDbContext>();
-    //dataContext.Database.EnsureCreated();
+    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetUserDbContext>();
+    dataContext.Database.EnsureCreated();
 
-    //new SetupService().Init(dataContext);
-    //new SetupService().InsertData(dataContext);
-
+    new SetupService().Init(dataContext);
+    new SetupService().InsertData(dataContext);
 }
 
 app.Run();

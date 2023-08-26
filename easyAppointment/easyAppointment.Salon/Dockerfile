@@ -2,21 +2,22 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 6000
+ENV ASPNETCORE_URLS=http://+:6000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Salon/Salon.csproj", "Salon/"]
-RUN dotnet restore "Salon/Salon.csproj"
+COPY ["easyAppointment.Salon/easyAppointment.Salon.csproj", "easyAppointment.Salon/"]
+RUN dotnet restore "easyAppointment.Salon/easyAppointment.Salon.csproj"
 COPY . .
-WORKDIR "/src/Salon"
-RUN dotnet build "Salon.csproj" -c Release -o /app/build
+WORKDIR "/src/easyAppointment.Salon"
+RUN dotnet build "easyAppointment.Salon.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Salon.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "easyAppointment.Salon.csproj" -c Release -o /app/publish 
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Salon.dll"]
+COPY easyAppointment.Salon/dataSeedSalon.sql ./
+ENTRYPOINT ["dotnet", "easyAppointment.Salon.dll"]
