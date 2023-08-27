@@ -7,6 +7,7 @@ namespace easyAppointment.Contributor.Services
     {
         Task<(UserResponse, string)> Login(string username, string password);
         UserResponse Register(UserInsertRequest request);
+        Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName);
 
     }
 }

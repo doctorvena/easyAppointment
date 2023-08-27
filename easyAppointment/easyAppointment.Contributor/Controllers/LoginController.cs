@@ -8,11 +8,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using easyAppointment.Contributor.Models;
 using easyAppointment.Contributor.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace easyAppointment.Contributor.Controllers
 {
     [ApiController]
     [Route("Login")]
+    [AllowAnonymous]
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _configuration;

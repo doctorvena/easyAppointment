@@ -3,14 +3,14 @@ using easyAppointment.Reservation.Responses;
 
 namespace easyAppointment.Reservation.FeignClient
 {
-    public class SalonEmployeeFeignClient
+    public class SalonFeignClient
     {
         private readonly HttpClient _httpClient;
 
-        public SalonEmployeeFeignClient(HttpClient client)
+        public SalonFeignClient(HttpClient client)
         {
             _httpClient = client;
-            _httpClient.BaseAddress = new Uri("https://localhost:7118/");
+            _httpClient.BaseAddress = new Uri("http://localhost:6000/");
         }
 
         public async Task<SalonEmployeeResponse> GetById(int? id)

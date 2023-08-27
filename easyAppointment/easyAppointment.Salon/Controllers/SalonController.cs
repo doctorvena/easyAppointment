@@ -9,7 +9,7 @@ using easyAppointment.Salon.Controllers;
 namespace easyAppointment.Salon.Salon
 {
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
     public class SalonController : BaseCRUDController<SalonResponse, SalonSearchObject,SalonInsertRequest,SalonUpdateRequest>
     {
         private readonly SalonService _salonService;

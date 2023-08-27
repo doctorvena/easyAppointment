@@ -13,6 +13,11 @@ services:
       - 1433
     networks:
       - easyappointmentnet2023
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-U", "sa", "-P", "QWElkj132!", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
       
   # easyAppointment (gateway) Docker
   easyappointment:
@@ -36,7 +41,8 @@ services:
     ports:
       - 5000:5000
     depends_on:
-      - easyappointment-sql
+      easyappointment-sql:
+        condition: service_healthy
     networks:
       - easyappointmentnet2023
     environment:
@@ -53,7 +59,8 @@ services:
     ports:
       - 4000:4000
     depends_on:
-      - easyappointment-sql
+      easyappointment-sql:
+        condition: service_healthy
     networks:
       - easyappointmentnet2023
     environment:
@@ -70,7 +77,8 @@ services:
     ports:
       - 6000:6000
     depends_on:
-      - easyappointment-sql
+      easyappointment-sql:
+        condition: service_healthy
     networks:
       - easyappointmentnet2023
     environment:

@@ -3,6 +3,7 @@ using easyAppointment.Salon.Database;
 using easyAppointment.Salon.FeignClient;
 using easyAppointment.Salon.InterfaceServices;
 using easyAppointment.Salon.ServiceImpl;
+using easyAppointment.Salon.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,11 +11,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<CityService, CityServiceImpl>();
+//builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
 builder.Services.AddScoped<SalonService, SalonServiceImpl>();
 builder.Services.AddScoped<SalonRatingService, SalonRatingServiceImpl>();
 builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
 builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
+builder.Services.AddScoped<CityService, CityServiceImpl>();
 //builder.Services.AddScoped<SalonRecommenderService, SalonRecommenderServiceImpl>();
 
 builder.Services.AddHttpClient<UserFeignClient>();
@@ -36,6 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     }
   );
 
+builder.Services.AddAutoMapper(typeof(CityService));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<EasyAppointmnetSalonDbContext>(options =>
     options.UseSqlServer(connectionString));

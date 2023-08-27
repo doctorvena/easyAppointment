@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Contributor.Controllers
 {
-    //[ApiController]
-    //[Route("[controller]")]
-    [AllowAnonymous]
+    [ApiController]
     public class UsersController : BaseCRUDController<UserResponse, UserSearchObject, UserInsertRequest, UserUpdateRequest>
     {
         protected IUserService _service;
@@ -26,17 +24,11 @@ namespace easyAppointment.Contributor.Controllers
             return _service.Register(request);
         }
 
-        //[AllowAnonymous]
-        //[HttpPost("login")]
-        //public async Task<UserResponse> Login(string username, string password)
-        //{
-        //    return await _service.Login(username, password);
-        //}
-
-        //[HttpGet("role/{roleName}/unassigned")]
-        //public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
-        //{
-        //    return await _service.GetUsersByRoleAndUnassigned(roleName);
-        //}
+        [HttpGet("role/{roleName}/unassigned")]
+        [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
+        public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
+        {
+            return await _service.GetUsersByRoleAndUnassigned(roleName);
+        }
     }
 }

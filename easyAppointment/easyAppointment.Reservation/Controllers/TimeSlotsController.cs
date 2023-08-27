@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace easyAppointment.Controllers
 {
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
     public class TimeSlotsController : BaseCRUDController<TimeslotResponse, TimeSlotSearchObject, TimeSlotInsertRequest, TimeSlotUpdateRequest>
     {
         TimeSlotsService _timeSlotsService;

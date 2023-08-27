@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using easyAppointment.Contributor.Database;
+using easyAppointment.Contributor.FeignClient;
 using easyAppointment.Contributor.Models;
 using easyAppointment.Contributor.SearchObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,11 +15,13 @@ namespace easyAppointment.Contributor.Services
     public class UserService : BaseCRUDService<UserResponse, Database.User, UserSearchObject, UserInsertRequest, UserUpdateRequest>, IUserService
     {
         private readonly IConfiguration _configuration;
+        private readonly SalonFeignClient _salonFeignClient;
 
-        public UserService(ILogger<BaseCRUDService<UserResponse, Database.User, UserSearchObject, UserInsertRequest, UserUpdateRequest>> logger, EasyAppointmnetUserDbContext context, IMapper mapper, IConfiguration configuration)
+        public UserService(SalonFeignClient salonFeignClient, ILogger<BaseCRUDService<UserResponse, Database.User, UserSearchObject, UserInsertRequest, UserUpdateRequest>> logger, EasyAppointmnetUserDbContext context, IMapper mapper, IConfiguration configuration)
           : base(logger, context, mapper)
         {
             _configuration = configuration;
+            _salonFeignClient = salonFeignClient;
         }
 
             public static string GenerateSalt()
@@ -148,5 +149,51 @@ namespace easyAppointment.Contributor.Services
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
+
+        public override async Task<bool> Delete(int id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var resultFromMicroservice = await _salonFeignClient.DeleteByOwnerId(id);
+                if (!resultFromMicroservice)
+                {
+                    throw new Exception("Failed to delete salon in microservice.");
+                }
+
+                var result = await base.Delete(id);
+
+                await transaction.CommitAsync();
+
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw; // re-throw the exception so you can handle it outside this method
+            }
+
+        }
+        public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
+        {
+            // Step 1: Fetch employed user IDs from the SalonFeignClient
+            var employedUsers = await _salonFeignClient.GetAllSalonEmployees();
+            var employedUserIds = employedUsers.Select(e => e.EmployeeUserId).ToList();
+
+            // Step 2: Query local users based on role and exclude employed users
+            var usersQuery = _context.Users
+                        .Include(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
+                        .Where(u =>
+                            u.UserRoles.Any(ur => ur.Role.RoleName == roleName) &&
+                            !employedUserIds.Contains(u.UserId) // Exclude employed users
+                        );
+
+            var users = await usersQuery.ToListAsync();
+
+            // Step 3: Map to response and return
+            return _mapper.Map<List<UserResponse>>(users);
+        }
+
     }
 }

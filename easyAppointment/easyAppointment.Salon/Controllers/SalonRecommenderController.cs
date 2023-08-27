@@ -1,8 +1,11 @@
 ﻿using easyAppointment.Salon.InterfaceServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Salon.Controllers
 {
+    [ApiController]
+    [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
     public class SalonRecommenderController : Controller
     {
         private readonly SalonRecommenderService service;

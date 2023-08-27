@@ -9,7 +9,7 @@ namespace easyAppointment.Salon.FeignClient
         public UserFeignClient(HttpClient client)
         {
             _client = client;
-            _client.BaseAddress = new Uri("https://localhost:7126/");
+            _client.BaseAddress = new Uri("http://localhost:5000/");
         }
 
         public async Task<UserResponse> GetUserById(int id)

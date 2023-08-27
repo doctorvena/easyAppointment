@@ -12,6 +12,7 @@ namespace easyAppointment.Salon.Services
 
             //City
             CreateMap<City, CityResponse>();
+            CreateMap<CityResponse, City>();
 
             //Salon
             CreateMap<Database.Salon, SalonResponse>();

@@ -1,9 +1,13 @@
 using easyAppointment.Contributor;
 using easyAppointment.Contributor.Database;
+using easyAppointment.Contributor.FeignClient;
 using easyAppointment.Contributor.Models;
 using easyAppointment.Contributor.SearchObjects;
 using easyAppointment.Contributor.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +15,25 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<Service<SexResponse, SexSearchObject>, SexServiceImpl>();
 builder.Services.AddScoped<Service<RoleResponse, RoleSearchObject>, RolesServiceImpl>();
 
+builder.Services.AddHttpClient<SalonFeignClient>();
 builder.Services.AddAutoMapper(typeof(IUserService));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    opt => {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    }
+  );
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<EasyAppointmnetUserDbContext>(options =>

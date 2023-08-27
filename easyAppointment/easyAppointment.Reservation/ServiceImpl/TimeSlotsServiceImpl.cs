@@ -13,11 +13,11 @@ namespace easyAppointment.Reservation.ServiceImpl
     public class TimeSlotsServiceImpl : BaseCRUDService<TimeslotResponse, TimeSlot, TimeSlotSearchObject, TimeSlotInsertRequest, TimeSlotUpdateRequest>, TimeSlotsService
     {
         private readonly UserFeignClient _userFeignClient;
-        private readonly SalonEmployeeFeignClient _salonEmployeeFeignClient;
-        public TimeSlotsServiceImpl(ILogger<BaseCRUDService<TimeslotResponse, TimeSlot, TimeSlotSearchObject, TimeSlotInsertRequest, TimeSlotUpdateRequest>> _logger, EasyAppointmnetReservationDbContext _context, IMapper _mapper, UserFeignClient userFeignClient, SalonEmployeeFeignClient salonEmployeeFeignClient) : base(_logger, _context, _mapper)
+        private readonly SalonFeignClient _SalonFeignClient;
+        public TimeSlotsServiceImpl(ILogger<BaseCRUDService<TimeslotResponse, TimeSlot, TimeSlotSearchObject, TimeSlotInsertRequest, TimeSlotUpdateRequest>> _logger, EasyAppointmnetReservationDbContext _context, IMapper _mapper, UserFeignClient userFeignClient, SalonFeignClient SalonFeignClient) : base(_logger, _context, _mapper)
         {
             _userFeignClient = userFeignClient;
-            _salonEmployeeFeignClient = salonEmployeeFeignClient;
+            _SalonFeignClient = SalonFeignClient;
         }
 
         public override IQueryable<TimeSlot> AddFilter(IQueryable<TimeSlot> query, TimeSlotSearchObject? search = null)
@@ -71,7 +71,7 @@ namespace easyAppointment.Reservation.ServiceImpl
         public override async Task BeforeInsert(TimeSlot db, TimeSlotInsertRequest insert)
         {
             // Fetch the SalonEmployeeId that corresponds to the EmployeeId
-            var salonEmployee = await _salonEmployeeFeignClient.GetById(insert.EmployeeId);
+            var salonEmployee = await _SalonFeignClient.GetById(insert.EmployeeId);
             if (salonEmployee == null)
             {
                 throw new Exception("Employee does not exist.");
@@ -112,7 +112,7 @@ namespace easyAppointment.Reservation.ServiceImpl
             {
                 var salonEmployeeResponse = new SalonEmployeeResponse();
 
-                var salonEmployee = await _salonEmployeeFeignClient.GetById(slot.SalonEmployeeId);
+                var salonEmployee = await _SalonFeignClient.GetById(slot.SalonEmployeeId);
                 if (salonEmployee != null)
                 {
                     var user = await _userFeignClient.GetById(salonEmployee.EmployeeUserId);
@@ -166,7 +166,7 @@ namespace easyAppointment.Reservation.ServiceImpl
             var timeSlots = new List<TimeSlot>();
 
             // Fetch the SalonEmployeeId that corresponds to the EmployeeId
-            var salonEmployee = await _salonEmployeeFeignClient.GetById(request.EmployeeId);
+            var salonEmployee = await _SalonFeignClient.GetById(request.EmployeeId);
             if (salonEmployee == null)
             {
                 throw new Exception("Employee does not exist.");

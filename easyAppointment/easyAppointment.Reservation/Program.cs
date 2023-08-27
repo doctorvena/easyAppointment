@@ -16,7 +16,7 @@ builder.Services.AddScoped<ReservationsService, ReservationsServiceImpl>();
 builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
 
 builder.Services.AddHttpClient<UserFeignClient>();
-builder.Services.AddHttpClient<SalonEmployeeFeignClient>();
+builder.Services.AddHttpClient<SalonFeignClient>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -36,9 +36,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     }
   );
 
+builder.Services.AddAutoMapper(typeof(TimeSlotsService));
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<EasyAppointmnetReservationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddAutoMapper(typeof(ReservationsService));
+builder.Services.AddAutoMapper(typeof(TimeSlotsService));
 
 var app = builder.Build();
 
