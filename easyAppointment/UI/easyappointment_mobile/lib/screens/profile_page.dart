@@ -70,10 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _emailController.text = user!.email!;
         bytes = base64Decode(user!.photo!);
       });
-    } catch (e) {
-      // Handle any errors or display an error message
-      print('Error fetching user data: $e');
-    }
+    } catch (e) {}
   }
 
   Image imageFromBase64String(String base64Image) {

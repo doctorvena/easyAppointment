@@ -44,6 +44,7 @@ builder.Services.AddDbContext<EasyAppointmnetReservationDbContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(ReservationsService));
 builder.Services.AddAutoMapper(typeof(TimeSlotsService));
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -62,11 +63,11 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetReservationDbContext>();
-    dataContext.Database.EnsureCreated();
+    //    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetReservationDbContext>();
+    //    dataContext.Database.EnsureCreated();
 
-    new SetupService().Init(dataContext);
-    new SetupService().InsertData(dataContext);
+    //    new SetupService().Init(dataContext);
+    //    new SetupService().InsertData(dataContext);
 
 }
 

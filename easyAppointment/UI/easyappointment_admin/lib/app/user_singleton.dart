@@ -12,4 +12,5 @@ class UserSingleton {
   late int loggedInUserId;
   late Salon? loggedInUserSalon = null;
   late String role;
+  String? jwtToken;
 }

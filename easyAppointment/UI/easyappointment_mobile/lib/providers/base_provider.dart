@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import '../models/login_response.dart';
 import '../models/search_result.dart';
-import '../utils/utils.dart';
+import '../utils/user_singleton.dart';
 
 class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
@@ -14,7 +15,7 @@ class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpint) {
     _endpoint = endpint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://10.0.2.2:7198");
+        defaultValue: "http://10.0.2.2:7000");
   }
 
   Future<searchResult<T>> get({dynamic filter}) async {
@@ -128,18 +129,11 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Map<String, String> createHeaders() {
-    String username = Authorization.username ?? "";
-    String password = Authorization.password ?? "";
-
-    String basicAuth =
-        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
-
-    var headers = {
+    var token = UserSingleton().jwtToken ?? "";
+    return {
       "Content-Type": "application/json",
-      "Authorization": basicAuth
+      "Authorization": "Bearer $token"
     };
-
-    return headers;
   }
 
   String getQueryString(Map params,
@@ -174,52 +168,43 @@ class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 
-  Future<T> loginUser(String username, String password) async {
-    final url = Uri.parse(
-        '$_baseUrl$_endpoint/login?username=$username&password=$password');
+  Future<LoginResponse> loginUser(String username, String password) async {
+    var url = "$_baseUrl/Login?username=$username&password=$password";
+    final uri = Uri.parse(url);
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
-      },
-    );
+    final response =
+        await http.post(uri, headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
-      final userData = jsonDecode(response.body);
-      final user = fromJson(userData);
-      print('Login successful');
-      return user;
-      // Handle the successful login response here
+      var data = jsonDecode(response.body);
+      LoginResponse loginResponse =
+          LoginResponse.fromJson(data['loginResponse']);
+
+      UserSingleton().jwtToken = loginResponse.token;
+
+      return loginResponse;
     } else {
-      print('Error logging in: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      throw Exception('Login failed');
-      // Handle the login error here
+      throw Exception('Error during login: ${response.body}');
     }
   }
 
   Future createUser(Map<String, dynamic> requestBody) async {
-    var url1 = "$_baseUrl$_endpoint/register";
+    var url1 = "$_baseUrl$_endpoint/Register";
     final url = Uri.parse(url1);
 
     final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
+        'Authorization':
+            'Bearer ' + UserSingleton().jwtToken! // Use the JWT token here
       },
       body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {
-      print('User created successfully');
       var data = jsonDecode(response.body);
       return fromJson(data);
-    } else {
-      print('Error creating user: ${response.statusCode}');
-      print('Response body: ${response.body}');
     }
   }
 }

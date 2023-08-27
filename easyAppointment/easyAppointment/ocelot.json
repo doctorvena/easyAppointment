@@ -77,7 +77,7 @@
     },
     //User
     {
-      "DownstreamPathTemplate": "/User",
+      "DownstreamPathTemplate": "/Users",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -85,11 +85,11 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/User",
+      "UpstreamPathTemplate": "/Users",
       "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/User/{id}",
+      "DownstreamPathTemplate": "/Users/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -97,8 +97,32 @@
           "Port": 5000
         }
       ],
-      "UpstreamPathTemplate": "/User/{id}",
+      "UpstreamPathTemplate": "/Users/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Users/Register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "contributor",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/Users/Register",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Users/Role/{roleName}/Unassigned",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "contributor",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/Users/Role/{roleName}/Unassigned",
+      "UpstreamHttpMethod": [ "GET" ]
     },
     //City
     {
@@ -228,8 +252,8 @@
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
     {
-      "RouteGroup": "Reservation",
-      "DownstreamPathTemplate": "/Reservation",
+      "RouteGroup": "Reservations",
+      "DownstreamPathTemplate": "/Reservations",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -237,7 +261,7 @@
           "Port": 4000
         }
       ],
-      "UpstreamPathTemplate": "/Reservation",
+      "UpstreamPathTemplate": "/Reservations",
       "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
@@ -253,8 +277,8 @@
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
     {
-      "RouteGroup": "TimeSlot",
-      "DownstreamPathTemplate": "/TimeSlot",
+      "RouteGroup": "TimeSlots",
+      "DownstreamPathTemplate": "/TimeSlots",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -262,11 +286,11 @@
           "Port": 4000
         }
       ],
-      "UpstreamPathTemplate": "/TimeSlot",
+      "UpstreamPathTemplate": "/TimeSlots",
       "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/TimeSlot/{id}",
+      "DownstreamPathTemplate": "/TimeSlots/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

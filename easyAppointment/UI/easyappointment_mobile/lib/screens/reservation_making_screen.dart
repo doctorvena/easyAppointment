@@ -221,9 +221,6 @@ class ReservationDetailsScreen extends StatelessWidget {
       };
       await _timeSlotProvider.update(selectedTimeSlot.timeSlotId!, updateData);
       Navigator.pop(context); // Close the dialog
-    } catch (e) {
-      print('Error creating reservation: $e');
-      // Add additional error handling here
-    }
+    } catch (e) {}
   }
 }

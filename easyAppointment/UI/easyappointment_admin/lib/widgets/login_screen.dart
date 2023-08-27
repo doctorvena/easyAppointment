@@ -100,18 +100,20 @@ class _LoginPageState extends State<LoginPage> {
     Authorization.password = password;
 
     try {
-      var loggedUser = await _userProvider.loginUser(username, password);
+      var loginResponse = await _userProvider.login(username, password);
 
-      if (loggedUser == null) {
+      if (loginResponse == null || loginResponse.user == null) {
         throw Exception('User login failed');
       }
 
-      UserSingleton().loggedInUserId = loggedUser.userId!;
-      UserSingleton().role = loggedUser.userRoles![0].role?.roleName ?? '';
+      UserSingleton().loggedInUserId = loginResponse.user!.userId!;
+      UserSingleton().jwtToken = loginResponse.token;
+      UserSingleton().role =
+          loginResponse.user!.userRoles![0].role?.roleName ?? '';
+
       if (UserSingleton().role == 'Employee') {
         var salon = await _salonProvider
             .getSalonByEmployeeId(UserSingleton().loggedInUserId);
-
         salon == null ? {} : UserSingleton().loggedInUserSalon = salon;
       } else {
         try {

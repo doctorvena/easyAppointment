@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<EasyAppointmnetUserDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -56,11 +57,11 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetUserDbContext>();
-    dataContext.Database.EnsureCreated();
+    //var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetUserDbContext>();
+    //dataContext.Database.EnsureCreated();
 
-    new SetupService().Init(dataContext);
-    new SetupService().InsertData(dataContext);
+    //new SetupService().Init(dataContext);
+    //new SetupService().InsertData(dataContext);
 }
 
 app.Run();

@@ -205,10 +205,7 @@ class ReservationsList extends StatelessWidget {
       if (onDataChanged != null) {
         onDataChanged!();
       }
-    } catch (e) {
-      print('Error canceling reservation: $e');
-      // Add additional error handling here
-    }
+    } catch (e) {}
   }
 }
 

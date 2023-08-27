@@ -18,13 +18,13 @@ namespace easyAppointment.Contributor.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public UserResponse Register(UserInsertRequest request)
         {
             return _service.Register(request);
         }
 
-        [HttpGet("role/{roleName}/unassigned")]
+        [HttpGet("Role/{roleName}/Unassigned")]
         [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
         public async Task<List<UserResponse>> GetUsersByRoleAndUnassigned(string roleName)
         {

@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:eprodaja_admin/models/login_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import '../app/user_singleton.dart';
+import '../models/login_response.dart';
 import '../models/search_result.dart';
-import '../utils/utils.dart';
 
 class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
@@ -15,7 +15,7 @@ class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpint) {
     _endpoint = endpint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://localhost:7198");
+        defaultValue: "http://localhost:7000");
   }
 
   Future<T> getById(dynamic id) async {
@@ -37,9 +37,6 @@ class BaseProvider<T> with ChangeNotifier {
 
   Future<searchResult<T>> get({dynamic filter}) async {
     var url = "$_baseUrl$_endpoint";
-
-    print("url");
-    print(url);
 
     if (filter != null) {
       var queryString = getQueryString(filter);
@@ -135,18 +132,12 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Map<String, String> createHeaders() {
-    String username = Authorization.username ?? "";
-    String password = Authorization.password ?? "";
+    var token = UserSingleton().jwtToken ?? "";
 
-    String basicAuth =
-        "Basic ${base64Encode(utf8.encode('$username:$password'))}";
-
-    var headers = {
+    return {
       "Content-Type": "application/json",
-      "Authorization": basicAuth
+      "Authorization": "Bearer $token"
     };
-
-    return headers;
   }
 
   String getQueryString(Map params,
@@ -181,29 +172,23 @@ class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 
-  Future<LoginResponse> loginUser(String username, String password) async {
-    final url =
-        Uri.parse('$_baseUrl/Login?username=$username&password=$password');
+  Future<LoginResponse> login(String username, String password) async {
+    var url = "$_baseUrl/Login?username=$username&password=$password";
+    final uri = Uri.parse(url);
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
-      },
-    );
+    final response =
+        await http.post(uri, headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
-      final userData = jsonDecode(response.body);
-      final user = fromJson(userData);
-      print('Login successful');
-      return user;
-      // Handle the successful login response here
+      var data = jsonDecode(response.body);
+      LoginResponse loginResponse =
+          LoginResponse.fromJson(data['loginResponse']);
+
+      UserSingleton().jwtToken = loginResponse.token;
+
+      return loginResponse;
     } else {
-      print('Error logging in: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      throw Exception('Login failed');
-      // Handle the login error here
+      throw Exception('Error during login: ${response.body}');
     }
   }
 
@@ -215,7 +200,6 @@ class BaseProvider<T> with ChangeNotifier {
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + base64Encode(utf8.encode('admin:admin')),
       },
       body: jsonEncode(requestBody),
     );

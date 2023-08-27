@@ -9,4 +9,5 @@ class UserSingleton {
 
   late int loggedInUserId;
   late String role;
+  String? jwtToken;
 }

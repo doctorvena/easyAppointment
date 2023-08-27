@@ -1,4 +1,4 @@
-import 'package:eprodaja_admin/models/user.dart';
+import 'package:easyappointment_mobile/models/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'login_response.g.dart';

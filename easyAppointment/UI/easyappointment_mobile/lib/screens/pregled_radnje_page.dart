@@ -224,8 +224,6 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
   }
 
   getUint8List(String? photo) {
-    print("photo");
-
     if (photo == null) return true;
     return base64Decode(photo);
   }
