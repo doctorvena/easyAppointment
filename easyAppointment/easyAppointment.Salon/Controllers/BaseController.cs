@@ -29,7 +29,7 @@ namespace easyAppointment.Salon.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public virtual async Task<IActionResult> Delete(int id)
         {
             var result = await service.Delete(id);
             if (!result)

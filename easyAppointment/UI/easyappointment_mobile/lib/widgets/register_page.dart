@@ -294,7 +294,7 @@ class RegisterPage extends StatelessWidget {
                     final Map<String, dynamic> requestBody = {
                       'firstName': firstName,
                       'lastName': lastName,
-                      'roleId': 4,
+                      'roleId': 3,
                       'email': email,
                       'phone': "phone",
                       'username': username,
