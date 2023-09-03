@@ -132,7 +132,7 @@ class BaseProvider<T> with ChangeNotifier {
     var token = UserSingleton().jwtToken ?? "";
     return {
       "Content-Type": "application/json",
-      "Authorization": "Bearer $token"
+      "Authorization": 'Bearer ' + (UserSingleton().jwtToken ?? 'default_token')
     };
   }
 
@@ -196,8 +196,6 @@ class BaseProvider<T> with ChangeNotifier {
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer ' + UserSingleton().jwtToken! // Use the JWT token here
       },
       body: jsonEncode(requestBody),
     );

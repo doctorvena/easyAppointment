@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace easyAppointment.Model
+namespace easyAppointment.Reservation
 {
     public class UserException : Exception
     {

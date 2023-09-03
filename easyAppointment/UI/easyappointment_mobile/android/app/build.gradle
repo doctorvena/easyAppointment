@@ -32,6 +32,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        // options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
     }
 
     kotlinOptions {

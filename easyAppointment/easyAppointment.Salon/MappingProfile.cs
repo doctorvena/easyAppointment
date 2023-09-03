@@ -30,9 +30,9 @@ namespace easyAppointment.Salon.Services
             CreateMap<SalonEmployeeUpdateRequest, SalonEmployee>();
 
             // SalonRating
-            CreateMap<SalonRating, SalonRatingResponse>();
-            CreateMap<SalonRatingInsertRequest, SalonRating>();
-            CreateMap<SalonRatingUpdateRequest, SalonRating>();
+            CreateMap<Database.SalonRating, SalonRatingResponse>();
+            CreateMap<SalonRatingInsertRequest, Database.SalonRating>();
+            CreateMap<SalonRatingUpdateRequest, Database.SalonRating>();
         }
     }
 }

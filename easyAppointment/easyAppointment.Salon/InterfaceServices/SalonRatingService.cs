@@ -4,7 +4,7 @@ using easyAppointment.Salon.SearchObjects;
 
 namespace easyAppointment.Salon.InterfaceServices
 {
-    public interface SalonRatingService : ICRUDService<SalonRatingResponse, SalonRatingSearcchObject,SalonRatingInsertRequest,SalonRatingUpdateRequest>
+    public interface SalonRatingService : ICRUDService<SalonRatingResponse, SalonRatingSearchObject,SalonRatingInsertRequest,SalonRatingUpdateRequest>
     {
     }
 }

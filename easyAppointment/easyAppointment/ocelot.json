@@ -265,7 +265,7 @@
       "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/Reservation/{id}",
+      "DownstreamPathTemplate": "/Reservations/{id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -273,7 +273,7 @@
           "Port": 4000
         }
       ],
-      "UpstreamPathTemplate": "/Reservation/{id}",
+      "UpstreamPathTemplate": "/Reservations/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
     {
@@ -298,7 +298,7 @@
           "Port": 4000
         }
       ],
-      "UpstreamPathTemplate": "/TimeSlot/{id}",
+      "UpstreamPathTemplate": "/TimeSlots/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     }
   ]

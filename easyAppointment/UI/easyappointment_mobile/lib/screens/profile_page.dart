@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/user.dart';
 import '../providers/user_provider.dart';
@@ -38,13 +39,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _selectImage() async {
-    // final pickedFile =
-    //     await ImagePicker().pickImage(source: ImageSource.gallery);
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     _selectedImage = File(pickedFile.path);
-    //   });
-    // }
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+        _isFormChanged.value =
+            true; // Image change should also set form as changed
+      });
+    }
   }
 
   @override

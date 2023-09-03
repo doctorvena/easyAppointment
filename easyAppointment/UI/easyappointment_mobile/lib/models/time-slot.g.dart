@@ -25,7 +25,7 @@ TimeSlot _$TimeSlotFromJson(Map<String, dynamic> json) => TimeSlot(
 
 Map<String, dynamic> _$TimeSlotToJson(TimeSlot instance) => <String, dynamic>{
       'timeSlotId': instance.timeSlotId,
-      'startTime': instance.startTime,
+      'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime,
       'salonId': instance.salonId,
       'employeeId': instance.employeeId,

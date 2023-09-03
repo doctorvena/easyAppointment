@@ -1,5 +1,5 @@
-import 'package:easyappointment_mobile/screens/narudzbe_page.dart';
 import 'package:easyappointment_mobile/screens/profile_page.dart';
+import 'package:easyappointment_mobile/screens/reservations/reservation_page.dart';
 import 'package:easyappointment_mobile/screens/salon_list.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart';

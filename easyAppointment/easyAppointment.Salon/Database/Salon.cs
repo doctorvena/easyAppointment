@@ -10,9 +10,12 @@ public partial class Salon
 
     public string? Address { get; set; }
 
+    public double? ReservationPrice { get; set; }
+
     public int? OwnerUserId { get; set; }
 
     public int? CityId { get; set; }
+    public double Rating { get; set; }
 
     public byte[]? Photo { get; set; }
 

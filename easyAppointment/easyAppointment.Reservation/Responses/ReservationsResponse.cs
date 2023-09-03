@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace easyAppointment.Reservation.Responses
 {
     public partial class ReservationsResponse
@@ -21,6 +16,9 @@ namespace easyAppointment.Reservation.Responses
         public string? ReservationName { get; set; }
         public virtual ICollection<TimeslotResponse> TimeSlots { get; set; } = new List<TimeslotResponse>();
 
-
+        // New fields
+        public int? Rating { get; set; }
+        public double? Price { get; set; }
+        public bool? IsPaid { get; set; }
     }
 }

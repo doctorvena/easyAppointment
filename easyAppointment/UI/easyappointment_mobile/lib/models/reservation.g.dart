@@ -20,6 +20,9 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
       (json['timeSlots'] as List<dynamic>?)
           ?.map((e) => TimeSlot.fromJson(e as Map<String, dynamic>))
           .toList(),
+      json['rating'] as int?,
+      (json['price'] as num?)?.toDouble(),
+      json['isPaid'] as bool?,
     );
 
 Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
@@ -29,8 +32,11 @@ Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
       'userCustomerId': instance.userCustomerId,
       'userBusinessId': instance.userBusinessId,
       'timeSlotId': instance.timeSlotId,
+      'rating': instance.rating,
       'reservationDate': instance.reservationDate?.toIso8601String(),
       'reservationName': instance.reservationName,
       'status': instance.status,
       'timeSlots': instance.timeSlots,
+      'price': instance.price,
+      'isPaid': instance.isPaid,
     };

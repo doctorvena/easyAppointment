@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace easyAppointment.Reservation.Database;
-
 public partial class Reservation
 {
     public int ReservationId { get; set; }
@@ -21,5 +21,9 @@ public partial class Reservation
     public string? ReservationName { get; set; }
 
     public virtual TimeSlot? TimeSlot { get; set; }
-
+    public int? Rating { get; set; }
+    public double? Price { get; set; }
+    public bool? IsPaid { get; set; }
 }
+
+

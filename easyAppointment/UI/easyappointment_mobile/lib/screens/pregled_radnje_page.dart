@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:easyappointment_mobile/models/salon.dart';
-import 'package:easyappointment_mobile/screens/reservation_screen.dart';
+import 'package:easyappointment_mobile/screens/reservations/reservation_screen.dart';
 import 'package:easyappointment_mobile/widgets/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

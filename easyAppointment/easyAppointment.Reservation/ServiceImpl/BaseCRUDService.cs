@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using easyAppointment.Model;
 using easyAppointment.Reservation.SearchObjects;
 using easyAppointment.Reservation.Database;
 

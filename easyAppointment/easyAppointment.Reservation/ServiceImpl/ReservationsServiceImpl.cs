@@ -74,6 +74,19 @@ namespace easyAppointment.Reservation.ServiceImpl
             return base.AddFilter(query, search);
         }
 
+        public override async Task BeforeInsert(Database.Reservation db, ReservationInsertRequest insert)
+        {
+            var overlappingReservations = await _context.Set<Database.Reservation>()
+                .AnyAsync(r => r.UserCustomerId == insert.UserCustomerId && r.TimeSlotId == insert.TimeSlotId);
+
+            if (overlappingReservations)
+            {
+                throw new UserException("You already have a reservation for this time slot.");
+            }
+            await base.BeforeInsert(db, insert);
+            return;
+
+        }
 
     }
 }

@@ -1,12 +1,12 @@
 import 'package:easyappointment_mobile/models/salon.dart';
-import 'package:easyappointment_mobile/screens/reservation_making_screen.dart';
+import 'package:easyappointment_mobile/screens/reservations/reservation_making_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../models/time-slot.dart';
-import '../providers/timeslot_provider.dart';
+import '../../models/time-slot.dart';
+import '../../providers/timeslot_provider.dart';
 
 class ReservationScreen extends StatefulWidget {
   Salon salon;
@@ -37,6 +37,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
         'SearchDate': _selectedDayFormated, // Added SearchDate to filter
       },
     );
+    print(data);
     setState(() {
       timeSlots = data.result;
     });

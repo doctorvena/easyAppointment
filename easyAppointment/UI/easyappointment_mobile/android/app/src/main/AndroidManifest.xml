@@ -1,7 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.easyappointment_mobile">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.example.easyappointment_mobile">
+
+    <uses-sdk tools:overrideLibrary="io.flutter.plugins.webviewflutter, com.pichillilorenzo.flutter_inappwebview"/>
+
     <uses-permission android:name="android.permission.INTERNET"/>
-   <application
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application
         android:label="easyappointment_mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

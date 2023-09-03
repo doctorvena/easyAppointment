@@ -3,17 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker_android/image_picker_android.dart';
 
 class ImageHelper {
-  // static final ImagePicker _imagePicker = ImagePicker();
-
-  // static Future<File?> pickImage(ImageSource source) async {
-  //   final pickedFile = await _imagePicker.pickImage(source: source);
-  //   if (pickedFile != null) {
-  //     return File(pickedFile.path as String);
-  //   }
-  //   return null;
-  // }
+  static final ImagePickerAndroid _imagePicker = ImagePickerAndroid();
 
   static Future<String?> fileToBytes(File file) async {
     if (file != null) {

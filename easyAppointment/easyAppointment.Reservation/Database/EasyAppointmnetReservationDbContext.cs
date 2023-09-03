@@ -42,7 +42,7 @@ public partial class EasyAppointmnetReservationDbContext : DbContext
         {
             entity.HasKey(e => e.TimeSlotId).HasName("PK__TimeSlot__41CC1F52BA833311");
 
-            entity.Property(e => e.TimeSlotId).HasColumnName("TimeSlotID");
+            entity.Property(e => e.TimeSlotId).HasColumnName("TimeSlotID"); 
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.SlotDate).HasColumnType("datetime");
             entity.Property(e => e.StartTime).HasColumnType("datetime");

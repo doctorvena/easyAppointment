@@ -17,6 +17,7 @@ namespace easyAppointment.Salon.Responses
         public int? OwnerUserId { get; set; }
 
         public int? CityId { get; set; }
+        public int? Rating { get; set; }
 
         //public virtual CityResponse? City { get; set; }
 

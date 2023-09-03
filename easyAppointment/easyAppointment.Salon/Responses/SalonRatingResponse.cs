@@ -9,15 +9,15 @@ namespace easyAppointment.Salon.Responses
 {
     public partial class SalonRatingResponse
     {
-        public int ReviewId { get; set; }
+        public int SalonRatingId { get; set; }
 
         public int? UserId { get; set; }
 
-        public int? ReservationId { get; set; }
+        public int SalonId { get; set; }
 
         public int? Rating { get; set; }
 
         public string? Comment { get; set; }
-
+        public DateTime RatingDate { get; set; }
     }
 }

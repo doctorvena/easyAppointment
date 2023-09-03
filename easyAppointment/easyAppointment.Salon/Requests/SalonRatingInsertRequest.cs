@@ -15,6 +15,8 @@ namespace easyAppointment.Salon.Requests
 
         public int? UserId { get; set; }
 
-        public int? ServiceId { get; set; }
+        public int? SalonId { get; set; }
+        public string? Comment { get; set; }
+
     }
 }
