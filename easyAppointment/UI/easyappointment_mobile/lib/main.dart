@@ -1,6 +1,7 @@
 import 'package:easyappointment_mobile/providers/city_provider.dart';
 import 'package:easyappointment_mobile/providers/reservation_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_employee_provider.dart';
+import 'package:easyappointment_mobile/providers/salon_photo_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_rating_provider.dart';
 import 'package:easyappointment_mobile/providers/timeslot_provider.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => SalonProvider()),
       ChangeNotifierProvider(create: (_) => SalonRatingProvider()),
+      ChangeNotifierProvider(create: (_) => SalonPhotoProvider()),
       ChangeNotifierProvider(create: (_) => CityProvider()),
     ],
     child: const MyApp(),

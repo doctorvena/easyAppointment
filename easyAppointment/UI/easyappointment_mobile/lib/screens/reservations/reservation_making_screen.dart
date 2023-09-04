@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:easyappointment_mobile/models/reservation.dart';
 import 'package:easyappointment_mobile/screens/reservations/reservation_page.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,8 @@ class ReservationDetailsScreen extends StatelessWidget {
         DateFormat('hh:mm a').format(selectedTimeSlot.startTime!);
     String formattedEndTime =
         DateFormat('hh:mm a').format(DateTime.parse(selectedTimeSlot.endTime!));
-
+    var bytes = base64Decode(selectedTimeSlot.employee!.photo!);
+    print(bytes);
     return Scaffold(
       appBar: AppBar(
         title: Text('Reservation Details'),
@@ -41,9 +44,18 @@ class ReservationDetailsScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  // Placeholder for employee picture
+                Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                      image: bytes != null && bytes.isNotEmpty
+                          ? DecorationImage(
+                              image: MemoryImage(bytes),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(45)),
                 ),
                 SizedBox(width: 10),
                 Column(
@@ -83,7 +95,7 @@ class ReservationDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: selectedTimeSlot.employeeId.toString(),
+                    text: selectedTimeSlot.employee!.firstName.toString(),
                     style: TextStyle(
                       fontSize: 22,
                       color: Colors.blue,

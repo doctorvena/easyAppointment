@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Salon": {
+    "easyAppointment.Salon": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

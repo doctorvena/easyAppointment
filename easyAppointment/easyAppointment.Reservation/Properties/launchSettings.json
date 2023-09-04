@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "easyAppointment": {
+    "easyAppointment.Reservation": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:4001;http://localhost:4000",
+      "applicationUrl": "https://localhost:4001;http://localhost:4000"
     },
     "IIS Express": {
       "commandName": "IISExpress",

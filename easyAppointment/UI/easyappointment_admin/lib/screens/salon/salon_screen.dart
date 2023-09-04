@@ -62,21 +62,50 @@ class _SalonPageState extends State<SalonPage> {
 
   void _fetchSalonData() async {
     try {
-      var salonData = await _salonProvider
-          .getById(UserSingleton().loggedInUserSalon?.salonId!);
-      salon =
-          salonData as Salon; // Assuming the response returns a single salon
+      var salonId = UserSingleton().loggedInUserSalon?.salonId;
+      if (salonId == null || salonId == -1) {
+        print(UserSingleton().role);
+        if (UserSingleton().role != "Employee") {
+          // Prepare the request body for the new salon
+          final Map<String, dynamic> requestBodySalon = {
+            'salonName': "New Salon",
+            'address': "Address",
+            'photo': "",
+            'ownerUserId': UserSingleton().loggedInUserId,
+            'cityId': 1,
+            'rating': 5,
+          };
 
-      // Update the widget state synchronously
-      setState(() {
-        _salonNameController.text = salon!.salonName!;
-        _addressController.text = salon!.address!;
-        selectedCityId = salon!.cityId;
-        bytes = base64Decode(salon!.photo!);
-      });
+          // Insert new salon
+          // await _salonProvider.insert(requestBodySalon);
+
+          // Fetch the new salon data (assuming the insert method provides the created salon's data, or you may have to fetch it separately)
+          var salonData = await _salonProvider.insert(requestBodySalon);
+          salon = salonData as Salon;
+          UserSingleton().loggedInUserSalon?.salonId = salonData.salonId;
+          // Update the widget state synchronously
+          setState(() {
+            _salonNameController.text = salon!.salonName!;
+            _addressController.text = salon!.address!;
+            selectedCityId = salon!.cityId;
+            bytes = base64Decode(salon!.photo!);
+          });
+        }
+      } else {
+        var salonData = await _salonProvider.getById(salonId);
+        salon = salonData as Salon;
+
+        // Update the widget state synchronously
+        setState(() {
+          _salonNameController.text = salon!.salonName!;
+          _addressController.text = salon!.address!;
+          selectedCityId = salon!.cityId;
+          bytes = base64Decode(salon!.photo!);
+        });
+      }
     } catch (e) {
       // Handle any errors or display an error message
-      print('Error fetching salon data: $e');
+      print('Error fetching or creating salon data: $e');
     }
   }
 

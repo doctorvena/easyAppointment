@@ -216,14 +216,42 @@ class _SalonListScreenState extends State<SalonListScreen> {
                                             child: ListView.builder(
                                               primary: false,
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: 5,
-                                              itemBuilder: (context, index) {
-                                                return Icon(
-                                                  Icons.star,
-                                                  size: 30,
-                                                  color: Color.fromARGB(
-                                                      255, 255, 167, 34),
-                                                );
+                                              itemCount:
+                                                  5, // Because a rating is out of 5
+                                              itemBuilder:
+                                                  (context, starIndex) {
+                                                double rating = result
+                                                        ?.result[index]
+                                                        .rating ??
+                                                    0;
+                                                if (starIndex < rating) {
+                                                  // This means we are still within the range of full stars
+                                                  return Icon(
+                                                    Icons.star,
+                                                    size: 30,
+                                                    color: Color.fromARGB(
+                                                        255, 255, 167, 34),
+                                                  );
+                                                } else if (starIndex <
+                                                    rating + 0.5) {
+                                                  // This means we should be displaying a half star
+                                                  return Icon(
+                                                    Icons
+                                                        .star_half, // This icon represents a half star
+                                                    size: 30,
+                                                    color: Color.fromARGB(
+                                                        255, 255, 167, 34),
+                                                  );
+                                                } else {
+                                                  // This means we are in the range of empty stars
+                                                  return Icon(
+                                                    Icons
+                                                        .star_border, // This icon represents an empty star
+                                                    size: 30,
+                                                    color: Color.fromARGB(
+                                                        255, 255, 167, 34),
+                                                  );
+                                                }
                                               },
                                             ),
                                           ),

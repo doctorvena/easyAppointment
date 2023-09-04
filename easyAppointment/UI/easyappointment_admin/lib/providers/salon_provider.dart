@@ -14,7 +14,7 @@ class SalonProvider extends BaseProvider<Salon> {
   }
 
   Future<Salon?> getSalonByEmployeeId(int employeeId) async {
-    var url = "http://localhost:7198/Salon/$employeeId";
+    var url = "http://localhost:7000/Salon/$employeeId";
 
     var uri = Uri.parse(url);
     var headers = createHeaders();

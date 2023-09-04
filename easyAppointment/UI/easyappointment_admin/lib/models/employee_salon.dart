@@ -1,3 +1,4 @@
+import 'package:eprodaja_admin/models/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'employee_salon.g.dart';
@@ -14,6 +15,7 @@ class SalonEmployee {
     this.username,
     this.phone,
     this.email,
+    this.user,
   );
 
   final int? salonEmployeeId;
@@ -25,6 +27,7 @@ class SalonEmployee {
   final String? username;
   final String? phone;
   final String? email;
+  final User? user;
 
   /// A necessary factory constructor for creating a new EmployeeSalon instance
   /// from a map. Pass the map to the generated `_$EmployeeSalonFromJson()` constructor.

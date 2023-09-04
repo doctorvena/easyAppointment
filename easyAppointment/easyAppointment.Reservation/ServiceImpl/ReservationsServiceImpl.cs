@@ -5,6 +5,7 @@ using easyAppointment.Reservation.InterfaceServices;
 using easyAppointment.Reservation.Requests;
 using easyAppointment.Reservation.Responses;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace easyAppointment.Reservation.ServiceImpl
 {
@@ -88,5 +89,32 @@ namespace easyAppointment.Reservation.ServiceImpl
 
         }
 
+        public override async Task<bool> Delete(int id)
+        {
+            var entity = await _context.Set<Database.Reservation>().FindAsync(id);
+
+            if (entity == null)
+                return false;
+
+            // If there's an associated TimeSlot with the Reservation
+            if (entity.TimeSlotId.HasValue)
+            {
+                var timeSlot = await _context.TimeSlots.FindAsync(entity.TimeSlotId.Value);
+                if (timeSlot != null)
+                {
+                    // Update the TimeSlot's status to "Available"
+                    timeSlot.Status = "Available";
+                    _context.TimeSlots.Update(timeSlot);
+                }
+            }
+
+            _context.Set<Database.Reservation>().Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
+
+
 }

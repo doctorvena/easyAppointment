@@ -76,30 +76,47 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
         return; // Exit the function or perform any necessary actions
       }
     } else {
-      employeeId =
-          _selectedEmployee?.employeeUserId ?? UserSingleton().loggedInUserId;
+      employeeId = _selectedEmployee?.salonEmployeeId;
+      // _selectedEmployee?.salonEmployeeId ?? UserSingleton().loggedInUserId;
       salonId = UserSingleton().loggedInUserSalon?.salonId;
     }
-    final int duration = _endTime.difference(_startTime).inMinutes;
+    if (employeeId != null) {
+      final int duration = _endTime.difference(_startTime).inMinutes;
 
-    final Map<String, dynamic> newTimeSlot = {
-      'startTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_startTime),
-      'endTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_endTime),
-      'employeeId': employeeId,
-      'duration': duration,
-      'salonId': salonId,
-      'status': 'Available'
-    };
+      final Map<String, dynamic> newTimeSlot = {
+        'startTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_startTime),
+        'endTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_endTime),
+        'employeeId': employeeId,
+        'duration': duration,
+        'salonId': salonId,
+        'status': 'Available'
+      };
 
-    try {
-      await _timeslotProvider.insert(newTimeSlot);
-      Navigator.pop(context, true);
-    } catch (e) {
+      try {
+        await _timeslotProvider.insert(newTimeSlot);
+        Navigator.pop(context, true);
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text("Error"),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              )
+            ],
+          ),
+        );
+      }
+    } else {
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: Text("Error"),
-          content: Text(e.toString()),
+          title: Text("First chose Employee"),
           actions: [
             TextButton(
               onPressed: () {
@@ -217,7 +234,9 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
                       (SalonEmployee employee) {
                     return DropdownMenuItem<SalonEmployee>(
                       value: employee,
-                      child: Text(employee.employeeUserId.toString()),
+                      child: Text(employee.firstName.toString() +
+                          " " +
+                          employee.lastName.toString()),
                     );
                   }).toList(),
                 ),

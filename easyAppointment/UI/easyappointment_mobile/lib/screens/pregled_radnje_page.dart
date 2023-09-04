@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:easyappointment_mobile/models/salon-photo.dart';
 import 'package:easyappointment_mobile/models/salon.dart';
+import 'package:easyappointment_mobile/providers/salon_photo_provider.dart';
 import 'package:easyappointment_mobile/screens/reservations/reservation_screen.dart';
 import 'package:easyappointment_mobile/widgets/home_page.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +27,15 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
   Uint8List? bytes;
   File? _selectedImage;
   List<SalonEmployee> employees = [];
+  List<SalonPhoto> salonPhotos = [];
   late SalonEmployeeProvider _salonEmployeeProvider;
+  late SalonPhotoProvider _salonPhotoProvider;
 
   @override
   void initState() {
     super.initState();
     _salonEmployeeProvider = context.read<SalonEmployeeProvider>();
+    _salonPhotoProvider = context.read<SalonPhotoProvider>();
     fetchData();
     initializeData();
   }
@@ -43,8 +48,18 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
       },
     );
     employees = data.result;
+
+    var dataSP = await _salonPhotoProvider.get(
+      filter: {
+        'SalonId': widget.salon.salonId,
+      },
+    );
+    salonPhotos = dataSP.result;
+
     setState(() {
       bytes = base64Decode(widget.salon.photo!);
+      var stop;
+      print(bytes);
     });
   }
 
@@ -71,22 +86,32 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
                   height: 180,
-                  decoration: BoxDecoration(
-                    image: _selectedImage != null
-                        ? DecorationImage(
-                            image: FileImage(_selectedImage!),
-                            fit: BoxFit.cover,
-                          )
-                        : bytes != null && bytes!.isNotEmpty
-                            ? DecorationImage(
-                                image: MemoryImage(bytes!),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                    color: Colors.red,
-                  ),
+                  child: salonPhotos.isNotEmpty
+                      ? PageView.builder(
+                          itemCount: salonPhotos.length,
+                          itemBuilder: (context, index) {
+                            Uint8List? coverBytes;
+                            if (salonPhotos[index].photo != null &&
+                                salonPhotos[index].photo!.isNotEmpty) {
+                              coverBytes =
+                                  base64Decode(salonPhotos[index].photo!);
+                            }
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                image: coverBytes != null
+                                    ? DecorationImage(
+                                        image: MemoryImage(coverBytes),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : null,
+                                color: Colors.red,
+                              ),
+                            );
+                          },
+                        )
+                      : Container(color: Colors.red),
                 ),
                 Container(
                   child: Column(
@@ -124,22 +149,34 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 50,
-                                    width: 160,
-                                    child: ListView.builder(
-                                      primary: false,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: 5,
-                                      itemBuilder: (context, index) {
+                                  Row(
+                                    children: List.generate(5, (index) {
+                                      if (index <
+                                          widget.salon.rating!.floor()) {
                                         return Icon(
                                           Icons.star,
                                           size: 30,
                                           color:
                                               Color.fromARGB(255, 255, 167, 34),
                                         );
-                                      },
-                                    ),
+                                      } else if (index ==
+                                              widget.salon.rating!.floor() &&
+                                          widget.salon.rating! % 1 >= 0.5) {
+                                        return Icon(
+                                          Icons.star_half,
+                                          size: 30,
+                                          color:
+                                              Color.fromARGB(255, 255, 167, 34),
+                                        );
+                                      } else {
+                                        return Icon(
+                                          Icons.star_border,
+                                          size: 30,
+                                          color:
+                                              Color.fromARGB(255, 255, 167, 34),
+                                        );
+                                      }
+                                    }),
                                   ),
                                   Text(widget.salon.address ?? ""),
                                 ],
@@ -161,45 +198,60 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 200, // Specify the height for the ListView
-                  child: ListView.builder(
-                    itemCount: employees.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          leading: Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              image: (employees[index].user?.photo != null &&
-                                      employees[index].user?.photo != "")
-                                  ? DecorationImage(
-                                      image: MemoryImage(
-                                        getUint8List(
-                                            employees[index].user?.photo),
-                                      ),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : null,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: (employees[index].user?.photo == null ||
-                                    employees[index].user?.photo == "")
-                                ? Icon(
-                                    Icons.person_3_sharp,
-                                    size: 24,
-                                    color: Colors.grey,
-                                  )
-                                : null,
-                          ),
-                          title: Text(
-                              '${employees[index].firstName} ${employees[index].lastName}'),
+                employees.isNotEmpty
+                    ? Container(
+                        height: 200, // Specify the height for the ListView
+                        child: ListView.builder(
+                          itemCount: employees.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                leading: Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    image: (employees[index].user?.photo !=
+                                                null &&
+                                            employees[index].user?.photo != "")
+                                        ? DecorationImage(
+                                            image: MemoryImage(
+                                              getUint8List(
+                                                  employees[index].user?.photo),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: (employees[index].user?.photo ==
+                                              null ||
+                                          employees[index].user?.photo == "")
+                                      ? Icon(
+                                          Icons.person_3_sharp,
+                                          size: 24,
+                                          color: Colors.grey,
+                                        )
+                                      : null,
+                                ),
+                                title: Text(
+                                    '${employees[index].firstName} ${employees[index].lastName}'),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      )
+                    : Center(
+                        child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          "We have no employees yet",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ))
               ],
             ),
           ),

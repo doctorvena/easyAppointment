@@ -116,15 +116,7 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                       DataColumn(
                         label: Expanded(
                           child: Text(
-                            'Salon Id',
-                            style: TextStyle(fontStyle: FontStyle.normal),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            'Business User Id',
+                            'Employee',
                             style: TextStyle(fontStyle: FontStyle.normal),
                           ),
                         ),
@@ -155,9 +147,12 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                                       Text(e.timeSlotId?.toString() ?? "")),
                                   DataCell(Text(e.startTime ?? "")),
                                   DataCell(Text(e.endTime ?? "")),
-                                  DataCell(Text(e.salonId?.toString() ?? "")),
                                   DataCell(
-                                      Text(e.OwnerUserId?.toString() ?? "")),
+                                    Text(
+                                      '${e.employee?.firstName ?? ""} ${e.employee?.lastName ?? ""}'
+                                          .trim(),
+                                    ),
+                                  ),
                                   DataCell(Text(e.duration?.toString() ?? "")),
                                   DataCell(Text(e.status?.toString() ?? "")),
                                   DataCell(

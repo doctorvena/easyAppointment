@@ -7,13 +7,15 @@ part of 'salon.dart';
 // **************************************************************************
 
 Salon _$SalonFromJson(Map<String, dynamic> json) => Salon(
-    json['salonId'] as int?,
-    json['salonName'] as String?,
-    json['address'] as String?,
-    json['photo'] as String?,
-    json['ownerUserId'] as int?,
-    json['cityId'] as int?,
-    json['reservationPrice'] as double?);
+      json['salonId'] as int?,
+      json['salonName'] as String?,
+      json['address'] as String?,
+      json['photo'] as String?,
+      json['ownerUserId'] as int?,
+      json['cityId'] as int?,
+      (json['reservationPrice'] as num?)?.toDouble(),
+      (json['rating'] as num?)?.toDouble(),
+    );
 
 Map<String, dynamic> _$SalonToJson(Salon instance) => <String, dynamic>{
       'salonId': instance.salonId,
@@ -23,4 +25,5 @@ Map<String, dynamic> _$SalonToJson(Salon instance) => <String, dynamic>{
       'ownerUserId': instance.ownerUserId,
       'cityId': instance.cityId,
       'reservationPrice': instance.reservationPrice,
+      'rating': instance.rating,
     };

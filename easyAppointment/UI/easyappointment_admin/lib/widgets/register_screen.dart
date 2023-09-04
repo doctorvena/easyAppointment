@@ -1,5 +1,4 @@
 import 'package:eprodaja_admin/providers/salon_provider.dart';
-import 'package:eprodaja_admin/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
@@ -167,7 +166,12 @@ class RegistrationPage extends StatelessWidget {
                         String password = _passwordController.text;
                         String confirmPassword =
                             _confirmPasswordController.text;
-                        int roleId = 3;
+                        int roleId;
+                        if (selectedRole == "Employee") {
+                          roleId = 4;
+                        } else {
+                          roleId = 2;
+                        }
 
                         validateRegister();
 
@@ -225,23 +229,8 @@ class RegistrationPage extends StatelessWidget {
                           'sexId': 1,
                         };
 
-                        // _saveUser(requestBody);
                         var test = await _userProvider.createUser(requestBody);
-                        final Map<String, dynamic> requestBodySalon = {
-                          'salonName': "New Salon",
-                          'address': "Adress",
-                          'photo': "",
-                          'ownerUserId': test.userId,
-                          'cityId': 1,
-                        };
-                        Authorization.username = username;
-                        Authorization.password = password;
 
-                        selectedRole != "employee"
-                            ? _salonProvider.insert(requestBodySalon)
-                            : {};
-
-                        // After registration, you can navigate to a different page
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => LoginPage(),

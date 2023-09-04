@@ -1,3 +1,5 @@
+import 'package:eprodaja_admin/screens/reservations/reservations_overview.dart';
+import 'package:eprodaja_admin/screens/salon/salon_screen.dart';
 import 'package:eprodaja_admin/widgets/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +7,6 @@ import 'package:provider/provider.dart';
 import '/app/user_singleton.dart';
 import '/providers/salon_provider.dart';
 import '/providers/user_provider.dart';
-import '/screens/reservations/reservations_overview.dart';
 import '/utils/utils.dart';
 import '../providers/employee_salon_provider.dart';
 
@@ -129,11 +130,19 @@ class _LoginPageState extends State<LoginPage> {
         } catch (e) {}
       }
 
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const ReservationsOverview(),
-        ),
-      );
+      if (UserSingleton().role == 'Employee') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const ReservationsOverview(),
+          ),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SalonPage(),
+          ),
+        );
+      }
     } catch (e) {
       showDialog(
         context: context,

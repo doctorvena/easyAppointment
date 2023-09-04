@@ -69,12 +69,17 @@ class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = createHeaders();
 
-    print(request);
     var jsonRequest = jsonEncode(request);
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 
-    if (isValidResponse(response)) {
+    print(response.body);
+
+    if (response.body.contains(
+        'The employee already has a timeslot within the same time span.')) {
+      throw new Exception(
+          "The employee already has a timeslot within the same time span.");
+    } else if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
       return fromJson(data);
@@ -193,7 +198,7 @@ class BaseProvider<T> with ChangeNotifier {
   }
 
   Future createUser(Map<String, dynamic> requestBody) async {
-    var url1 = "$_baseUrl$_endpoint/register";
+    var url1 = "$_baseUrl$_endpoint/Register";
     final url = Uri.parse(url1);
 
     final response = await http.post(
@@ -205,12 +210,8 @@ class BaseProvider<T> with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      print('User created successfully');
       var data = jsonDecode(response.body);
       return fromJson(data);
-    } else {
-      print('Error creating user: ${response.statusCode}');
-      print('Response body: ${response.body}');
     }
   }
 }

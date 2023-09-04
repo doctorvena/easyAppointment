@@ -58,7 +58,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: 'Reservations - ${UserSingleton().loggedInUserSalon?.salonName}',
+      title: 'Reservations',
       child: Column(
         children: [
           SizedBox(height: 8),
@@ -88,22 +88,6 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                     DataColumn(
                       label: const Expanded(
                         child: const Text(
-                          'Reservation ID',
-                          style: const TextStyle(fontStyle: FontStyle.normal),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: const Expanded(
-                        child: const Text(
-                          'Time Slot ID',
-                          style: const TextStyle(fontStyle: FontStyle.normal),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: const Expanded(
-                        child: const Text(
                           'Reservation Date',
                           style: const TextStyle(fontStyle: FontStyle.normal),
                         ),
@@ -112,7 +96,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                     DataColumn(
                       label: const Expanded(
                         child: const Text(
-                          'Reservation Nmae',
+                          'Reservation Name',
                           style: const TextStyle(fontStyle: FontStyle.normal),
                         ),
                       ),
@@ -142,6 +126,12 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                       ),
                     ),
                     DataColumn(
+                      label: Text('Completed'),
+                    ),
+                    DataColumn(
+                      label: Text('Cancel'),
+                    ),
+                    DataColumn(
                       label: Text('Delete'),
                     ),
                   ],
@@ -149,8 +139,6 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                           .map(
                             (Reservation e) => DataRow(
                               cells: [
-                                DataCell(Text(e.reservationId.toString())),
-                                DataCell(Text(e.timeSlotId.toString())),
                                 DataCell(
                                   e.reservationDate != null
                                       ? Text(
@@ -171,7 +159,11 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                                 ),
                                 DataCell(
                                   e.timeSlots != null && e.timeSlots!.isNotEmpty
-                                      ? Text(e.timeSlots![0].endTime.toString())
+                                      ? Text(
+                                          DateFormat('EEEE, HH:mm').format(
+                                              parseDateTime(
+                                                  e.timeSlots![0].endTime)!),
+                                        )
                                       : Text(''),
                                 ),
                                 DataCell(
@@ -180,6 +172,30 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                                       false, // Optional: If you want an edit icon
 
                                   placeholder: false,
+                                ),
+                                DataCell(
+                                  e.status == "Active"
+                                      ? ElevatedButton(
+                                          onPressed: () {
+                                            completeReservation(e);
+                                          },
+                                          child: Text("Complete"),
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Colors.green),
+                                        )
+                                      : Text(''),
+                                ),
+                                DataCell(
+                                  e.status == "Active"
+                                      ? ElevatedButton(
+                                          onPressed: () {
+                                            cancelReservation(e);
+                                          },
+                                          child: Text("Cancel"),
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Colors.red),
+                                        )
+                                      : Text(''),
                                 ),
                                 DataCell(
                                   Row(
@@ -242,6 +258,93 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void completeReservation(Reservation reservation) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text(
+              'Are you sure you want to mark this reservation as complete?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                try {
+                  final dynamic requestData = {
+                    "status": "Completed",
+                    "timeSlotId": reservation.timeSlotId,
+                    "rating": reservation.rating,
+                    "isPaid": reservation.isPaid,
+                    "reservationName": reservation.reservationName,
+                    "reservationDate":
+                        DateTime.parse(reservation.reservationDate.toString())
+                            .toUtc()
+                            .toIso8601String()
+                  };
+                  await _reservationProvider.update(
+                      reservation.reservationId!, requestData);
+
+                  // onReservationUpdated();
+                } catch (e) {}
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void cancelReservation(Reservation reservation) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Are you sure you want to cancel this reservation?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                try {
+                  final dynamic requestData = {
+                    "status": "Canceled",
+                    "timeSlotId": reservation.timeSlotId,
+                    "rating": reservation.rating,
+                    "isPaid": reservation.isPaid,
+                    "reservationName": reservation.reservationName,
+                    "reservationDate":
+                        DateTime.parse(reservation.reservationDate.toString())
+                            .toUtc()
+                            .toIso8601String()
+                  };
+                  await _reservationProvider.update(
+                      reservation.reservationId!, requestData);
+
+                  // onReservationUpdated();
+                } catch (e) {}
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('No'),
             ),
           ],
         );

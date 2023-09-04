@@ -34,8 +34,9 @@ class _AddReservationPageState extends State<AddReservationPage> {
   Future<void> fetchTimeSlots() async {
     var data = await _timeSlotProvider.get(
       filter: {
-        'userBusinessId': UserSingleton().loggedInUserId,
+        'ownerUserId': UserSingleton().loggedInUserId,
         'status': 'Available',
+        'AreEmployeesIncluded': true,
       },
     );
     setState(() {
@@ -101,7 +102,8 @@ class _AddReservationPageState extends State<AddReservationPage> {
                       return DropdownMenuItem<TimeSlot>(
                         value: timeSlot,
                         child: Text(
-                          '${DateFormat('EEEE, MMM dd, hh:mm a').format(parseDateTime(timeSlot.startTime)!)} - ${DateFormat('hh:mm a').format(parseDateTime(timeSlot.endTime)!)}',
+                          '${DateFormat('EEEE, MMM dd, hh:mm a').format(parseDateTime(timeSlot.startTime)!)} - ${DateFormat('hh:mm a').format(parseDateTime(timeSlot.endTime)!)} ( ${timeSlot.employee?.firstName ?? ""} ${timeSlot.employee?.lastName ?? ""} )'
+                              .trim(),
                         ),
                       );
                     }).toList(),
@@ -137,6 +139,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
                         "timeSlotId": selectedTimeSlot!.timeSlotId,
                         "reservationDate": DateTime.now().toIso8601String(),
                         "reservationName": reservationName!,
+                        "status": "Active"
                       };
 
                       try {

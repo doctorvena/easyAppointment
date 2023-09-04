@@ -17,6 +17,9 @@ SalonEmployee _$SalonEmployeeFromJson(Map<String, dynamic> json) =>
       json['username'] as String?,
       json['phone'] as String?,
       json['email'] as String?,
+      json['user'] == null
+          ? null
+          : User.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SalonEmployeeToJson(SalonEmployee instance) =>
@@ -30,4 +33,5 @@ Map<String, dynamic> _$SalonEmployeeToJson(SalonEmployee instance) =>
       'username': instance.username,
       'phone': instance.phone,
       'email': instance.email,
+      'user': instance.user,
     };
