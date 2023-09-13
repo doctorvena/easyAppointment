@@ -254,7 +254,7 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
               ),
             );
           },
-          child: const Text('Rezerviši Termin'),
+          child: const Text('Make a Reservation'),
         ),
       ),
     );

@@ -30,6 +30,10 @@ docker-compose up --build
 *Important disclaimer - Make sure you have an emulator running before using the command
 
 
+Paypal creds for payment:
+Password: 12345678
+email: sb-kdryg27127512@personal.example.com
+
 ## Login credentials:
 **Desktop**<br/>
 
