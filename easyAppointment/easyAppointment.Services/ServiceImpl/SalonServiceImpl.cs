@@ -35,15 +35,21 @@ namespace easyAppointment.Services.ServiceImpl
 
         public override IQueryable<Database.Salon> AddFilter(IQueryable<Database.Salon> query, SalonSearchObject? search = null)
         {
+            var filteredQuery = base.AddFilter(query, search);
+
             if (search != null)
             {
-                query = query.Where(x =>
+                if (!string.IsNullOrWhiteSpace(search.FTS))
+                {
+                    filteredQuery = filteredQuery.Where(x => x.SalonName.Contains(search.FTS));
+                }
+
+                filteredQuery = filteredQuery.Where(x =>
                     (search.OwnerUserId == null || x.OwnerUserId.Equals(search.OwnerUserId))
                 );
             }
 
-
-            return base.AddFilter(query, search);
+            return base.AddFilter(filteredQuery, search);
         }
         public async Task<SalonResponse> GetSalonByEmployeeId(int employeeId)
         {

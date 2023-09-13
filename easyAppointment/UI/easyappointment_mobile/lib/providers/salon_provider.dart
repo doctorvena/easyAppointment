@@ -38,7 +38,7 @@ class SalonProvider extends BaseProvider<Salon> {
   }
 
   Future<int> getLastRatedSalonByUserId(int userId) async {
-    var url = "http://10.0.2.2:4000/Salons/LastRatedSalonByUser/$userId";
+    var url = "http://10.0.2.2:4000/Salon/LastRatedSalonByUser/$userId";
 
     var uri = Uri.parse(url);
     var headers = createHeaders();

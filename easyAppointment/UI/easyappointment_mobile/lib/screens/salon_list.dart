@@ -24,6 +24,7 @@ class SalonListScreen extends StatefulWidget {
 }
 
 class _SalonListScreenState extends State<SalonListScreen> {
+  TextEditingController _ftsController = new TextEditingController();
   late SalonProvider _salonProvider;
   bool isLoading = true;
   bool showRecommended = false;
@@ -45,15 +46,20 @@ class _SalonListScreenState extends State<SalonListScreen> {
     initializeData();
   }
 
-  Future<void> fetchData() async {
-    int? lastRatedSalonId = await _salonProvider
-        .getLastRatedSalonByUserId(UserSingleton().loggedInUserId);
+  Future<void> fetchData({String fts = ''}) async {
+    int? lastRatedSalonId = 0;
+    if (showRecommended) {
+      lastRatedSalonId = await _salonProvider
+          .getLastRatedSalonByUserId(UserSingleton().loggedInUserId);
+    }
     searchResult<Salon>? data;
 
     if (showRecommended) {
       data = await _salonProvider.getRecommended(lastRatedSalonId);
     } else {
-      data = await _salonProvider.get();
+      data = await _salonProvider.get(filter: {
+        if (fts.isNotEmpty || fts != '') 'fts': fts,
+      });
     }
 
     var cities = await _cityProvider.get();
@@ -92,59 +98,59 @@ class _SalonListScreenState extends State<SalonListScreen> {
             )
           : SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Show Recommended'),
                       Switch(
                         value: showRecommended,
                         onChanged: (value) {
                           setState(() {
                             showRecommended = value;
+                            _ftsController.text = '';
                             fetchData();
                           });
                         },
                       ),
+                      Text('Show Recommended'),
                     ],
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      left: MediaQuery.of(context).size.width * 0.05,
-                    ),
-                    height: 50,
-                    // width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color.fromARGB(255, 88, 86, 86),
+                  if (!showRecommended)
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: MediaQuery.of(context).size.width * 0.05,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Color.fromARGB(255, 88, 86, 86),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _ftsController,
+                              decoration: InputDecoration(
+                                hintText: "Search...",
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                              ),
+                              onChanged: (value) {},
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              fetchData(fts: _ftsController.text);
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    child: DropdownButton<int>(
-                      isExpanded: true,
-                      hint: Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Text(dropDownText),
-                      ),
-                      items:
-                          cityResult?.result.map<DropdownMenuItem<int>>((item) {
-                        return DropdownMenuItem<int>(
-                          value: item.cityId,
-                          child: Text(item.cityName ?? ""),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          filter = value ?? 0;
-                          dropDownText =
-                              cityResult?.result[filter - 1].cityName ?? "";
-                        });
-                      },
-                    ),
-                  ),
                   Padding(
                     padding: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.05,
