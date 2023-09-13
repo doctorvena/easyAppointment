@@ -17,7 +17,7 @@ namespace easyAppointment.Services.ServiceImpl
         protected IMapper _mapper { get; set; }
         protected readonly EasyAppointmnetDbContext _context;
         private readonly ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> logger;
-        public ReservationsServiceImpl(ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper,IRabbitMqService rabbitMqService) : base(_logger, _context, _mapper)
+        public ReservationsServiceImpl(ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper, IRabbitMqService rabbitMqService) : base(_logger, _context, _mapper)
         {
             this._mapper = _mapper;
             this._context = _context;

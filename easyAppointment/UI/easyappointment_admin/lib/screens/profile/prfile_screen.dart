@@ -28,6 +28,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   Uint8List? bytes;
   File? _selectedImage;
   User? user;
+  int? _selectedSexId;
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _usernameController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
+    // _selectedSexId.dispose();
     super.dispose();
   }
 
@@ -58,18 +60,17 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     try {
       var userData =
           await _userProvider.getById(UserSingleton().loggedInUserId);
-      user = userData; // Assuming the response returns a single user
+      user = userData;
 
-      // Update the widget state synchronously
       setState(() {
         _nameController.text = user!.firstName!;
         _usernameController.text = user!.username!;
         _phoneController.text = user!.phone!;
         _emailController.text = user!.email!;
         bytes = base64Decode(user!.photo!);
+        _selectedSexId = user!.sexId;
       });
     } catch (e) {
-      // Handle any errors or display an error message
       print('Error fetching user data: $e');
     }
   }
@@ -145,9 +146,40 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   ),
                 ),
                 SizedBox(height: 16),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10.0), // Optional for better UI
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius:
+                        BorderRadius.circular(5.0), // Optional for better UI
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    // to hide the built-in underline of the dropdown
+                    child: DropdownButton<int>(
+                      isExpanded: true, // makes it full width
+                      value: _selectedSexId,
+                      onChanged: (int? newValue) {
+                        setState(() {
+                          _selectedSexId = newValue;
+                        });
+                      },
+                      items: <DropdownMenuItem<int>>[
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Text("Male"),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Text("Female"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () async {
-                    // Save profile settings logic
                     String name = _nameController.text;
                     String username = _usernameController.text;
                     String phone = _phoneController.text;
@@ -160,7 +192,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       'lastName': '',
                       'email': email,
                       'phone': phone,
-                      'photo': photo, // Update with the photo data if needed
+                      'photo': photo,
+                      'sexId': _selectedSexId,
                     };
 
                     try {
@@ -206,7 +239,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace easyAppointment.Controllers
 { 
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
     public class SalonController : BaseCRUDController<SalonResponse, SalonSearchObject,SalonInsertRequest,SalonUpdateRequest>
     {
         private readonly SalonService _salonService;

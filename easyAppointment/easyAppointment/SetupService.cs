@@ -16,7 +16,6 @@ namespace easyAppointment
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dataSeed.sql");
             var query = File.ReadAllText(path);
 
-
             context.Database.ExecuteSqlRaw(query);
         }
     }

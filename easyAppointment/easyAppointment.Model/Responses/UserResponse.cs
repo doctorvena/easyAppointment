@@ -17,6 +17,7 @@ namespace easyAppointment.Model.Responses
         public string? Phone { get; set; }
         public string Username { get; set; } = null!;
         public string? Status { get; set; }
+        public int? SexId { get; set; }
         public virtual ICollection<UserRoleResponse> UserRoles { get; set; } = new List<UserRoleResponse>();
     }
 }

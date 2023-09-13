@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace easyAppointment.Controllers
 {
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "BusinessOwner,Admin,Employee,Customer")]
     public class SexController : BaseController<SexResponse, SexSearchObject>
     {
         public SexController(ILogger<BaseController<SexResponse, SexSearchObject>> _logger, Service<SexResponse, SexSearchObject> _service) : base(_logger, _service)
