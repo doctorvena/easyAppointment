@@ -9,7 +9,6 @@ class SalonProvider extends BaseProvider<Salon> {
 
   @override
   Salon fromJson(data) {
-    // TODO: implement fromJson
     return Salon.fromJson(data);
   }
 

@@ -10,7 +10,6 @@ class ReservationProvider extends BaseProvider<Reservation> {
 
   @override
   Reservation fromJson(data) {
-    // TODO: implement fromJson
     return Reservation.fromJson(data);
   }
 

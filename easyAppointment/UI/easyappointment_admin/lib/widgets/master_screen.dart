@@ -125,8 +125,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             ),
             ListTile(
               title: Text('Logout'),
-              onTap:
-                  _showLogoutDialog, // Call the _showLogoutDialog function to display the logout popup
+              onTap: _showLogoutDialog,
             ),
           ],
         ),

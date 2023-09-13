@@ -193,21 +193,19 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
                 try {
                   await _timeslotprovider.delete(timeslotId);
-                  await fetchData(); // Refresh data after deletion
+                  await fetchData();
                 } catch (e) {
-                  // Handle the error
                   print('Error deleting reservation: $e');
-                  // Show an error message or perform any necessary error handling
                 }
               },
               child: Text('Delete'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),

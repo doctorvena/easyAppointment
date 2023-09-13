@@ -6,7 +6,6 @@ class SalonPhotoProvider extends BaseProvider<SalonPhoto> {
 
   @override
   SalonPhoto fromJson(data) {
-    // TODO: implement fromJson
     return SalonPhoto.fromJson(data);
   }
 }
