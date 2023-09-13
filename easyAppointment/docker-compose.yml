@@ -1,5 +1,6 @@
+version: '3'
 services:
-  # MSSQL Docker
+
   easyappointment-sql:
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     restart: unless-stopped
@@ -18,44 +19,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
-  # easyAppointment (gateway) Docker
-  easyappointment:
-    build: 
-      context: .
-      dockerfile: easyAppointment/Dockerfile
-    ports:
-      - 7000:7000
-    networks:
-      - easyappointmentnet2023
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    links:
-      - easyappointment-sql
-      
-  # Contributor Docker
-  contributor:
-    build: 
-      context: .
-      dockerfile: easyAppointment.Contributor/Dockerfile
-    ports:
-      - 5000:5000
-    depends_on:
-      easyappointment-sql:
-        condition: service_healthy
-    networks:
-      - easyappointmentnet2023
-    environment:
-      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaUserMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0;TrustServerCertificate=True
-      - ASPNETCORE_ENVIRONMENT=Development
-    links:
-      - easyappointment-sql
 
-  # Reservations Docker (I'm assuming this corresponds to the 'easyAppointment' launch setting)
-  reservations:
-    build: 
+  easyappointment-api:
+    restart: unless-stopped
+    build:
       context: .
-      dockerfile: easyAppointment.Reservation/Dockerfile
+      dockerfile: easyappointment/Dockerfile      
+    environment:
+      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=easyAppointmentDB;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - 4000:4000
     depends_on:
@@ -63,29 +35,43 @@ services:
         condition: service_healthy
     networks:
       - easyappointmentnet2023
-    environment:
-      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaReservationMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0;TrustServerCertificate=True
-      - ASPNETCORE_ENVIRONMENT=Development
     links:
       - easyappointment-sql
-      
-  # Salon Docker
-  salon:
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - easyappointmentnet2023
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  rabbitmqwebapi:
     build: 
       context: .
-      dockerfile: easyAppointment.Salon/Dockerfile
+      dockerfile: rabiitMqWebApi/Dockerfile
     ports:
-      - 6000:6000
-    depends_on:
-      easyappointment-sql:
-        condition: service_healthy
+      - 3000:3000
     networks:
       - easyappointmentnet2023
     environment:
-      - ConnectionStrings:DefaultConnection=Server=easyappointment-sql,1433;Database=eaSalonMenagment;User=sa;Password=QWElkj132!;ConnectRetryCount=0;TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMq:HostName=rabbitmq
+      - RabbitMq:UserName=guest
+      - RabbitMq:Password=guest
     links:
-      - easyappointment-sql
+      - rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
 networks:
   easyappointmentnet2023:

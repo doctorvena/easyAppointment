@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/image_helper.dart';
+import '../../models/city.dart';
 import '../../models/salon.dart';
+import '../../models/search_result.dart';
 import '../../providers/city_provider.dart';
 import '../../providers/salon_provider.dart';
 import '../../widgets/master_screen.dart';
@@ -23,9 +25,12 @@ class SalonPage extends StatefulWidget {
 class _SalonPageState extends State<SalonPage> {
   final SalonProvider _salonProvider = SalonProvider();
   late CityProvider _cityProvider;
+  searchResult<City>? cityResult;
+  City? _selectedCity;
 
   TextEditingController _salonNameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  TextEditingController _reservationPriceController = TextEditingController();
   Uint8List? bytes;
   File? _selectedImage;
   int? selectedCityId;
@@ -35,12 +40,23 @@ class _SalonPageState extends State<SalonPage> {
   void initState() {
     super.initState();
     _cityProvider = context.read<CityProvider>();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    await _fetchCities();
     _fetchSalonData();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  Future<void> _fetchCities() async {
+    try {
+      var cities = await _cityProvider.get();
+      setState(() {
+        cityResult = cities as searchResult<City>?;
+      });
+    } catch (e) {
+      print('Error fetching cities: $e');
+    }
   }
 
   Future<void> _selectImage() async {
@@ -57,6 +73,7 @@ class _SalonPageState extends State<SalonPage> {
   void dispose() {
     _salonNameController.dispose();
     _addressController.dispose();
+    _reservationPriceController.dispose();
     super.dispose();
   }
 
@@ -99,8 +116,19 @@ class _SalonPageState extends State<SalonPage> {
         setState(() {
           _salonNameController.text = salon!.salonName!;
           _addressController.text = salon!.address!;
+
+          // Assuming reservationPrice is of type double or int
+          _reservationPriceController.text = salon!.reservationPrice.toString();
+
           selectedCityId = salon!.cityId;
           bytes = base64Decode(salon!.photo!);
+
+          // Set the selected city for the dropdown based on cityId
+          if (cityResult != null && cityResult!.result.isNotEmpty) {
+            _selectedCity = cityResult!.result.firstWhere(
+                (city) => city.cityId == salon!.cityId,
+                orElse: () => cityResult!.result.first);
+          }
         });
       }
     } catch (e) {
@@ -132,8 +160,8 @@ class _SalonPageState extends State<SalonPage> {
                     GestureDetector(
                       onTap: _selectImage,
                       child: Container(
-                        width: 400, // Increase the width
-                        height: 200, // Increase the height
+                        width: 400,
+                        height: 200,
                         decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
                           image: _selectedImage != null
@@ -168,6 +196,32 @@ class _SalonPageState extends State<SalonPage> {
                       decoration: InputDecoration(
                         labelText: 'Address',
                       ),
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: _reservationPriceController,
+                      decoration: InputDecoration(
+                        labelText: 'Reservation Price',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(height: 8),
+                    DropdownButton<City>(
+                      value: _selectedCity,
+                      hint: Text("Select a city"), // Hint for better UX
+                      items: cityResult?.result.map((City city) {
+                        return DropdownMenuItem<City>(
+                          value: city,
+                          child: Text(city.cityName!),
+                        );
+                      }).toList(),
+                      onChanged: (City? newValue) {
+                        setState(() {
+                          _selectedCity = newValue;
+                          selectedCityId = newValue?.cityId;
+                        });
+                      },
+                      isExpanded: true, // For better appearance and UX
                     ),
                     SizedBox(height: 8),
                     ElevatedButton(

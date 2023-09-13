@@ -112,11 +112,7 @@ class _LoginPageState extends State<LoginPage> {
       UserSingleton().role =
           loginResponse.user!.userRoles![0].role?.roleName ?? '';
 
-      if (UserSingleton().role == 'Employee') {
-        var salon = await _salonProvider
-            .getSalonByEmployeeId(UserSingleton().loggedInUserId);
-        salon == null ? {} : UserSingleton().loggedInUserSalon = salon;
-      } else {
+      if (UserSingleton().role != 'Employee') {
         try {
           var loggedUserSalon = await _salonProvider.get(
             filter: {'ownerUserId': UserSingleton().loggedInUserId},
@@ -127,7 +123,9 @@ class _LoginPageState extends State<LoginPage> {
           } else {
             UserSingleton().loggedInUserSalon = loggedUserSalon.result[0];
           }
-        } catch (e) {}
+        } catch (e) {
+          throw Exception('Failed to fetch logged in user salon: $e');
+        }
       }
 
       if (UserSingleton().role == 'Employee') {

@@ -20,7 +20,7 @@ class Salon {
   String? photo;
   int? ownerUserId;
   int? cityId;
-  double? reservationPrice;
+  int? reservationPrice;
   double? rating;
 
   /// A necessary factory constructor for creating a new User instance

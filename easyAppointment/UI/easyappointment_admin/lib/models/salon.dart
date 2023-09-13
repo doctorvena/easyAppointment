@@ -4,14 +4,8 @@ part 'salon.g.dart';
 
 @JsonSerializable()
 class Salon {
-  Salon(
-    this.salonId,
-    this.salonName,
-    this.address,
-    this.photo,
-    this.ownerUserId,
-    this.cityId,
-  );
+  Salon(this.salonId, this.salonName, this.address, this.photo,
+      this.ownerUserId, this.cityId, this.reservationPrice, this.rating);
 
   int? salonId;
   String? salonName;
@@ -19,6 +13,8 @@ class Salon {
   String? photo;
   int? ownerUserId;
   int? cityId;
+  int? reservationPrice;
+  double? rating;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

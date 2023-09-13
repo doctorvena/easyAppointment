@@ -15,7 +15,7 @@ class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpint) {
     _endpoint = endpint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://localhost:7000");
+        defaultValue: "http://localhost:4000");
   }
 
   Future<T> getById(dynamic id) async {
@@ -54,8 +54,11 @@ class BaseProvider<T> with ChangeNotifier {
       var result = searchResult<T>();
 
       for (var item in data) {
-        // TimeSlot t = TimeSlot(timeSlotId, startTime, endTime, businessId, duration)
-        result.result.add(fromJson(item));
+        try {
+          result.result.add(fromJson(item));
+        } catch (e) {
+          print('Error processing item: $e');
+        }
       }
 
       return result;

@@ -1,75 +1,108 @@
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 using System.Text;
+using RabbitMQ.Client;
+using easyAppointment.Model.SearchObjects;
+using easyAppointment.Services.ServiceImpl;
+using easyAppointment.Services.InterfaceServices;
+using easyAppointment.Model.Responses;
+using easyAppointment.Services.Database;
+using Microsoft.EntityFrameworkCore;
+using easyAppointment;
 
-namespace easyAppointment
-{
-    public class Program
-    {
-        public static void Main(string[] args)
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ReservationsService, ReservationsServiceImpl>();
+builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+builder.Services.AddScoped<SalonService, SalonServiceImpl>();
+builder.Services.AddScoped<SalonRatingService, SalonRatingServiceImpl>();
+builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
+builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
+builder.Services.AddScoped<CityService, CityServiceImpl>();
+builder.Services.AddScoped<ReservationsService, ReservationsServiceImpl>();
+builder.Services.AddScoped<TimeSlotsService, TimeSlotsServiceImpl>();
+builder.Services.AddScoped<UserService, UserServiceImpl>();
+builder.Services.AddScoped<Service<SexResponse, SexSearchObject>, SexServiceImpl>();
+builder.Services.AddScoped<Service<CityResponse, BaseSearchObject>, CityServiceImpl>();
+builder.Services.AddScoped<Service<SalonRatingResponse, SalonRatingSearcchObject>, SalonRatingServiceImpl>();
+builder.Services.AddScoped<Service<RoleResponse, RoleSearchObject>, RolesServiceImpl>();
+builder.Services.AddScoped<SalonService, SalonServiceImpl>();
+builder.Services.AddScoped<SalonRatingService, SalonRatingServiceImpl>();
+builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
+builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
+
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    opt => {
+        opt.TokenValidationParameters = new TokenValidationParameters
         {
-            var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            // Add JWT Authentication Middleware - This code will intercept HTTP request and validate the JWT.
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
-                opt => {
-                    opt.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                        .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                }
-              );
-
-            builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-
-            builder.Services.AddOcelot(builder.Configuration);
-            builder.Services.AddCors( );
-
-            var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseCors(policy =>
-            policy
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            );
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.Use(async (context, next) =>
-            {
-                await next();
-
-                if (context.Response.StatusCode == (int)System.Net.HttpStatusCode.Unauthorized)
-                {
-                    await context.Response.WriteAsync("Token Validation Has Failed. Request Access Denied");
-                }
-            });
-
-            app.MapControllers();
-            app.UseOcelot().Wait();
-
-            app.Run();
-
-        }
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
     }
+  );
+
+builder.Services.AddAutoMapper(typeof(TimeSlotsService));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<EasyAppointmnetDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddAutoMapper(typeof(ReservationsService));
+builder.Services.AddAutoMapper(typeof(TimeSlotsService));
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var factory = new ConnectionFactory()
+    {
+        HostName = config["RabbitMq:Hostname"],
+        UserName = config["RabbitMq:Username"],
+        Password = config["RabbitMq:Password"]
+    };
+
+    return new Lazy<IConnection>(() => factory.CreateConnection());
+});
+
+builder.Services.AddSingleton(sp =>
+{
+    var connection = sp.GetRequiredService<Lazy<IConnection>>();
+    return connection.Value.CreateModel();
+});
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<EasyAppointmnetDbContext>();
+    dataContext.Database.EnsureCreated();
+
+    new SetupService().Init(dataContext);
+    new SetupService().InsertData(dataContext);
+}
+
+app.Run();

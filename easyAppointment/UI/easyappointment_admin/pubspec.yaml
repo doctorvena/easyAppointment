@@ -42,7 +42,12 @@ dependencies:
   local_notifier: ^0.1.5
   image_picker: ^0.8.4+4
   file_picker: ^4.2.2
-  
+  pdf: ^3.9.0
+  path_provider: ^2.0.1 
+  open_file: ^3.1.0
+  printing: ^5.10.4
+  # flutter_full_pdf_viewer: ^1.0.6
+    
 dev_dependencies:
   json_serializable: ^6.2.0
   build_runner: ^2.1.11

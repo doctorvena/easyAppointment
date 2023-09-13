@@ -291,7 +291,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                   };
                   await _reservationProvider.update(
                       reservation.reservationId!, requestData);
-
+                  await fetchData();
                   // onReservationUpdated();
                 } catch (e) {}
               },
@@ -334,7 +334,7 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
                   };
                   await _reservationProvider.update(
                       reservation.reservationId!, requestData);
-
+                  await fetchData();
                   // onReservationUpdated();
                 } catch (e) {}
               },

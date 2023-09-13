@@ -134,7 +134,7 @@ class ReservationDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Total Price: 20e', // Total price
+                  'Total Price: ${salon.reservationPrice}e', // Total price
                   style:
                       TextStyle(fontSize: 18, color: Colors.blue), // Blue color
                 ),
@@ -301,13 +301,13 @@ class ReservationDetailsScreen extends StatelessWidget {
             "ELIJEgHfwdmF-wIs-8p3oxMymarodznKIFj4BmoC5ST5pF9Uu8UMfxRF0GbkBmXkNn6ByKePxPC_mkKM",
         returnURL: "success.snippetcoder.com",
         cancelURL: "cancel.snippetcoder.com",
-        transactions: const [
+        transactions: [
           {
             "amount": {
-              "total": '20',
+              "total": salon.reservationPrice?.toString() ?? '0',
               "currency": "USD",
               "details": {
-                "subtotal": '20',
+                "subtotal": salon.reservationPrice?.toString() ?? '0',
                 "shipping": '0',
                 "shipping_discount": 0
               }

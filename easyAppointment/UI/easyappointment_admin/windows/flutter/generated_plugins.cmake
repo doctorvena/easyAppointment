@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   local_notifier
+  printing
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

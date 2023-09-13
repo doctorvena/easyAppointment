@@ -13,6 +13,8 @@ Salon _$SalonFromJson(Map<String, dynamic> json) => Salon(
       json['photo'] as String?,
       json['ownerUserId'] as int?,
       json['cityId'] as int?,
+      json['reservationPrice'] as int?,
+      (json['rating'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$SalonToJson(Salon instance) => <String, dynamic>{
@@ -22,4 +24,6 @@ Map<String, dynamic> _$SalonToJson(Salon instance) => <String, dynamic>{
       'photo': instance.photo,
       'ownerUserId': instance.ownerUserId,
       'cityId': instance.cityId,
+      'reservationPrice': instance.reservationPrice,
+      'rating': instance.rating,
     };
