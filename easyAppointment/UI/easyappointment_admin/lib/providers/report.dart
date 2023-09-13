@@ -6,23 +6,25 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 import '../models/reservation.dart';
-import '../models/search_result.dart';
 
 class PdfReservationReportApi {
-  static Future<File> generate(searchResult<Reservation> reservations) async {
+  static Future<bool> generate(
+      List<Reservation> reservations, String employeeName) async {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
       build: (context) => [
         buildHeader(),
         SizedBox(height: 2 * PdfPageFormat.cm),
-        buildTitle(),
+        buildTitle(employeeName),
         buildReservationsTable(reservations),
       ],
       footer: (context) => buildFooter(),
     ));
 
-    return PdfApi.saveDocument(name: 'reservations_report2.pdf', pdf: pdf);
+    File? savedFile =
+        await PdfApi.saveDocument(name: 'reservations_report32.pdf', pdf: pdf);
+    return savedFile != null;
   }
 
   static Widget buildHeader() => Center(
@@ -32,16 +34,16 @@ class PdfReservationReportApi {
         ),
       );
 
-  static Widget buildTitle() => Column(
+  static Widget buildTitle(String employeeName) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 0.8 * PdfPageFormat.cm),
-          Text('List of Reservations'),
+          Text('List of Reservations for Employee: $employeeName'),
           SizedBox(height: 0.8 * PdfPageFormat.cm),
         ],
       );
 
-  static Widget buildReservationsTable(searchResult<Reservation> reservations) {
+  static Widget buildReservationsTable(List<Reservation> reservations) {
     final headers = [
       'Reservation Name',
       'Status',
@@ -50,7 +52,7 @@ class PdfReservationReportApi {
       'Is Paid'
     ];
 
-    final data = reservations.result.map((reservation) {
+    final data = reservations.map((reservation) {
       return [
         reservation.reservationName ?? '',
         reservation.status ?? '',

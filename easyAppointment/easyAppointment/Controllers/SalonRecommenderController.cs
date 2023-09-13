@@ -15,7 +15,7 @@ namespace easyAppointment.Controllers
             this.service = service;
         }
 
-        [HttpGet("{SalonId}")]
+        [HttpGet("RecomendedSalon/{SalonId}")]
         public IActionResult RecommendedSalon(int SalonId)
         {
             try

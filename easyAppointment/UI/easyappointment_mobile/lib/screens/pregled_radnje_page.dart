@@ -150,33 +150,24 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                                     ),
                                   ),
                                   Row(
-                                    children: List.generate(5, (index) {
-                                      if (index <
-                                          widget.salon.rating!.floor()) {
-                                        return Icon(
-                                          Icons.star,
-                                          size: 30,
-                                          color:
-                                              Color.fromARGB(255, 255, 167, 34),
-                                        );
-                                      } else if (index ==
-                                              widget.salon.rating!.floor() &&
-                                          widget.salon.rating! % 1 >= 0.5) {
-                                        return Icon(
-                                          Icons.star_half,
-                                          size: 30,
-                                          color:
-                                              Color.fromARGB(255, 255, 167, 34),
-                                        );
-                                      } else {
-                                        return Icon(
-                                          Icons.star_border,
-                                          size: 30,
-                                          color:
-                                              Color.fromARGB(255, 255, 167, 34),
-                                        );
-                                      }
-                                    }),
+                                    children: [
+                                      Icon(
+                                        Icons.star,
+                                        size: 30,
+                                        color:
+                                            Color.fromARGB(255, 255, 167, 34),
+                                      ),
+                                      SizedBox(width: 5.0), // Add some spacing
+                                      Text(
+                                        widget.salon.rating!.toStringAsFixed(
+                                            1), // This will ensure that the rating is displayed with 1 decimal place
+                                        style: TextStyle(
+                                          fontSize:
+                                              20, // You can adjust the size if you want
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Text(widget.salon.address ?? ""),
                                 ],

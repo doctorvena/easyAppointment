@@ -60,7 +60,14 @@ namespace easyAppointment.Services.ServiceImpl
             var salon = salonEmployee.Salon;
             return _mapper.Map<SalonResponse>(salon);
         }
+        public async Task<int?> GetLastRatedSalonByUserId(int userId)
+        {
+            var lastRating = await _context.Set<SalonRating>()
+                .Where(r => r.UserId == userId)
+                .OrderByDescending(r => r.RatingDate)
+                .FirstOrDefaultAsync();
 
-
+            return lastRating?.SalonId; // This will return either the SalonId or null
+        }
     }
 }

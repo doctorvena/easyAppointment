@@ -18,6 +18,7 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
   late TimeSlotProvider _timeslotProvider;
   late SalonEmployeeProvider _salonEmployeeProvider;
 
+  DateTime _selectedDate = DateTime.now();
   DateTime _endTime = DateTime.now().add(Duration(hours: 1));
   DateTime _startTime = DateTime.now();
   List<SalonEmployee> _employees = [];
@@ -84,8 +85,18 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
       final int duration = _endTime.difference(_startTime).inMinutes;
 
       final Map<String, dynamic> newTimeSlot = {
-        'startTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_startTime),
-        'endTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(_endTime),
+        'startTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime(
+            _selectedDate.year,
+            _selectedDate.month,
+            _selectedDate.day,
+            _startTime.hour,
+            _startTime.minute)),
+        'endTime': DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime(
+            _selectedDate.year,
+            _selectedDate.month,
+            _selectedDate.day,
+            _endTime.hour,
+            _endTime.minute)),
         'employeeId': employeeId,
         'duration': duration,
         'salonId': salonId,
@@ -140,6 +151,36 @@ class _AddTimeSlotPageState extends State<AddTimeSlotPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Text(
+                'Date',
+                style: TextStyle(fontSize: 16),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: _selectedDate,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null && pickedDate != _selectedDate)
+                    setState(() {
+                      _selectedDate = pickedDate;
+                    });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    DateFormat('yMMMd').format(_selectedDate),
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
               Text(
                 'Start Time',
                 style: TextStyle(fontSize: 16),

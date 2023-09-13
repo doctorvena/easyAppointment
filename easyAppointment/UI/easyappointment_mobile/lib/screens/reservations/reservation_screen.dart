@@ -23,23 +23,32 @@ class _ReservationScreenState extends State<ReservationScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   List<TimeSlot> timeSlots = [];
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _timeSlotProvider = context.read<TimeSlotProvider>();
   }
 
   Future<void> GetTimeSlots(String _selectedDayFormated) async {
+    setState(() {
+      isLoading = true;
+    });
     var data = await _timeSlotProvider.get(
       filter: {
         'SalonId': widget.salon.salonId,
-        'SearchDate': _selectedDayFormated, // Added SearchDate to filter
+        'SearchDate': _selectedDayFormated,
       },
     );
     print(data);
     setState(() {
       timeSlots = data.result;
+      isLoading = false;
     });
   }
 
@@ -72,8 +81,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
-              GetTimeSlots(DateFormat('yyyy-MM-dd').format(
-                  _selectedDay!)); // Fetch timeslots whenever a new day is selected
+              GetTimeSlots(DateFormat('yyyy-MM-dd').format(_selectedDay!));
             },
             calendarBuilders: CalendarBuilders(
               defaultBuilder: (context, date, _) {
@@ -107,13 +115,13 @@ class _ReservationScreenState extends State<ReservationScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               _selectedDay == null
-                  ? "Select the Day" // If no day is selected
+                  ? "Select the Day"
                   : timeSlots.isEmpty
-                      ? "The selected day has no available time slots, please try another date" // If there are no time slots for the selected day
-                      : "Select the time slot that suits you", // If there are time slots for the selected day
+                      ? "The selected day has no available time slots, please try another date"
+                      : "Select the time slot that suits you",
               style: TextStyle(
-                fontSize: 16, // You can adjust the size
-                fontWeight: FontWeight.bold, // You can adjust the weight
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -127,13 +135,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.white, // Neutral color for the button
-                      onPrimary: Colors.black, // Text color
-                      elevation: 5, // Elevation for the 3D effect
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      elevation: 5,
                       side: BorderSide(
-                        color: isTaken
-                            ? Colors.red
-                            : Colors.green, // Colored indicator
+                        color: isTaken ? Colors.red : Colors.green,
                       ),
                     ),
                     onPressed: isTaken
@@ -171,6 +177,10 @@ class _ReservationScreenState extends State<ReservationScreen> {
               },
             ),
           ),
+          if (isLoading)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
         ],
       ),
     );

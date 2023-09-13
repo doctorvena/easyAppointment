@@ -83,7 +83,6 @@ class _SalonPageState extends State<SalonPage> {
       if (salonId == null || salonId == -1) {
         print(UserSingleton().role);
         if (UserSingleton().role != "Employee") {
-          // Prepare the request body for the new salon
           final Map<String, dynamic> requestBodySalon = {
             'salonName': "New Salon",
             'address': "Address",
@@ -93,14 +92,10 @@ class _SalonPageState extends State<SalonPage> {
             'rating': 5,
           };
 
-          // Insert new salon
-          // await _salonProvider.insert(requestBodySalon);
-
-          // Fetch the new salon data (assuming the insert method provides the created salon's data, or you may have to fetch it separately)
           var salonData = await _salonProvider.insert(requestBodySalon);
           salon = salonData as Salon;
           UserSingleton().loggedInUserSalon?.salonId = salonData.salonId;
-          // Update the widget state synchronously
+
           setState(() {
             _salonNameController.text = salon!.salonName!;
             _addressController.text = salon!.address!;
@@ -112,18 +107,15 @@ class _SalonPageState extends State<SalonPage> {
         var salonData = await _salonProvider.getById(salonId);
         salon = salonData as Salon;
 
-        // Update the widget state synchronously
         setState(() {
           _salonNameController.text = salon!.salonName!;
           _addressController.text = salon!.address!;
 
-          // Assuming reservationPrice is of type double or int
           _reservationPriceController.text = salon!.reservationPrice.toString();
 
           selectedCityId = salon!.cityId;
           bytes = base64Decode(salon!.photo!);
 
-          // Set the selected city for the dropdown based on cityId
           if (cityResult != null && cityResult!.result.isNotEmpty) {
             _selectedCity = cityResult!.result.firstWhere(
                 (city) => city.cityId == salon!.cityId,
@@ -132,7 +124,6 @@ class _SalonPageState extends State<SalonPage> {
         });
       }
     } catch (e) {
-      // Handle any errors or display an error message
       print('Error fetching or creating salon data: $e');
     }
   }
@@ -208,7 +199,7 @@ class _SalonPageState extends State<SalonPage> {
                     SizedBox(height: 8),
                     DropdownButton<City>(
                       value: _selectedCity,
-                      hint: Text("Select a city"), // Hint for better UX
+                      hint: Text("Select a city"),
                       items: cityResult?.result.map((City city) {
                         return DropdownMenuItem<City>(
                           value: city,
@@ -221,12 +212,11 @@ class _SalonPageState extends State<SalonPage> {
                           selectedCityId = newValue?.cityId;
                         });
                       },
-                      isExpanded: true, // For better appearance and UX
+                      isExpanded: true,
                     ),
                     SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () async {
-                        // Save profile settings logic
                         String salonName = _salonNameController.text;
                         String address = _addressController.text;
                         String? photo = _selectedImage != null
@@ -237,8 +227,7 @@ class _SalonPageState extends State<SalonPage> {
                           'salonName': salonName,
                           'address': address,
                           'ownerUserId': UserSingleton().loggedInUserId,
-                          'photo':
-                              photo, // Update with the photo data if needed
+                          'photo': photo,
                           'cityId': selectedCityId,
                         };
 
@@ -288,7 +277,7 @@ class _SalonPageState extends State<SalonPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],

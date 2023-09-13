@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:easyappointment_mobile/models/reservation.dart';
 import 'package:easyappointment_mobile/screens/reservations/reservation_page.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +29,8 @@ class ReservationDetailsScreen extends StatelessWidget {
         DateFormat('hh:mm a').format(selectedTimeSlot.startTime!);
     String formattedEndTime =
         DateFormat('hh:mm a').format(DateTime.parse(selectedTimeSlot.endTime!));
-    var bytes = base64Decode(selectedTimeSlot.employee!.photo!);
+    // var bytes = base64Decode(selectedTimeSlot.employee!.photo!);
+    var bytes = null;
     print(bytes);
     return Scaffold(
       appBar: AppBar(
@@ -63,13 +62,13 @@ class ReservationDetailsScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.access_time), // Clock icon
+                        Icon(Icons.access_time),
                         Text(' $formattedStartTime - $formattedEndTime'),
                       ],
                     ),
                     Row(
                       children: [
-                        Icon(Icons.calendar_today), // Calendar icon
+                        Icon(Icons.calendar_today),
                         Text(' $formattedDate'),
                       ],
                     ),
@@ -77,11 +76,11 @@ class ReservationDetailsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20), // Increased space
+            SizedBox(height: 20),
             Divider(thickness: 2),
             Text(
-              salon.salonName.toString(), // Salon name
-              style: TextStyle(fontSize: 28), // Larger font size, blue color
+              salon.salonName.toString(),
+              style: TextStyle(fontSize: 28),
             ),
             SizedBox(height: 10),
             RichText(
@@ -104,12 +103,9 @@ class ReservationDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             SizedBox(height: 10),
             Text(
-              'Duration: ' +
-                  selectedTimeSlot.duration.toString() +
-                  ' min', // Duration
+              'Duration: ' + selectedTimeSlot.duration.toString() + ' min',
               style: TextStyle(fontSize: 18),
             ),
             Spacer(),
@@ -134,9 +130,8 @@ class ReservationDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Total Price: ${salon.reservationPrice}e', // Total price
-                  style:
-                      TextStyle(fontSize: 18, color: Colors.blue), // Blue color
+                  'Total Price: ${salon.reservationPrice} USD',
+                  style: TextStyle(fontSize: 18, color: Colors.blue),
                 ),
               ],
             ),
@@ -153,82 +148,98 @@ class ReservationDetailsScreen extends StatelessWidget {
         DateFormat('hh:mm a').format(selectedTimeSlot.startTime!);
     String formattedEndTime =
         DateFormat('hh:mm a').format(DateTime.parse(selectedTimeSlot.endTime!));
-    String price = '20.00'; // Price for the reservation, adjust as needed
+    String price = salon.reservationPrice.toString() + 'USD';
 
     showDialog(
       context: context,
+      barrierDismissible:
+          false, // prevents user from dismissing by clicking outside
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Checkout'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'You made a reservation on:',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '$formattedDate',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '$formattedStartTime - $formattedEndTime',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20), // Increased spacing for better clarity
-                Divider(thickness: 1, color: Colors.grey[300]),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total:',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '\$$price',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await _initiatePayPalPayment(context, reservation!);
-                  },
-                  child: Text('Pay With PayPal'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.teal[900], // Deep dark green color
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const ReservationsPage(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+            return true;
+          },
+          child: AlertDialog(
+            title: Text('Checkout'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'You made a reservation on:',
+                    style: TextStyle(fontSize: 20),
                   ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pop(); // Close the current dialog or popup
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => const ReservationsPage()),
-                      (Route<dynamic> route) =>
-                          false, // This ensures all previous routes are removed
-                    );
-                  },
-                  child: Text('Pay Later'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                    textStyle: TextStyle(fontSize: 20),
+                  SizedBox(height: 10),
+                  Text(
+                    '$formattedDate',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
+                  Text(
+                    '$formattedStartTime - $formattedEndTime',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  Divider(thickness: 1, color: Colors.grey[300]),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total:',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        '\$$price',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _initiatePayPalPayment(context, reservation!);
+                    },
+                    child: Text('Pay With PayPal'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.teal[900],
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const ReservationsPage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text('Pay Later'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      textStyle: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -245,7 +256,7 @@ class ReservationDetailsScreen extends StatelessWidget {
       "salonId": salon.salonId,
       "timeSlotId": selectedTimeSlot.timeSlotId,
       "reservationDate": DateTime.now().toIso8601String(),
-      "reservationName": "CUSTOMER_NAME_OR_ID", // Modify as needed
+      "reservationName": "CUSTOMER_NAME_OR_ID",
       "status": "Active",
       "userCustomerId": UserSingleton().loggedInUserId,
       "isPaid": false,
@@ -261,7 +272,7 @@ class ReservationDetailsScreen extends StatelessWidget {
       await _timeSlotProvider.update(selectedTimeSlot.timeSlotId!, updateData);
 
       return reservation;
-      Navigator.pop(context); // Close the dialog
+      Navigator.pop(context);
     } catch (e) {
       throw Exception("Unknown error");
     }
@@ -291,7 +302,6 @@ class ReservationDetailsScreen extends StatelessWidget {
 
   Future<void> _initiatePayPalPayment(
       BuildContext context, Reservation? reservation) async {
-    // Push the PaypalCheckout widget and await the result
     await Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => PaypalCheckout(
         sandboxMode: true,
@@ -318,26 +328,22 @@ class ReservationDetailsScreen extends StatelessWidget {
         note: "Payment for reservation.",
         onSuccess: (Map params) async {
           if (reservation != null) {
-            // Check if reservationId is not null
             await _updateReservationToPaid(context, reservation);
           }
           print("Payment success: $params");
-          // Navigate to ReservationsPage and remove all previous routes
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (BuildContext context) => ReservationsPage()),
-            (Route<dynamic> route) =>
-                false, // this ensures that there are no other routes left in the navigation stack
+            (Route<dynamic> route) => false,
           );
         },
         onError: (error) {
           print("Payment error: $error");
-          Navigator.of(context).pop(false); // Pop with payment error flag
+          Navigator.of(context).pop(false);
         },
         onCancel: () {
           print('Payment cancelled.');
-          Navigator.of(context)
-              .pop(false); // Pop with payment cancellation flag
+          Navigator.of(context).pop(false);
         },
       ),
     ));

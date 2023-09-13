@@ -10,6 +10,7 @@ using easyAppointment.Model.Responses;
 using easyAppointment.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using easyAppointment;
+using easyAppointment.Salon.ServiceImpl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddScoped<SalonService, SalonServiceImpl>();
 builder.Services.AddScoped<SalonRatingService, SalonRatingServiceImpl>();
 builder.Services.AddScoped<SalonPhotoService, SalonPhotoServiceImpl>();
 builder.Services.AddScoped<SalonEmployeeService, SalonEmployeeServiceImpl>();
+builder.Services.AddScoped<SalonRecommenderService, SalonRecommenderServiceImpl>();
 
 
 builder.Services.AddControllers();
@@ -103,6 +105,10 @@ using (var scope = app.Services.CreateScope())
 
     new SetupService().Init(dataContext);
     new SetupService().InsertData(dataContext);
+
+    var services = scope.ServiceProvider;
+    var recommendationService = services.GetRequiredService<SalonRecommenderService>();
+    await recommendationService.CreateModel();
 }
 
 app.Run();

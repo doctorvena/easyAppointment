@@ -11,7 +11,7 @@ public partial class Salon
     public int? ReservationPrice { get; set; }
     public int? OwnerUserId { get; set; }
     public int? CityId { get; set; }
-    public double Rating { get; set; }
+    public double? Rating { get; set; }
     public byte[]? Photo { get; set; }
     public virtual City? City { get; set; }
     public virtual User? OwnerUser { get; set; }

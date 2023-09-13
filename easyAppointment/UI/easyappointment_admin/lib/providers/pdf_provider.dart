@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
 
@@ -35,16 +34,17 @@ class PdfApi {
     final bytes = await pdf.save();
 
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$name');
+    int counter = 1;
+    String fileName = name;
 
+    while (await File('${dir.path}/$fileName').exists()) {
+      fileName = name.replaceFirst('.pdf', '_$counter.pdf');
+      counter++;
+    }
+
+    final file = File('${dir.path}/$fileName');
     await file.writeAsBytes(bytes);
 
     return file;
-  }
-
-  static Future openFile(File file) async {
-    final url = file.path;
-
-    await OpenFile.open(url);
   }
 }

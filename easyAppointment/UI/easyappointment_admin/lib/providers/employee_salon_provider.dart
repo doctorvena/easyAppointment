@@ -17,7 +17,7 @@ class SalonEmployeeProvider extends BaseProvider<SalonEmployee> {
   Future<SalonEmployee> addEmplyeeAsOwner(String username) async {
     var salonId = UserSingleton().loggedInUserSalon!.salonId;
     var url =
-        "http://localhost:7000/SalonEmployee/AddSalonEmployee?username=$username&salonId=$salonId";
+        "http://localhost:4000/SalonEmployee/AddSalonEmployee?username=$username&salonId=$salonId";
     var uri = Uri.parse(url);
     var headers = createHeaders();
 

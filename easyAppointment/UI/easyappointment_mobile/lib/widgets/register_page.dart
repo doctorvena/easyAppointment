@@ -255,41 +255,41 @@ class RegisterPage extends StatelessWidget {
                     String confirmPassword = _confirmPasswordController.text;
                     int roleId = 3;
 
-                    // if (firstName == null || firstName.isEmpty) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text("FirstName can not be empty"),
-                    //   ));
-                    //   return;
-                    // }
+                    if (firstName == null || firstName.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("FirstName can not be empty"),
+                      ));
+                      return;
+                    }
 
-                    // if (lastName == null || lastName.isEmpty) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text("LastName can not be empty"),
-                    //   ));
-                    //   return;
-                    // }
+                    if (lastName == null || lastName.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("LastName can not be empty"),
+                      ));
+                      return;
+                    }
 
-                    // if (email == null || email.isEmpty) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text("Email can not be empty"),
-                    //   ));
-                    //   return;
-                    // }
+                    if (email == null || email.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Email can not be empty"),
+                      ));
+                      return;
+                    }
 
-                    // if (!validateStructure(password)) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text(
-                    //         "Password must contain one upercase letter one special char and number"),
-                    //   ));
-                    //   return;
-                    // }
+                    if (!validateStructure(password)) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Password must contain one upercase letter one special char and number"),
+                      ));
+                      return;
+                    }
 
-                    // if (password != confirmPassword) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text("Passwors must match!"),
-                    //   ));
-                    //   return;
-                    // }
+                    if (password != confirmPassword) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Passwors must match!"),
+                      ));
+                      return;
+                    }
 
                     final Map<String, dynamic> requestBody = {
                       'firstName': firstName,

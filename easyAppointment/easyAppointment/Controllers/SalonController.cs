@@ -32,5 +32,25 @@ namespace easyAppointment.Controllers
             return salonResponse;
         }
 
+        [HttpGet("LastRatedSalonByUser/{userId}")]
+        public async Task<IActionResult> GetLastRatedSalonByUserId(int userId)
+        {
+            try
+            {
+                int? salonId = await _salonService.GetLastRatedSalonByUserId(userId);
+
+                if (!salonId.HasValue)
+                {
+                    return Ok(new { salonId = 0 }); 
+                }
+                return Ok(new { salonId = salonId.Value });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
     }
 }

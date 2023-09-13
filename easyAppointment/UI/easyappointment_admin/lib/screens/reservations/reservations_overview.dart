@@ -5,7 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../app/user_singleton.dart';
+import '../../models/employee_salon.dart';
 import '../../models/search_result.dart';
+import '../../providers/employee_salon_provider.dart';
+import '../../providers/report.dart';
 import '../../providers/reservation_provider.dart';
 import '../../widgets/master_screen.dart';
 import 'add_reservation_page.dart';
@@ -20,34 +23,39 @@ class ReservationsOverview extends StatefulWidget {
 class _ReservationsOverviewState extends State<ReservationsOverview> {
   late ReservationProvider _reservationProvider;
   late SalonProvider _salonnProvider;
+  late SalonEmployeeProvider _salonEmployeeProvider;
+  searchResult<SalonEmployee>? employeeresult;
   searchResult<Reservation>? result;
 
   @override
   void initState() {
     super.initState();
+    _salonEmployeeProvider = context.read<SalonEmployeeProvider>();
     _reservationProvider = context.read<ReservationProvider>();
     _salonnProvider = context.read<SalonProvider>();
-    fetchSalonId(); // Fetch the salon ID first
+    fetchSalonId();
   }
 
   Future<void> fetchSalonId() async {
-    // Fetch the salon ID that the user owns
     try {
       setState(() {});
-      fetchData(); // Fetch reservations after getting the salon ID
+      fetchData();
     } catch (e) {
-      // Handle error
       print('Error fetching salon ID: $e');
     }
   }
 
   Future<void> fetchData() async {
+    var employee = await _salonEmployeeProvider.get(
+      filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
+    );
     var data = await _reservationProvider.get(
       filter: {'salonId': UserSingleton().loggedInUserSalon?.salonId},
     );
 
     setState(() {
       result = data as searchResult<Reservation>?;
+      employeeresult = employee as searchResult<SalonEmployee>?;
     });
   }
 
@@ -64,19 +72,29 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
           SizedBox(height: 8),
           Align(
             alignment: Alignment.topRight,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddReservationPage(
-                      salonId: UserSingleton().loggedInUserSalon?.salonId,
-                      refreshData: refreshData,
-                    ),
-                  ),
-                );
-              },
-              child: Text('Add Reservation Manualy'),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _showEmployeeSelectionDialog(context),
+                  child: Text('Generate Report'),
+                ),
+                SizedBox(width: 10), // Give some space between buttons
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddReservationPage(
+                          salonId: UserSingleton().loggedInUserSalon?.salonId,
+                          refreshData: refreshData,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text('Add Reservation Manually'),
+                ),
+              ],
             ),
           ),
           Expanded(
@@ -350,5 +368,91 @@ class _ReservationsOverviewState extends State<ReservationsOverview> {
         );
       },
     );
+  }
+
+  Future<void> _showEmployeeSelectionDialog(BuildContext context) async {
+    SalonEmployee? _selectedEmployee;
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Select Employee'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<SalonEmployee>(
+                    value: _selectedEmployee,
+                    hint: Text("Select an employee"),
+                    items: employeeresult?.result.map((SalonEmployee employee) {
+                          return DropdownMenuItem<SalonEmployee>(
+                            value: employee,
+                            child: Text(employee
+                                .firstName!), // Assuming SalonEmployee has a 'name' attribute
+                          );
+                        }).toList() ??
+                        [],
+                    onChanged: (SalonEmployee? value) {
+                      setState(() {
+                        _selectedEmployee = value;
+                      });
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_selectedEmployee != null) {
+                        // Call a function to fetch reservations for the selected employee
+                        fetchReservationsForEmployee(_selectedEmployee!);
+                        Navigator.pop(dialogContext);
+                      } else {
+                        // Optionally, show an error if no employee is selected
+                        print("Please select an employee.");
+                      }
+                    },
+                    child: Text('Get Reservations for Employee'),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> fetchReservationsForEmployee(SalonEmployee employee) async {
+    var reservations = await _reservationProvider
+        .getReservationsForEmployee(employee.employeeUserId!);
+    var employeeName = employee.firstName! + ' ' + employee.lastName!;
+    if (reservations != null) {
+      bool success =
+          await PdfReservationReportApi.generate(reservations, employeeName);
+
+      // Check if the PDF generation was successful
+      if (success) {
+        // Show the dialog informing about the download
+        showDialog(
+            context: context, // Make sure you have the context here
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Success'),
+                content: Text('Your report is downloaded in documents!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the alert dialog
+                    },
+                    child: Text('Close'),
+                  )
+                ],
+              );
+            });
+      } else {
+        print("There was an error generating the report.");
+      }
+    }
   }
 }

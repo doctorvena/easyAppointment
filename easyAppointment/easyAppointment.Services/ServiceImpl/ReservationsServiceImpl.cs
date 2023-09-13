@@ -7,6 +7,7 @@ using easyAppointment.Services.Database;
 using easyAppointment.Services.InterfaceServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace easyAppointment.Services.ServiceImpl
 {
@@ -16,7 +17,7 @@ namespace easyAppointment.Services.ServiceImpl
         protected IMapper _mapper { get; set; }
         protected readonly EasyAppointmnetDbContext _context;
         private readonly ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> logger;
-        public ReservationsServiceImpl(ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper, IRabbitMqService rabbitMqService) : base(_logger, _context, _mapper)
+        public ReservationsServiceImpl(ILogger<BaseCRUDService<ReservationsResponse, Database.Reservation, ReservationSearchObjecs, ReservationInsertRequest, ReservationUpdateRequest>> _logger, EasyAppointmnetDbContext _context, IMapper _mapper,IRabbitMqService rabbitMqService) : base(_logger, _context, _mapper)
         {
             this._mapper = _mapper;
             this._context = _context;
@@ -107,7 +108,7 @@ namespace easyAppointment.Services.ServiceImpl
 
                 try
                 {
-                _rabbitMqService.PublishReservationNotification2($"Nova rezervacija u {timeSlot.StartTime}.", ownerEmail);
+                    _rabbitMqService.PublishReservationNotification2($"Nova rezervacija u {timeSlot.StartTime}.", ownerEmail);
 
                 }
                 catch (Exception ex)
@@ -118,6 +119,26 @@ namespace easyAppointment.Services.ServiceImpl
 
             await base.BeforeInsert(db, insert);
             return;
+        }
+        public async Task<List<ReservationsResponse>> GetReservationsForEmployeeUserId(int employeeUserId)
+        {
+            var salonEmployeeId = await _context.SalonEmployees
+                                                .Where(se => se.EmployeeUserId == employeeUserId)
+                                                .Select(se => se.SalonEmployeeId)
+                                                .FirstOrDefaultAsync();
+
+            if (salonEmployeeId == 0)
+            {
+                return new List<ReservationsResponse>();
+            }
+
+            var reservations = await (from r in _context.Reservations
+                                      join t in _context.TimeSlots on r.TimeSlotId equals t.TimeSlotId
+                                      where t.SalonEmployeeId == salonEmployeeId
+                                      select r).Distinct().ToListAsync();
+
+
+            return _mapper.Map<List<ReservationsResponse>>(reservations);
         }
 
 

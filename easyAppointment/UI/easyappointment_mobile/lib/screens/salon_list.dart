@@ -8,6 +8,7 @@ import 'package:easyappointment_mobile/models/city.dart';
 import 'package:easyappointment_mobile/models/salon.dart';
 import 'package:easyappointment_mobile/providers/salon_provider.dart';
 import 'package:easyappointment_mobile/screens/pregled_radnje_page.dart';
+import 'package:easyappointment_mobile/utils/user_singleton.dart';
 import 'package:easyappointment_mobile/widgets/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class SalonListScreen extends StatefulWidget {
 class _SalonListScreenState extends State<SalonListScreen> {
   late SalonProvider _salonProvider;
   bool isLoading = true;
-
+  bool showRecommended = false;
   late CityProvider _cityProvider;
   searchResult<Salon>? result;
   searchResult<City>? cityResult;
@@ -40,28 +41,33 @@ class _SalonListScreenState extends State<SalonListScreen> {
     _salonProvider = context.read<SalonProvider>();
     _cityProvider = context.read<CityProvider>();
 
-    // Perform actions or initialize data when the page loads
     fetchData();
     initializeData();
   }
 
   Future<void> fetchData() async {
-    var data = await _salonProvider.get();
+    int? lastRatedSalonId = await _salonProvider
+        .getLastRatedSalonByUserId(UserSingleton().loggedInUserId);
+    searchResult<Salon>? data;
+
+    if (showRecommended) {
+      data = await _salonProvider.getRecommended(lastRatedSalonId);
+    } else {
+      data = await _salonProvider.get();
+    }
+
     var cities = await _cityProvider.get();
 
     if (mounted) {
-      // Check if the widget is still in the widget tree
       setState(() {
         result = data as searchResult<Salon>?;
         cityResult = cities as searchResult<City>?;
-        isLoading = false; // Set loading to false when data is fetched
+        isLoading = false;
       });
     }
   }
 
-  void initializeData() {
-    // Initialize data or perform any other necessary setup
-  }
+  void initializeData() {}
 
   @override
   void didChangeDependencies() {
@@ -79,10 +85,8 @@ class _SalonListScreenState extends State<SalonListScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
-                  SizedBox(
-                      height:
-                          20), // Add some spacing between the loader and the text
-                  Text('Loading Salons...'), // Your loading message
+                  SizedBox(height: 20),
+                  Text('Loading Salons...'),
                 ],
               ),
             )
@@ -91,6 +95,21 @@ class _SalonListScreenState extends State<SalonListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Show Recommended'),
+                      Switch(
+                        value: showRecommended,
+                        onChanged: (value) {
+                          setState(() {
+                            showRecommended = value;
+                            fetchData();
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                   Container(
                     margin: EdgeInsets.only(
                       top: 20,
@@ -210,50 +229,25 @@ class _SalonListScreenState extends State<SalonListScreen> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 50,
-                                            width: 160,
-                                            child: ListView.builder(
-                                              primary: false,
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount:
-                                                  5, // Because a rating is out of 5
-                                              itemBuilder:
-                                                  (context, starIndex) {
-                                                double rating = result
-                                                        ?.result[index]
-                                                        .rating ??
-                                                    0;
-                                                if (starIndex < rating) {
-                                                  // This means we are still within the range of full stars
-                                                  return Icon(
-                                                    Icons.star,
-                                                    size: 30,
-                                                    color: Color.fromARGB(
-                                                        255, 255, 167, 34),
-                                                  );
-                                                } else if (starIndex <
-                                                    rating + 0.5) {
-                                                  // This means we should be displaying a half star
-                                                  return Icon(
-                                                    Icons
-                                                        .star_half, // This icon represents a half star
-                                                    size: 30,
-                                                    color: Color.fromARGB(
-                                                        255, 255, 167, 34),
-                                                  );
-                                                } else {
-                                                  // This means we are in the range of empty stars
-                                                  return Icon(
-                                                    Icons
-                                                        .star_border, // This icon represents an empty star
-                                                    size: 30,
-                                                    color: Color.fromARGB(
-                                                        255, 255, 167, 34),
-                                                  );
-                                                }
-                                              },
-                                            ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                "${result?.result[index].rating ?? "0.0"}",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 167, 34),
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.star,
+                                                color: Color.fromARGB(
+                                                    255, 255, 167, 34),
+                                                size: 22,
+                                              ),
+                                            ],
                                           ),
                                           Text(result?.result[index].address ??
                                               ""),

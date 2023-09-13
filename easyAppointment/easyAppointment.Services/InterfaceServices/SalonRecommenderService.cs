@@ -10,6 +10,6 @@ namespace easyAppointment.Services.InterfaceServices
     public interface SalonRecommenderService
     {
         List<SalonResponse> Recommend(int proizvodid);
-
+        Task CreateModel();
     }
 }

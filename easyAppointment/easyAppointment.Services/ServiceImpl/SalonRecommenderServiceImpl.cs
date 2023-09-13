@@ -6,8 +6,8 @@ using easyAppointment.Model.SearchObjects;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.ML;
-using Microsoft.ML.Trainers;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 
 namespace easyAppointment.Salon.ServiceImpl
 {
@@ -26,7 +26,6 @@ namespace easyAppointment.Salon.ServiceImpl
 
         public List<SalonResponse> Recommend(int salonId)
         {
-            //if the customer did not have any ratings for any salon then best rated salons will be returned
             if (salonId == 0)
             {
                 var bestRatedSalons = _context.Salons
@@ -135,26 +134,25 @@ namespace easyAppointment.Salon.ServiceImpl
 
         ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingData)
         {
-            //var options = new matrixfactorizationtrainer.options
-            //{
-            //    matrixcolumnindexcolumnname = nameof(salonratingentry.salonid),
-            //    matrixrowindexcolumnname = nameof(salonratingentry.coratedsalonid),
-            //    labelcolumnname = "label",
+            var options = new MatrixFactorizationTrainer.Options
+            {
+                MatrixColumnIndexColumnName = nameof(SalonRatingEntry.SalonId),
+                MatrixRowIndexColumnName = nameof(SalonRatingEntry.CoRatedSalonId),
+                LabelColumnName = "Label",
 
-            //    lossfunction = matrixfactorizationtrainer.lossfunctiontype.squarelossoneclass,
-            //    alpha = 0.01,
-            //    lambda = 0.025,
+                LossFunction = MatrixFactorizationTrainer.LossFunctionType.SquareLossOneClass,
+                Alpha = 0.01,
+                Lambda = 0.025,
 
-            //    numberofiterations = 100,
-            //    c = 0.00001
-            //};
+                NumberOfIterations = 100,
+                C = 0.00001
+            };
 
-            //var pipeline = mlcontext.recommendation().trainers.matrixfactorization(options);
+            var pipeline = mlContext.Recommendation().Trainers.MatrixFactorization(options);
 
-            //var model = pipeline.fit(trainingdata);
+            var model = pipeline.Fit(trainingData);
 
-            //return model;
-            return null;
+            return model;
         }
 
         void SaveModel(MLContext mlContext, DataViewSchema trainingDataViewSchema, ITransformer model)

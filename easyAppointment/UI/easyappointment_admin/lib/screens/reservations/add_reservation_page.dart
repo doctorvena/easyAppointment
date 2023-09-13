@@ -34,7 +34,7 @@ class _AddReservationPageState extends State<AddReservationPage> {
   Future<void> fetchTimeSlots() async {
     var data = await _timeSlotProvider.get(
       filter: {
-        'ownerUserId': UserSingleton().loggedInUserId,
+        'salonId': UserSingleton().loggedInUserSalon!.salonId,
         'status': 'Available',
         'AreEmployeesIncluded': true,
       },
