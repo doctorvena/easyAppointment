@@ -11,6 +11,7 @@ namespace easyAppointment.Model.Responses
         public string SalonName { get; set; } = null!;
         public string? Address { get; set; }
         public int? EmployeeUserId { get; set; }
+        public int? ReservationPrice { get; set; }
         public byte[]? Photo { get; set; }
         public int? CityId { get; set; }
     }

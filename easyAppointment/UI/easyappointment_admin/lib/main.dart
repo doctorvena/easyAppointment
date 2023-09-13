@@ -6,16 +6,11 @@ import 'package:eprodaja_admin/providers/salon_provider.dart';
 import 'package:eprodaja_admin/providers/timeslot_provider.dart';
 import 'package:eprodaja_admin/providers/user_provider.dart';
 import 'package:eprodaja_admin/widgets/login_screen.dart';
+import 'package:eprodaja_admin/widgets/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  final timeOfDay = TimeOfDay(hour: 0, minute: 34);
-  final formattedTime =
-      '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}:00';
-
-  print(formattedTime); // Output: 12:34:00
-
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TimeSlotProvider()),
@@ -36,12 +31,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: LoginPage(),
-    );
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        home: LoginPage(),
+        navigatorKey: navigatorKey);
   }
 }

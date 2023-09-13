@@ -159,21 +159,19 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
                 try {
                   await _salonEmployeeProvider.delete(euserId);
-                  await fetchData(); // Refresh data after deletion
+                  await fetchData();
                 } catch (e) {
-                  // Handle the error
                   print('Error deleting euser: $e');
-                  // Show an error message or perform any necessary error handling
                 }
               },
               child: Text('Delete'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),

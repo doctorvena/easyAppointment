@@ -269,11 +269,6 @@ class RegistrationPage extends StatelessWidget {
       _fromKey.currentState?.saveAndValidate();
       await _userProvider.insert(request);
     } catch (e, stackTrace) {
-      // Exception or error handling code.
-      // e: The caught exception or error object.
-      // stackTrace: Stack trace of the error or exception.
-
-      // Handle the exception or error here.
       print('An error occurred: $e');
       print('Stack trace: $stackTrace');
     }
@@ -287,8 +282,7 @@ class RegistrationPage extends StatelessWidget {
 
       return false;
     }
-    // Add more validation logic as needed
-    return true; // Return null if the input is valid
+    return true;
   }
 
   bool validateStructure(String value) {

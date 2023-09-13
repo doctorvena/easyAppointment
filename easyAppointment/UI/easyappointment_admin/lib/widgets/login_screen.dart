@@ -118,14 +118,11 @@ class _LoginPageState extends State<LoginPage> {
             filter: {'ownerUserId': UserSingleton().loggedInUserId},
           );
 
-          if (loggedUserSalon == null || loggedUserSalon.result.length == 0) {
-            throw Exception('User login failed');
-          } else {
+          if (loggedUserSalon != null &&
+              loggedUserSalon.result[0].salonId != null) {
             UserSingleton().loggedInUserSalon = loggedUserSalon.result[0];
           }
-        } catch (e) {
-          throw Exception('Failed to fetch logged in user salon: $e');
-        }
+        } catch (e) {}
       }
 
       if (UserSingleton().role == 'Employee') {

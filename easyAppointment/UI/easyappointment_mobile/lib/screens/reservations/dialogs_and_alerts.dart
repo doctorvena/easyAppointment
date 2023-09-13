@@ -12,7 +12,7 @@ void showAlertDialog(BuildContext context, Reservation reservation,
         TextButton(
           child: Text('No'),
           onPressed: () {
-            Navigator.of(context).pop(); // Dismiss the dialog
+            Navigator.of(context).pop();
           },
         ),
         TextButton(

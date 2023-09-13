@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import '../app/user_singleton.dart';
 import '../models/login_response.dart';
 import '../models/search_result.dart';
+import '../widgets/navigation.dart';
 
 class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
@@ -133,10 +134,15 @@ class BaseProvider<T> with ChangeNotifier {
     if (response.statusCode < 299) {
       return true;
     } else if (response.statusCode == 401) {
-      throw new Exception("Unauthorized");
+      navigateToLoginPage();
+      return false;
     } else {
       throw new Exception("Something bad happened please try again");
     }
+  }
+
+  void navigateToLoginPage() {
+    navigatorKey.currentState!.pushReplacementNamed('/login');
   }
 
   Map<String, String> createHeaders() {

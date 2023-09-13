@@ -15,7 +15,7 @@ class PdfApi {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(text, style: TextStyle(fontSize: 48)),
-            SizedBox(height: 20), // Spacing between the main text and subtitle
+            SizedBox(height: 20),
             if (subtitle != null)
               Text(subtitle,
                   style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),

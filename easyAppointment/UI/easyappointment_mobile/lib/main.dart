@@ -1,4 +1,5 @@
 import 'package:easyappointment_mobile/providers/city_provider.dart';
+import 'package:easyappointment_mobile/providers/navigation.dart';
 import 'package:easyappointment_mobile/providers/reservation_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_employee_provider.dart';
 import 'package:easyappointment_mobile/providers/salon_photo_provider.dart';
@@ -36,11 +37,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EasyAppointment',
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: LoginPage(),
-    );
+        title: 'EasyAppointment',
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
+        home: LoginPage(),
+        navigatorKey: navigatorKey);
   }
 }

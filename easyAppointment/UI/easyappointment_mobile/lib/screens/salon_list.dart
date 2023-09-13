@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_cast
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -190,7 +188,6 @@ class _SalonListScreenState extends State<SalonListScreen> {
                                           width: 120,
                                           height: 120,
                                           decoration: BoxDecoration(
-                                            // shape: BoxShape.rectangle,
                                             image:
                                                 result?.result[index].photo !=
                                                             null &&

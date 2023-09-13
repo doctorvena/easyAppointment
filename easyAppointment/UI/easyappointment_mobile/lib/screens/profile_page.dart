@@ -44,8 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (pickedFile != null) {
       setState(() {
         _selectedImage = File(pickedFile.path);
-        _isFormChanged.value =
-            true; // Image change should also set form as changed
+        _isFormChanged.value = true;
       });
     }
   }
@@ -65,7 +64,6 @@ class _ProfilePageState extends State<ProfilePage> {
           await _userProvider.getById(UserSingleton().loggedInUserId);
       user = userData;
 
-      // Update the widget state synchronously
       setState(() {
         _nameController.text = user!.firstName!;
         _usernameController.text = user!.username!;
@@ -86,8 +84,6 @@ class _ProfilePageState extends State<ProfilePage> {
       title: "profile",
       index: 2,
       child: SingleChildScrollView(
-        // child: Card(
-        //   color: Colors.grey[200],
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -213,7 +209,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   return ElevatedButton(
                     onPressed: isUsernameChanged
                         ? () async {
-                            // Save profile settings logic
                             String name = _nameController.text;
                             String username = _usernameController.text;
                             String phone = _phoneController.text;
@@ -251,7 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               );
                             }
                           }
-                        : null, // disable button if username not changed
+                        : null,
                     child: Text('Save'),
                   );
                 },
@@ -260,13 +255,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => _logOutUser(context),
                 child: Text('Log Out'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors
-                      .red, // Making it red to indicate a cautionary action
+                  primary: Colors.red,
                 ),
               )
             ],
           ),
-          // ),
         ),
       ),
     );
@@ -283,7 +276,7 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -314,16 +307,13 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: Text('Yes'),
               onPressed: () {
-                // Log out the user and reset the necessary variables
                 UserSingleton().loggedInUserId = -1;
-
-                // Close the dialog and navigate to LoginPage
                 Navigator.of(context).pop();
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => LoginPage()),

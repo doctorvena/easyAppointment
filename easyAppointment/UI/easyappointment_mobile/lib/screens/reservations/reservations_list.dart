@@ -63,39 +63,32 @@ class ReservationsList extends StatelessWidget {
                         // Text(
                         //     'Price: \$${reservations[index].price.toString}'), // Displaying price
                         Text(
-                            'Paid: ${reservations[index].isPaid != null && reservations[index].isPaid! ? "Yes" : "No"}'), // Displaying if paid
+                            'Paid: ${reservations[index].isPaid != null && reservations[index].isPaid! ? "Yes" : "No"}'),
                       ],
                     ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
-                          height: 8), // Adjusting space after removing stars
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: Text(reservations[index]
-                                .status
-                                .toString()), // Always display the status
+                            child: Text(reservations[index].status.toString()),
                           ),
                           if (reservations[index].rating != null)
                             Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Row(
                                 children: [
-                                  Text(
-                                      '${reservations[index].rating}'), // Display the rating number
-                                  Icon(Icons.star,
-                                      color:
-                                          Colors.yellow), // Star icon for rated
+                                  Text('${reservations[index].rating}'),
+                                  Icon(Icons.star, color: Colors.yellow),
                                 ],
                               ),
                             ),
                           if (reservations[index].rating == null &&
                               reservations[index].status != "Active")
-                            // Check if not rated
                             IconButton(
                               onPressed: () {
                                 _showRatingDialog(context, reservations[index]);
@@ -193,8 +186,7 @@ class ReservationsList extends StatelessWidget {
                                 TextButton(
                                   child: Text('Okay'),
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Closes the alert dialog
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                               ],
@@ -204,8 +196,7 @@ class ReservationsList extends StatelessWidget {
                       } else {
                         insertSalonRating(
                             selectedRating, salonRatingProvider!, reservation);
-                        Navigator.of(context)
-                            .pop(); // Close the current dialog or popup
+                        Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Thanks for rating!')),
                         );

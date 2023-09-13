@@ -152,8 +152,7 @@ class ReservationDetailsScreen extends StatelessWidget {
 
     showDialog(
       context: context,
-      barrierDismissible:
-          false, // prevents user from dismissing by clicking outside
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async {

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_cast
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -63,9 +61,7 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
     });
   }
 
-  void initializeData() {
-    // Initialize data or perform any other necessary setup
-  }
+  void initializeData() {}
 
   @override
   void didChangeDependencies() {
@@ -157,13 +153,11 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                                         color:
                                             Color.fromARGB(255, 255, 167, 34),
                                       ),
-                                      SizedBox(width: 5.0), // Add some spacing
+                                      SizedBox(width: 5.0),
                                       Text(
-                                        widget.salon.rating!.toStringAsFixed(
-                                            1), // This will ensure that the rating is displayed with 1 decimal place
+                                        widget.salon.rating!.toStringAsFixed(1),
                                         style: TextStyle(
-                                          fontSize:
-                                              20, // You can adjust the size if you want
+                                          fontSize: 20,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -191,7 +185,7 @@ class _PregledRadnjePageState extends State<PregledRadnjePage> {
                 ),
                 employees.isNotEmpty
                     ? Container(
-                        height: 200, // Specify the height for the ListView
+                        height: 200,
                         child: ListView.builder(
                           itemCount: employees.length,
                           itemBuilder: (context, index) {

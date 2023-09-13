@@ -81,7 +81,6 @@ class _SalonPageState extends State<SalonPage> {
     try {
       var salonId = UserSingleton().loggedInUserSalon?.salonId;
       if (salonId == null || salonId == -1) {
-        print(UserSingleton().role);
         if (UserSingleton().role != "Employee") {
           final Map<String, dynamic> requestBodySalon = {
             'salonName': "New Salon",
@@ -89,13 +88,14 @@ class _SalonPageState extends State<SalonPage> {
             'photo': "",
             'ownerUserId': UserSingleton().loggedInUserId,
             'cityId': 1,
-            'rating': 5,
+            'rating': 0,
           };
 
           var salonData = await _salonProvider.insert(requestBodySalon);
           salon = salonData as Salon;
-          UserSingleton().loggedInUserSalon?.salonId = salonData.salonId;
-
+          // UserSingleton().loggedInUserSalon?.salonId = salonData.salonId;
+          UserSingleton().loggedInUserSalon = salon;
+          print(UserSingleton().loggedInUserSalon?.salonId);
           setState(() {
             _salonNameController.text = salon!.salonName!;
             _addressController.text = salon!.address!;
@@ -229,6 +229,7 @@ class _SalonPageState extends State<SalonPage> {
                           'ownerUserId': UserSingleton().loggedInUserId,
                           'photo': photo,
                           'cityId': selectedCityId,
+                          'reservationPrice': _reservationPriceController.text
                         };
 
                         try {

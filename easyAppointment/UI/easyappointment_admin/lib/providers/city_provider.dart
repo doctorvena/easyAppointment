@@ -7,7 +7,6 @@ class CityProvider extends BaseProvider<City> {
 
   @override
   City fromJson(data) {
-    // TODO: implement fromJson
     return City.fromJson(data);
   }
 }

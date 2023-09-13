@@ -89,7 +89,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
                   return Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      // color: Colors.red,
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -107,7 +106,6 @@ class _ReservationScreenState extends State<ReservationScreen> {
             ),
           ),
           Divider(
-            // This will add a one-line separator
             color: Colors.grey,
             thickness: 1,
           ),
@@ -162,9 +160,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                         children: [
                           Icon(
                             isTaken ? Icons.close : Icons.check,
-                            color: isTaken
-                                ? Colors.red
-                                : Colors.green, // Colored indicator
+                            color: isTaken ? Colors.red : Colors.green,
                           ),
                           Text(
                             '${DateFormat('hh:mm a').format(timeSlot.startTime!)} - ${DateFormat('hh:mm a').format(parseDateTime(timeSlot.endTime)!)}',
