@@ -190,7 +190,7 @@ class BaseProvider<T> with ChangeNotifier {
 
       return loginResponse;
     } else {
-      throw Exception('Error during login: ${response.body}');
+      throw Exception('Error during login: Please try again');
     }
   }
 

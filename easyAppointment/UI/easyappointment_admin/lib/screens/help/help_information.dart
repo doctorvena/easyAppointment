@@ -11,7 +11,7 @@ When a user makes a reservation within our system, our dedicated service, Rabbit
 
 3. Timeslot Allocation: Once an employee is added, you can assign a timeslot to that employee. Alternatively, you can select an available timeslot.
 
-4. Reservation Booking: After configuring a timeslot, users can make reservations. This can be done through the mobile application or from the business's side.
+4. Reservation Booking: After configuring a timeslot, users can make reservations. This can be done through the mobile application or from the business's side.(Also in reservations page the report can be generated)
 
 5. Owner Notification: Crucially, when a reservation is successfully created, our RabbitMq service automatically sends a notification email to the owners email. This email informs them about the reservation, specifying the date and time.
 

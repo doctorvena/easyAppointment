@@ -75,13 +75,16 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           margin: const EdgeInsets.only(top: 20),
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildUserNameField(),
-              const SizedBox(height: 20.0),
-              _buildPasswordField(),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildUserNameField(),
+                const SizedBox(height: 20.0),
+                _buildPasswordField(),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 14.0),
@@ -178,6 +181,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginUser() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     setState(() {
       isLoading = true;
     });

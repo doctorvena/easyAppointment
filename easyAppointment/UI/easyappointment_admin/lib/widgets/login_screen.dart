@@ -89,6 +89,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginUser() async {
+    var username1 = _userNameController.text.trim();
+    var password1 = _passwordController.text.trim();
+
+    if (username1.isEmpty || password1.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text("Error"),
+          content: Text("Both username and password are required."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
     setState(
       () {
         isLoading = true;
