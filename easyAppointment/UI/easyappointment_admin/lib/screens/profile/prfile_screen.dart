@@ -196,6 +196,15 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       'sexId': _selectedSexId,
                     };
 
+                    if (email == null ||
+                        email.isEmpty ||
+                        !isValidEmail(email)) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please enter a valid email address"),
+                      ));
+                      return;
+                    }
+
                     try {
                       _userProvider.update(
                           UserSingleton().loggedInUserId, updateData);
@@ -226,6 +235,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         ),
       ),
     );
+  }
+
+  bool isValidEmail(String email) {
+    // A basic regex for email validation
+    final RegExp regex =
+        RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
+    return regex.hasMatch(email);
   }
 
   void showSuccessDialog(BuildContext context) {

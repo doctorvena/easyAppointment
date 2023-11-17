@@ -73,12 +73,6 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
                     columns: [
                       DataColumn(
                         label: Text(
-                          'Employee ID',
-                          style: TextStyle(fontStyle: FontStyle.normal),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
                           'User Name',
                           style: TextStyle(fontStyle: FontStyle.normal),
                         ),
@@ -115,7 +109,6 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
                             .map(
                               (SalonEmployee e) => DataRow(
                                 cells: [
-                                  DataCell(Text(e.salonEmployeeId.toString())),
                                   DataCell(Text(e.username ?? '')),
                                   DataCell(Text(e.email ?? '')),
                                   DataCell(Text(e.firstName ?? '')),
@@ -127,7 +120,7 @@ class _EmployeeOverviewState extends State<EmployeeOverview> {
                                         SizedBox(width: 8),
                                         ElevatedButton(
                                           onPressed: () {
-                                            deleteUser(e.employeeUserId!);
+                                            deleteUser(e.salonEmployeeId!);
                                           },
                                           child: Icon(Icons.delete),
                                         ),
