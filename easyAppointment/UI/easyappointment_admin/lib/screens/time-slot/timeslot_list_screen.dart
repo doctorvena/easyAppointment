@@ -92,14 +92,6 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                       DataColumn(
                         label: Expanded(
                           child: Text(
-                            'Id',
-                            style: TextStyle(fontStyle: FontStyle.normal),
-                          ),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
                             'Start time',
                             style: TextStyle(fontStyle: FontStyle.normal),
                           ),
@@ -143,8 +135,6 @@ class _TimeSlotOverviewScreenState extends State<TimeSlotOverviewScreen> {
                             .map(
                               (TimeSlot e) => DataRow(
                                 cells: [
-                                  DataCell(
-                                      Text(e.timeSlotId?.toString() ?? "")),
                                   DataCell(Text(e.startTime ?? "")),
                                   DataCell(Text(e.endTime ?? "")),
                                   DataCell(
